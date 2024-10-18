@@ -1,0 +1,223 @@
+2024-09-12 18:48:54,303 - INFO - Current working directory: D:\Flask
+2024-09-12 18:48:54,849 - DEBUG - Starting new HTTP connection (1): 10.10.15.94:3000
+2024-09-12 18:48:54,873 - DEBUG - http://10.10.15.94:3000 "POST /update_status_wall_to_wall HTTP/1.1" 200 66
+2024-09-12 18:48:54,876 - DEBUG - Starting new HTTP connection (1): 10.10.15.94:3000
+2024-09-12 18:48:54,900 - DEBUG - http://10.10.15.94:3000 "POST /blocked_websites HTTP/1.1" 200 64
+2024-09-12 18:48:54,902 - INFO - Response Status Code: 200
+2024-09-12 18:48:54,902 - INFO - Response Text: {
+  "message": "Successfully wrote blocked websites to file."
+}
+
+2024-09-12 18:48:54,902 - INFO - Successfully wrote blocked websites to file.
+2024-09-12 18:48:54,920 - DEBUG - Reading from file: I:\test\block\W2403030NN.txt
+2024-09-12 18:48:54,922 - DEBUG - Websites found in file: []
+2024-09-12 18:48:54,923 - INFO - All previously blocked domains have been removed.
+2024-09-12 18:48:54,962 - INFO - Timestamp file updated: I:\test\block\W2403030NN.txt.timestamp
+2024-09-12 18:48:54,964 - DEBUG - Starting new HTTP connection (1): 10.10.15.94:3000
+2024-09-12 18:48:54,991 - DEBUG - http://10.10.15.94:3000 "POST /blocked_websites HTTP/1.1" 200 64
+2024-09-12 18:48:54,992 - INFO - Response Status Code: 200
+2024-09-12 18:48:54,992 - INFO - Response Text: {
+  "message": "Successfully wrote blocked websites to file."
+}
+
+2024-09-12 18:48:54,992 - INFO - Successfully wrote blocked websites to file.
+2024-09-12 18:48:55,008 - DEBUG - Reading from file: I:\test\block\W2403030NN.txt
+2024-09-12 18:48:55,011 - DEBUG - Websites found in file: []
+2024-09-12 18:48:55,013 - INFO - All previously blocked domains have been removed.
+2024-09-12 18:48:55,046 - INFO - Timestamp file updated: I:\test\block\W2403030NN.txt.timestamp
+2024-09-13 11:44:22,175 - WARNING - Another instance detected.
+2024-09-13 11:44:38,746 - INFO - Current working directory: D:\Flask
+2024-09-13 11:50:18,308 - INFO - Current working directory: D:\Flask
+2024-09-13 11:51:02,752 - INFO - Current working directory: D:\Flask
+2024-09-13 11:51:02,831 - DEBUG - Starting new HTTP connection (1): 10.10.15.94:3000
+2024-09-13 11:51:02,846 - DEBUG - http://10.10.15.94:3000 "POST /update_status_wall_to_wall HTTP/1.1" 200 66
+2024-09-13 11:51:02,849 - DEBUG - Starting new HTTP connection (1): 10.10.15.94:3000
+2024-09-13 11:51:02,871 - DEBUG - http://10.10.15.94:3000 "POST /blocked_websites HTTP/1.1" 200 64
+2024-09-13 11:51:02,872 - INFO - Response Status Code: 200
+2024-09-13 11:51:02,872 - INFO - Response Text: {
+  "message": "Successfully wrote blocked websites to file."
+}
+
+2024-09-13 11:51:02,872 - INFO - Successfully wrote blocked websites to file.
+2024-09-13 11:51:02,887 - DEBUG - Reading from file: I:\test\block\W2403030NN.txt
+2024-09-13 11:51:02,888 - DEBUG - Websites found in file: []
+2024-09-13 11:51:02,889 - INFO - All previously blocked domains have been removed.
+2024-09-13 11:51:02,928 - INFO - Timestamp file updated: I:\test\block\W2403030NN.txt.timestamp
+2024-09-13 11:51:02,929 - DEBUG - Starting new HTTP connection (1): 10.10.15.94:3000
+2024-09-13 11:51:02,948 - DEBUG - http://10.10.15.94:3000 "POST /blocked_websites HTTP/1.1" 200 64
+2024-09-13 11:51:02,948 - INFO - Response Status Code: 200
+2024-09-13 11:51:02,949 - INFO - Response Text: {
+  "message": "Successfully wrote blocked websites to file."
+}
+
+2024-09-13 11:51:02,949 - INFO - Successfully wrote blocked websites to file.
+2024-09-13 11:51:02,967 - DEBUG - Reading from file: I:\test\block\W2403030NN.txt
+2024-09-13 11:51:02,969 - DEBUG - Websites found in file: []
+2024-09-13 11:51:02,970 - INFO - All previously blocked domains have been removed.
+2024-09-13 11:51:02,998 - INFO - Timestamp file updated: I:\test\block\W2403030NN.txt.timestamp
+2024-09-13 11:52:04,967 - DEBUG - Starting new HTTP connection (1): 10.10.15.94:3000
+2024-09-13 11:52:04,975 - DEBUG - http://10.10.15.94:3000 "POST /update_status_wall_to_wall HTTP/1.1" 200 66
+2024-09-13 11:52:08,440 - INFO - Current working directory: D:\Flask
+2024-09-13 11:52:08,514 - DEBUG - Starting new HTTP connection (1): 10.10.15.94:3000
+2024-09-13 11:52:08,527 - DEBUG - http://10.10.15.94:3000 "POST /update_status_wall_to_wall HTTP/1.1" 200 66
+2024-09-13 11:52:08,529 - DEBUG - Starting new HTTP connection (1): 10.10.15.94:3000
+2024-09-13 11:52:08,560 - DEBUG - http://10.10.15.94:3000 "POST /blocked_websites HTTP/1.1" 200 64
+2024-09-13 11:52:08,560 - INFO - Response Status Code: 200
+2024-09-13 11:52:08,560 - INFO - Response Text: {
+  "message": "Successfully wrote blocked websites to file."
+}
+
+2024-09-13 11:52:08,560 - INFO - Successfully wrote blocked websites to file.
+2024-09-13 11:52:08,580 - DEBUG - Reading from file: I:\test\block\W2403030NN.txt
+2024-09-13 11:52:08,583 - DEBUG - Websites found in file: []
+2024-09-13 11:52:08,584 - INFO - All previously blocked domains have been removed.
+2024-09-13 11:52:08,619 - INFO - Timestamp file updated: I:\test\block\W2403030NN.txt.timestamp
+2024-09-13 11:52:08,620 - DEBUG - Starting new HTTP connection (1): 10.10.15.94:3000
+2024-09-13 11:52:08,653 - DEBUG - http://10.10.15.94:3000 "POST /blocked_websites HTTP/1.1" 200 64
+2024-09-13 11:52:08,654 - INFO - Response Status Code: 200
+2024-09-13 11:52:08,654 - INFO - Response Text: {
+  "message": "Successfully wrote blocked websites to file."
+}
+
+2024-09-13 11:52:08,654 - INFO - Successfully wrote blocked websites to file.
+2024-09-13 11:52:08,676 - DEBUG - Reading from file: I:\test\block\W2403030NN.txt
+2024-09-13 11:52:08,677 - DEBUG - Websites found in file: []
+2024-09-13 11:52:08,679 - INFO - All previously blocked domains have been removed.
+2024-09-13 11:52:08,712 - INFO - Timestamp file updated: I:\test\block\W2403030NN.txt.timestamp
+2024-09-17 17:19:10,260 - INFO - Current working directory: D:\Flask
+2024-09-17 17:19:10,403 - DEBUG - Starting new HTTP connection (1): 10.10.15.94:3000
+2024-09-17 17:19:10,414 - DEBUG - http://10.10.15.94:3000 "POST /update_status_wall_to_wall HTTP/1.1" 200 66
+2024-09-17 17:19:10,417 - DEBUG - Starting new HTTP connection (1): 10.10.15.94:3000
+2024-09-17 17:19:10,495 - DEBUG - http://10.10.15.94:3000 "POST /blocked_websites HTTP/1.1" 200 64
+2024-09-17 17:19:10,496 - INFO - Response Status Code: 200
+2024-09-17 17:19:10,496 - INFO - Response Text: {
+  "message": "Successfully wrote blocked websites to file."
+}
+
+2024-09-17 17:19:10,496 - INFO - Successfully wrote blocked websites to file.
+2024-09-17 17:19:10,584 - ERROR - Error copying file I:\test\block\W2403030NN.txt to C:\MKS Support Center\block\W2403030NN.txt: [Errno 2] No such file or directory: 'C:\\MKS Support Center\\block\\W2403030NN.txt'
+2024-09-17 17:19:10,585 - DEBUG - Starting new HTTP connection (1): 10.10.15.94:3000
+2024-09-17 17:19:10,682 - DEBUG - http://10.10.15.94:3000 "POST /blocked_websites HTTP/1.1" 200 64
+2024-09-17 17:19:10,683 - INFO - Response Status Code: 200
+2024-09-17 17:19:10,683 - INFO - Response Text: {
+  "message": "Successfully wrote blocked websites to file."
+}
+
+2024-09-17 17:19:10,683 - INFO - Successfully wrote blocked websites to file.
+2024-09-17 17:19:10,732 - ERROR - Error copying file I:\test\block\W2403030NN.txt to C:\MKS Support Center\block\W2403030NN.txt: [Errno 2] No such file or directory: 'C:\\MKS Support Center\\block\\W2403030NN.txt'
+2024-09-17 17:19:47,624 - INFO - Current working directory: D:\Flask
+2024-09-17 17:19:47,704 - DEBUG - Starting new HTTP connection (1): 10.10.15.94:3000
+2024-09-17 17:19:47,707 - DEBUG - http://10.10.15.94:3000 "POST /update_status_wall_to_wall HTTP/1.1" 200 66
+2024-09-17 17:19:47,709 - DEBUG - Starting new HTTP connection (1): 10.10.15.94:3000
+2024-09-17 17:19:47,729 - DEBUG - http://10.10.15.94:3000 "POST /blocked_websites HTTP/1.1" 200 64
+2024-09-17 17:19:47,729 - INFO - Response Status Code: 200
+2024-09-17 17:19:47,729 - INFO - Response Text: {
+  "message": "Successfully wrote blocked websites to file."
+}
+
+2024-09-17 17:19:47,729 - INFO - Successfully wrote blocked websites to file.
+2024-09-17 17:19:47,762 - INFO - File copied to C:\MKS Support Center\block\W2403030NN.txt
+2024-09-17 17:19:47,762 - DEBUG - Reading from file: C:\MKS Support Center\block\W2403030NN.txt
+2024-09-17 17:19:47,763 - DEBUG - Websites found in file: []
+2024-09-17 17:19:47,763 - INFO - All previously blocked domains have been removed.
+2024-09-17 17:19:47,764 - INFO - Timestamp file updated: C:\MKS Support Center\block\W2403030NN.txt.timestamp
+2024-09-17 17:19:47,765 - DEBUG - Starting new HTTP connection (1): 10.10.15.94:3000
+2024-09-17 17:19:47,785 - DEBUG - http://10.10.15.94:3000 "POST /blocked_websites HTTP/1.1" 200 64
+2024-09-17 17:19:47,786 - INFO - Response Status Code: 200
+2024-09-17 17:19:47,786 - INFO - Response Text: {
+  "message": "Successfully wrote blocked websites to file."
+}
+
+2024-09-17 17:19:47,786 - INFO - Successfully wrote blocked websites to file.
+2024-09-17 17:19:47,811 - INFO - File copied to C:\MKS Support Center\block\W2403030NN.txt
+2024-09-17 17:19:47,812 - DEBUG - Reading from file: C:\MKS Support Center\block\W2403030NN.txt
+2024-09-17 17:19:47,812 - DEBUG - Websites found in file: []
+2024-09-17 17:19:47,814 - INFO - All previously blocked domains have been removed.
+2024-09-17 17:19:47,815 - INFO - Timestamp file updated: C:\MKS Support Center\block\W2403030NN.txt.timestamp
+2024-09-17 17:21:39,174 - INFO - Current working directory: D:\Flask
+2024-09-17 17:21:39,265 - DEBUG - Starting new HTTP connection (1): 10.10.15.94:3000
+2024-09-17 17:21:39,269 - DEBUG - http://10.10.15.94:3000 "POST /update_status_wall_to_wall HTTP/1.1" 200 66
+2024-09-17 17:21:39,271 - DEBUG - Starting new HTTP connection (1): 10.10.15.94:3000
+2024-09-17 17:21:39,296 - DEBUG - http://10.10.15.94:3000 "POST /blocked_websites HTTP/1.1" 200 64
+2024-09-17 17:21:39,297 - INFO - Response Status Code: 200
+2024-09-17 17:21:39,297 - INFO - Response Text: {
+  "message": "Successfully wrote blocked websites to file."
+}
+
+2024-09-17 17:21:39,297 - INFO - Successfully wrote blocked websites to file.
+2024-09-17 17:21:39,319 - INFO - File copied to C:\MKS Support Center\block\W2403030NN.txt
+2024-09-17 17:21:39,319 - DEBUG - Reading from file: C:\MKS Support Center\block\W2403030NN.txt
+2024-09-17 17:21:39,320 - DEBUG - Websites found in file: []
+2024-09-17 17:21:39,321 - INFO - All previously blocked domains have been removed.
+2024-09-17 17:21:39,321 - INFO - Timestamp file updated: C:\MKS Support Center\block\W2403030NN.txt.timestamp
+2024-09-17 17:21:39,323 - DEBUG - Starting new HTTP connection (1): 10.10.15.94:3000
+2024-09-17 17:21:39,356 - DEBUG - http://10.10.15.94:3000 "POST /blocked_websites HTTP/1.1" 200 64
+2024-09-17 17:21:39,357 - INFO - Response Status Code: 200
+2024-09-17 17:21:39,357 - INFO - Response Text: {
+  "message": "Successfully wrote blocked websites to file."
+}
+
+2024-09-17 17:21:39,358 - INFO - Successfully wrote blocked websites to file.
+2024-09-17 17:21:39,419 - INFO - File copied to C:\MKS Support Center\block\W2403030NN.txt
+2024-09-17 17:21:39,419 - DEBUG - Reading from file: C:\MKS Support Center\block\W2403030NN.txt
+2024-09-17 17:21:39,419 - DEBUG - Websites found in file: []
+2024-09-17 17:21:39,421 - INFO - All previously blocked domains have been removed.
+2024-09-17 17:21:39,422 - INFO - Timestamp file updated: C:\MKS Support Center\block\W2403030NN.txt.timestamp
+2024-09-17 17:32:07,411 - INFO - Current working directory: D:\Flask
+2024-09-17 17:32:07,504 - DEBUG - Starting new HTTP connection (1): 10.10.15.94:3000
+2024-09-17 17:32:07,509 - DEBUG - http://10.10.15.94:3000 "POST /update_status_wall_to_wall HTTP/1.1" 200 66
+2024-09-17 17:32:07,511 - DEBUG - Starting new HTTP connection (1): 10.10.15.94:3000
+2024-09-17 17:32:07,527 - DEBUG - http://10.10.15.94:3000 "POST /blocked_websites HTTP/1.1" 200 64
+2024-09-17 17:32:07,528 - INFO - Response Status Code: 200
+2024-09-17 17:32:07,528 - INFO - Response Text: {
+  "message": "Successfully wrote blocked websites to file."
+}
+
+2024-09-17 17:32:07,528 - INFO - Successfully wrote blocked websites to file.
+2024-09-17 17:32:07,573 - INFO - File copied to C:\MKS Support Center\block\W2403030NN.txt
+2024-09-17 17:32:07,574 - DEBUG - Reading from file: C:\MKS Support Center\block\W2403030NN.txt
+2024-09-17 17:32:07,574 - DEBUG - Websites found in file: []
+2024-09-17 17:32:07,575 - INFO - All previously blocked domains have been removed.
+2024-09-17 17:32:07,576 - INFO - Timestamp file updated: C:\MKS Support Center\block\W2403030NN.txt.timestamp
+2024-09-17 17:32:07,578 - DEBUG - Starting new HTTP connection (1): 10.10.15.94:3000
+2024-09-17 17:32:07,602 - DEBUG - http://10.10.15.94:3000 "POST /blocked_websites HTTP/1.1" 200 64
+2024-09-17 17:32:07,602 - INFO - Response Status Code: 200
+2024-09-17 17:32:07,602 - INFO - Response Text: {
+  "message": "Successfully wrote blocked websites to file."
+}
+
+2024-09-17 17:32:07,603 - INFO - Successfully wrote blocked websites to file.
+2024-09-17 17:32:07,626 - INFO - File copied to C:\MKS Support Center\block\W2403030NN.txt
+2024-09-17 17:32:07,627 - DEBUG - Reading from file: C:\MKS Support Center\block\W2403030NN.txt
+2024-09-17 17:32:07,627 - DEBUG - Websites found in file: []
+2024-09-17 17:32:07,627 - INFO - All previously blocked domains have been removed.
+2024-09-17 17:32:07,629 - INFO - Timestamp file updated: C:\MKS Support Center\block\W2403030NN.txt.timestamp
+2024-09-17 17:36:33,032 - INFO - Current working directory: D:\Flask
+2024-09-17 17:36:33,120 - DEBUG - Starting new HTTP connection (1): 10.10.15.94:3000
+2024-09-17 17:36:33,124 - DEBUG - http://10.10.15.94:3000 "POST /update_status_wall_to_wall HTTP/1.1" 200 66
+2024-09-17 17:36:33,126 - DEBUG - Starting new HTTP connection (1): 10.10.15.94:3000
+2024-09-17 17:36:33,143 - DEBUG - http://10.10.15.94:3000 "POST /blocked_websites HTTP/1.1" 200 64
+2024-09-17 17:36:33,144 - INFO - Response Status Code: 200
+2024-09-17 17:36:33,144 - INFO - Response Text: {
+  "message": "Successfully wrote blocked websites to file."
+}
+
+2024-09-17 17:36:33,144 - INFO - Successfully wrote blocked websites to file.
+2024-09-17 17:36:33,179 - INFO - File copied to C:\MKS Support Center\block\W2403030NN.txt
+2024-09-17 17:36:33,180 - DEBUG - Reading from file: C:\MKS Support Center\block\W2403030NN.txt
+2024-09-17 17:36:33,180 - DEBUG - Websites found in file: []
+2024-09-17 17:36:33,181 - INFO - All previously blocked domains have been removed.
+2024-09-17 17:36:33,182 - INFO - Timestamp file updated: C:\MKS Support Center\block\W2403030NN.txt.timestamp
+2024-09-17 17:36:33,184 - DEBUG - Starting new HTTP connection (1): 10.10.15.94:3000
+2024-09-17 17:36:33,205 - DEBUG - http://10.10.15.94:3000 "POST /blocked_websites HTTP/1.1" 200 64
+2024-09-17 17:36:33,206 - INFO - Response Status Code: 200
+2024-09-17 17:36:33,207 - INFO - Response Text: {
+  "message": "Successfully wrote blocked websites to file."
+}
+
+2024-09-17 17:36:33,207 - INFO - Successfully wrote blocked websites to file.
+2024-09-17 17:36:33,233 - INFO - File copied to C:\MKS Support Center\block\W2403030NN.txt
+2024-09-17 17:36:33,233 - DEBUG - Reading from file: C:\MKS Support Center\block\W2403030NN.txt
+2024-09-17 17:36:33,234 - DEBUG - Websites found in file: []
+2024-09-17 17:36:33,234 - INFO - All previously blocked domains have been removed.
+2024-09-17 17:36:33,235 - INFO - Timestamp file updated: C:\MKS Support Center\block\W2403030NN.txt.timestamp

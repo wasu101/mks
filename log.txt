@@ -1,0 +1,389 @@
+2024-09-11 16:06:18,502 - INFO - Destination installer path: C:\MKS Support Center\open_vnc_installer_master.exe
+2024-09-11 16:06:18,502 - INFO - Destination version path: C:\MKS Support Center\version.txt
+2024-09-11 16:06:20,018 - INFO - Files copied to C:\MKS Support Center
+2024-09-11 16:06:20,019 - INFO - Running installer from C:\MKS Support Center\open_vnc_installer_master.exe
+2024-09-11 16:06:20,029 - INFO - Latest version: 1.0.6
+2024-09-11 16:07:16,767 - INFO - Destination installer path: C:\MKS Support Center\open_vnc_installer_master.exe
+2024-09-11 16:07:16,767 - INFO - Destination version path: C:\MKS Support Center\version.txt
+2024-09-11 16:07:18,331 - INFO - Files copied to C:\MKS Support Center
+2024-09-11 16:07:18,331 - INFO - Running installer from C:\MKS Support Center\open_vnc_installer_master.exe
+2024-09-11 16:07:18,340 - INFO - Latest version: 1.0.6
+2024-09-12 14:16:35,884 - INFO - Current working directory: D:\Flask
+2024-09-12 14:16:35,982 - DEBUG - Starting new HTTP connection (1): 10.10.15.94:3000
+2024-09-12 14:16:37,017 - DEBUG - http://10.10.15.94:3000 "POST /update_status_wall_to_wall HTTP/1.1" 200 66
+2024-09-12 14:16:37,019 - DEBUG - Starting new HTTP connection (1): 10.10.15.94:3000
+2024-09-12 14:16:37,040 - DEBUG - http://10.10.15.94:3000 "POST /blocked_websites HTTP/1.1" 200 64
+2024-09-12 14:17:28,173 - INFO - Current working directory: D:\Flask
+2024-09-12 14:17:28,289 - DEBUG - Starting new HTTP connection (1): 10.10.15.94:3000
+2024-09-12 14:17:29,302 - DEBUG - http://10.10.15.94:3000 "POST /update_status_wall_to_wall HTTP/1.1" 200 66
+2024-09-12 14:17:29,304 - DEBUG - Starting new HTTP connection (1): 10.10.15.94:3000
+2024-09-12 14:17:29,323 - DEBUG - http://10.10.15.94:3000 "POST /blocked_websites HTTP/1.1" 200 64
+2024-09-12 14:18:54,995 - INFO - Current working directory: D:\Flask
+2024-09-12 14:18:55,075 - DEBUG - Starting new HTTP connection (1): 10.10.15.94:3000
+2024-09-12 14:18:55,079 - DEBUG - http://10.10.15.94:3000 "POST /update_status_wall_to_wall HTTP/1.1" 200 66
+2024-09-12 14:18:55,080 - DEBUG - Starting new HTTP connection (1): 10.10.15.94:3000
+2024-09-12 14:18:55,101 - DEBUG - http://10.10.15.94:3000 "POST /blocked_websites HTTP/1.1" 200 64
+2024-09-12 14:19:51,720 - DEBUG - Starting new HTTP connection (1): 10.10.15.94:3000
+2024-09-12 14:19:52,242 - DEBUG - http://10.10.15.94:3000 "POST /update_status_wall_to_wall HTTP/1.1" 200 66
+2024-09-12 14:19:55,693 - INFO - Current working directory: D:\Flask
+2024-09-12 14:19:55,797 - DEBUG - Starting new HTTP connection (1): 10.10.15.94:3000
+2024-09-12 14:19:55,811 - DEBUG - http://10.10.15.94:3000 "POST /update_status_wall_to_wall HTTP/1.1" 200 66
+2024-09-12 14:19:55,813 - DEBUG - Starting new HTTP connection (1): 10.10.15.94:3000
+2024-09-12 14:19:55,836 - DEBUG - http://10.10.15.94:3000 "POST /blocked_websites HTTP/1.1" 200 64
+2024-09-12 14:20:29,503 - DEBUG - Starting new HTTP connection (1): 10.10.15.94:3000
+2024-09-12 14:20:29,519 - DEBUG - http://10.10.15.94:3000 "POST /update_status_wall_to_wall HTTP/1.1" 200 66
+2024-09-12 14:24:13,674 - INFO - Current working directory: D:\Flask
+2024-09-12 14:24:13,761 - DEBUG - Starting new HTTP connection (1): 10.10.15.94:3000
+2024-09-12 14:24:13,774 - DEBUG - http://10.10.15.94:3000 "POST /update_status_wall_to_wall HTTP/1.1" 200 66
+2024-09-12 14:24:13,776 - DEBUG - Starting new HTTP connection (1): 10.10.15.94:3000
+2024-09-12 14:24:13,866 - DEBUG - http://10.10.15.94:3000 "POST /blocked_websites HTTP/1.1" 200 64
+2024-09-12 14:24:37,494 - INFO - Current working directory: D:\Flask
+2024-09-12 14:24:37,595 - DEBUG - Starting new HTTP connection (1): 10.10.15.94:3000
+2024-09-12 14:24:38,620 - DEBUG - http://10.10.15.94:3000 "POST /update_status_wall_to_wall HTTP/1.1" 200 66
+2024-09-12 14:24:38,622 - DEBUG - Starting new HTTP connection (1): 10.10.15.94:3000
+2024-09-12 14:24:38,649 - DEBUG - http://10.10.15.94:3000 "POST /blocked_websites HTTP/1.1" 200 64
+2024-09-12 14:25:03,118 - DEBUG - Starting new HTTP connection (1): 10.10.15.94:3000
+2024-09-12 14:25:03,126 - DEBUG - http://10.10.15.94:3000 "POST /update_status_wall_to_wall HTTP/1.1" 200 66
+2024-09-12 14:25:38,998 - INFO - Current working directory: D:\Flask
+2024-09-12 14:25:39,126 - DEBUG - Starting new HTTP connection (1): 10.10.15.94:3000
+2024-09-12 14:25:39,136 - DEBUG - http://10.10.15.94:3000 "POST /update_status_wall_to_wall HTTP/1.1" 200 66
+2024-09-12 14:25:39,138 - DEBUG - Starting new HTTP connection (1): 10.10.15.94:3000
+2024-09-12 14:25:39,168 - DEBUG - http://10.10.15.94:3000 "POST /blocked_websites HTTP/1.1" 200 64
+2024-09-12 14:26:08,942 - DEBUG - Starting new HTTP connection (1): 10.10.15.94:3000
+2024-09-12 14:26:08,954 - DEBUG - http://10.10.15.94:3000 "POST /update_status_wall_to_wall HTTP/1.1" 200 66
+2024-09-12 14:27:37,149 - INFO - Current working directory: D:\Flask
+2024-09-12 14:27:37,246 - DEBUG - Starting new HTTP connection (1): 10.10.15.94:3000
+2024-09-12 14:27:37,759 - DEBUG - http://10.10.15.94:3000 "POST /update_status_wall_to_wall HTTP/1.1" 200 66
+2024-09-12 14:27:37,761 - DEBUG - Starting new HTTP connection (1): 10.10.15.94:3000
+2024-09-12 14:27:37,780 - DEBUG - http://10.10.15.94:3000 "POST /blocked_websites HTTP/1.1" 200 64
+2024-09-12 14:31:45,348 - WARNING - Another instance detected.
+2024-09-12 14:31:55,523 - DEBUG - Starting new HTTP connection (1): 10.10.15.94:3000
+2024-09-12 14:31:55,536 - DEBUG - http://10.10.15.94:3000 "POST /update_status_wall_to_wall HTTP/1.1" 200 66
+2024-09-12 14:31:58,879 - INFO - Current working directory: D:\Flask
+2024-09-12 14:31:58,975 - DEBUG - Starting new HTTP connection (1): 10.10.15.94:3000
+2024-09-12 14:31:58,985 - DEBUG - http://10.10.15.94:3000 "POST /update_status_wall_to_wall HTTP/1.1" 200 66
+2024-09-12 14:31:58,988 - DEBUG - Starting new HTTP connection (1): 10.10.15.94:3000
+2024-09-12 14:31:59,008 - DEBUG - http://10.10.15.94:3000 "POST /blocked_websites HTTP/1.1" 200 64
+2024-09-12 14:32:43,325 - DEBUG - Starting new HTTP connection (1): 10.10.15.94:3000
+2024-09-12 14:32:43,332 - DEBUG - http://10.10.15.94:3000 "POST /update_status_wall_to_wall HTTP/1.1" 200 66
+2024-09-12 14:34:41,705 - INFO - Current working directory: D:\Flask
+2024-09-12 14:34:41,819 - DEBUG - Starting new HTTP connection (1): 10.10.15.94:3000
+2024-09-12 14:34:41,846 - DEBUG - http://10.10.15.94:3000 "POST /update_status_wall_to_wall HTTP/1.1" 200 66
+2024-09-12 14:34:41,849 - DEBUG - Starting new HTTP connection (1): 10.10.15.94:3000
+2024-09-12 14:34:41,868 - DEBUG - http://10.10.15.94:3000 "POST /blocked_websites HTTP/1.1" 200 64
+2024-09-12 14:35:25,513 - INFO - Current working directory: D:\Flask
+2024-09-12 14:35:25,615 - DEBUG - Starting new HTTP connection (1): 10.10.15.94:3000
+2024-09-12 14:35:25,619 - DEBUG - http://10.10.15.94:3000 "POST /update_status_wall_to_wall HTTP/1.1" 200 66
+2024-09-12 14:35:25,621 - DEBUG - Starting new HTTP connection (1): 10.10.15.94:3000
+2024-09-12 14:35:25,642 - DEBUG - http://10.10.15.94:3000 "POST /blocked_websites HTTP/1.1" 200 64
+2024-09-12 14:37:43,176 - INFO - Current working directory: D:\Flask
+2024-09-12 14:37:43,302 - DEBUG - Starting new HTTP connection (1): 10.10.15.94:3000
+2024-09-12 14:37:45,562 - DEBUG - http://10.10.15.94:3000 "POST /update_status_wall_to_wall HTTP/1.1" 200 66
+2024-09-12 14:37:45,565 - DEBUG - Starting new HTTP connection (1): 10.10.15.94:3000
+2024-09-12 14:37:45,586 - DEBUG - http://10.10.15.94:3000 "POST /blocked_websites HTTP/1.1" 200 64
+2024-09-12 14:38:36,253 - INFO - Current working directory: D:\Flask
+2024-09-12 14:38:36,356 - DEBUG - Starting new HTTP connection (1): 10.10.15.94:3000
+2024-09-12 14:38:37,897 - DEBUG - http://10.10.15.94:3000 "POST /update_status_wall_to_wall HTTP/1.1" 200 66
+2024-09-12 14:38:37,899 - DEBUG - Starting new HTTP connection (1): 10.10.15.94:3000
+2024-09-12 14:38:37,920 - DEBUG - http://10.10.15.94:3000 "POST /blocked_websites HTTP/1.1" 200 64
+2024-09-12 14:39:18,877 - DEBUG - Starting new HTTP connection (1): 10.10.15.94:3000
+2024-09-12 14:39:18,889 - DEBUG - http://10.10.15.94:3000 "POST /update_status_wall_to_wall HTTP/1.1" 200 66
+2024-09-12 14:39:31,677 - INFO - Current working directory: D:\Flask
+2024-09-12 14:39:31,773 - DEBUG - Starting new HTTP connection (1): 10.10.15.94:3000
+2024-09-12 14:39:31,783 - DEBUG - http://10.10.15.94:3000 "POST /update_status_wall_to_wall HTTP/1.1" 200 66
+2024-09-12 14:39:31,786 - DEBUG - Starting new HTTP connection (1): 10.10.15.94:3000
+2024-09-12 14:39:31,803 - DEBUG - http://10.10.15.94:3000 "POST /blocked_websites HTTP/1.1" 200 64
+2024-09-12 15:06:59,204 - DEBUG - Starting new HTTP connection (1): 10.10.15.94:3000
+2024-09-12 15:07:56,549 - INFO - Current working directory: D:\Flask
+2024-09-12 15:07:56,626 - DEBUG - Starting new HTTP connection (1): 10.10.15.94:3000
+2024-09-12 15:08:17,683 - DEBUG - Starting new HTTP connection (1): 10.10.15.94:3000
+2024-09-12 15:08:45,854 - INFO - Current working directory: D:\Flask
+2024-09-12 15:08:45,944 - DEBUG - Starting new HTTP connection (1): 10.10.15.94:3000
+2024-09-12 15:09:06,975 - DEBUG - Starting new HTTP connection (1): 10.10.15.94:3000
+2024-09-12 15:10:38,322 - DEBUG - Starting new HTTP connection (1): 10.10.15.94:3000
+2024-09-12 15:11:01,359 - INFO - Current working directory: D:\Flask
+2024-09-12 15:11:01,447 - DEBUG - Starting new HTTP connection (1): 10.10.15.94:3000
+2024-09-12 15:11:22,491 - DEBUG - Starting new HTTP connection (1): 10.10.15.94:3000
+2024-09-12 15:14:13,660 - DEBUG - Starting new HTTP connection (1): 10.10.15.94:3000
+2024-09-12 15:23:44,326 - INFO - Current working directory: D:\Flask
+2024-09-12 15:23:44,452 - DEBUG - Starting new HTTP connection (1): 10.10.15.94:3000
+2024-09-12 15:24:05,497 - DEBUG - Starting new HTTP connection (1): 10.10.15.94:3000
+2024-09-12 16:20:12,616 - DEBUG - Starting new HTTP connection (1): 10.10.15.94:3000
+2024-09-12 17:05:01,242 - WARNING - Another instance detected.
+2024-09-12 17:05:10,585 - INFO - Current working directory: D:\Flask
+2024-09-12 17:05:10,707 - DEBUG - Starting new HTTP connection (1): 10.10.15.94:3000
+2024-09-12 17:05:10,722 - DEBUG - http://10.10.15.94:3000 "POST /update_status_wall_to_wall HTTP/1.1" 200 66
+2024-09-12 17:05:10,725 - DEBUG - Starting new HTTP connection (1): 10.10.15.94:3000
+2024-09-12 17:05:10,744 - DEBUG - http://10.10.15.94:3000 "POST /blocked_websites HTTP/1.1" 200 64
+2024-09-12 17:16:35,150 - INFO - Current working directory: D:\Flask
+2024-09-12 17:16:35,228 - DEBUG - Starting new HTTP connection (1): 10.10.15.94:3000
+2024-09-12 17:16:35,241 - DEBUG - http://10.10.15.94:3000 "POST /update_status_wall_to_wall HTTP/1.1" 200 66
+2024-09-12 17:16:35,243 - DEBUG - Starting new HTTP connection (1): 10.10.15.94:3000
+2024-09-12 17:16:35,268 - DEBUG - http://10.10.15.94:3000 "POST /blocked_websites HTTP/1.1" 200 64
+2024-09-12 17:17:48,157 - DEBUG - Starting new HTTP connection (1): 10.10.15.94:3000
+2024-09-12 17:17:48,177 - DEBUG - http://10.10.15.94:3000 "POST /update_status_wall_to_wall HTTP/1.1" 200 66
+2024-09-12 17:17:56,269 - INFO - Current working directory: D:\Flask
+2024-09-12 17:17:56,378 - DEBUG - Starting new HTTP connection (1): 10.10.15.94:3000
+2024-09-12 17:17:56,395 - DEBUG - http://10.10.15.94:3000 "POST /update_status_wall_to_wall HTTP/1.1" 200 66
+2024-09-12 17:17:56,398 - DEBUG - Starting new HTTP connection (1): 10.10.15.94:3000
+2024-09-12 17:17:56,447 - DEBUG - http://10.10.15.94:3000 "POST /blocked_websites HTTP/1.1" 200 64
+2024-09-12 17:20:52,954 - DEBUG - Starting new HTTP connection (1): 10.10.15.94:3000
+2024-09-12 17:20:52,969 - DEBUG - http://10.10.15.94:3000 "POST /update_status_wall_to_wall HTTP/1.1" 200 66
+2024-09-12 17:20:56,754 - INFO - Current working directory: D:\Flask
+2024-09-12 17:20:56,864 - DEBUG - Starting new HTTP connection (1): 10.10.15.94:3000
+2024-09-12 17:20:56,880 - DEBUG - http://10.10.15.94:3000 "POST /update_status_wall_to_wall HTTP/1.1" 200 66
+2024-09-12 17:20:56,890 - DEBUG - Starting new HTTP connection (1): 10.10.15.94:3000
+2024-09-12 17:20:56,933 - DEBUG - http://10.10.15.94:3000 "POST /blocked_websites HTTP/1.1" 200 64
+2024-09-12 17:22:04,744 - WARNING - Another instance detected.
+2024-09-12 17:22:08,791 - DEBUG - Starting new HTTP connection (1): 10.10.15.94:3000
+2024-09-12 17:22:08,806 - DEBUG - http://10.10.15.94:3000 "POST /update_status_wall_to_wall HTTP/1.1" 200 66
+2024-09-12 17:22:11,861 - INFO - Current working directory: D:\Flask
+2024-09-12 17:22:11,944 - DEBUG - Starting new HTTP connection (1): 10.10.15.94:3000
+2024-09-12 17:22:11,961 - DEBUG - http://10.10.15.94:3000 "POST /update_status_wall_to_wall HTTP/1.1" 200 66
+2024-09-12 17:22:11,971 - DEBUG - Starting new HTTP connection (1): 10.10.15.94:3000
+2024-09-12 17:22:12,011 - DEBUG - http://10.10.15.94:3000 "POST /blocked_websites HTTP/1.1" 200 64
+2024-09-12 17:22:45,187 - INFO - Current working directory: D:\Flask
+2024-09-12 17:22:45,259 - DEBUG - Starting new HTTP connection (1): 10.10.15.94:3000
+2024-09-12 17:22:45,262 - DEBUG - http://10.10.15.94:3000 "POST /update_status_wall_to_wall HTTP/1.1" 200 66
+2024-09-12 17:22:45,264 - DEBUG - Starting new HTTP connection (1): 10.10.15.94:3000
+2024-09-12 17:22:45,294 - DEBUG - http://10.10.15.94:3000 "POST /blocked_websites HTTP/1.1" 200 64
+2024-09-12 17:23:19,030 - INFO - Current working directory: D:\Flask
+2024-09-12 17:23:19,119 - DEBUG - Starting new HTTP connection (1): 10.10.15.94:3000
+2024-09-12 17:23:19,123 - DEBUG - http://10.10.15.94:3000 "POST /update_status_wall_to_wall HTTP/1.1" 200 66
+2024-09-12 17:23:19,124 - DEBUG - Starting new HTTP connection (1): 10.10.15.94:3000
+2024-09-12 17:23:19,144 - DEBUG - http://10.10.15.94:3000 "POST /blocked_websites HTTP/1.1" 200 64
+2024-09-12 17:23:36,710 - INFO - Current working directory: D:\Flask
+2024-09-12 17:23:36,819 - DEBUG - Starting new HTTP connection (1): 10.10.15.94:3000
+2024-09-12 17:23:36,819 - DEBUG - http://10.10.15.94:3000 "POST /update_status_wall_to_wall HTTP/1.1" 200 66
+2024-09-12 17:23:36,819 - DEBUG - Starting new HTTP connection (1): 10.10.15.94:3000
+2024-09-12 17:23:36,851 - DEBUG - http://10.10.15.94:3000 "POST /blocked_websites HTTP/1.1" 200 64
+2024-09-12 17:24:20,396 - INFO - Current working directory: D:\Flask
+2024-09-12 17:24:20,475 - DEBUG - Starting new HTTP connection (1): 10.10.15.94:3000
+2024-09-12 17:24:22,517 - DEBUG - Starting new HTTP connection (1): 10.10.15.94:3000
+2024-09-12 17:24:23,053 - DEBUG - http://10.10.15.94:3000 "POST /blocked_websites HTTP/1.1" 200 64
+2024-09-12 17:24:32,141 - INFO - Current working directory: D:\Flask
+2024-09-12 17:24:32,226 - DEBUG - Starting new HTTP connection (1): 10.10.15.94:3000
+2024-09-12 17:24:32,229 - DEBUG - http://10.10.15.94:3000 "POST /update_status_wall_to_wall HTTP/1.1" 200 66
+2024-09-12 17:24:32,231 - DEBUG - Starting new HTTP connection (1): 10.10.15.94:3000
+2024-09-12 17:24:32,261 - DEBUG - http://10.10.15.94:3000 "POST /blocked_websites HTTP/1.1" 200 64
+2024-09-12 17:28:51,820 - WARNING - Another instance detected.
+2024-09-12 17:28:58,550 - DEBUG - Starting new HTTP connection (1): 10.10.15.94:3000
+2024-09-12 17:28:58,560 - DEBUG - http://10.10.15.94:3000 "POST /update_status_wall_to_wall HTTP/1.1" 200 66
+2024-09-12 17:29:02,234 - INFO - Current working directory: D:\Flask
+2024-09-12 17:29:02,317 - DEBUG - Starting new HTTP connection (1): 10.10.15.94:3000
+2024-09-12 17:29:02,333 - DEBUG - http://10.10.15.94:3000 "POST /update_status_wall_to_wall HTTP/1.1" 200 66
+2024-09-12 17:29:02,336 - DEBUG - Starting new HTTP connection (1): 10.10.15.94:3000
+2024-09-12 17:29:02,367 - DEBUG - http://10.10.15.94:3000 "POST /blocked_websites HTTP/1.1" 200 64
+2024-09-12 17:30:58,654 - INFO - Current working directory: D:\Flask
+2024-09-12 17:30:58,727 - DEBUG - Starting new HTTP connection (1): 10.10.15.94:3000
+2024-09-12 17:30:58,731 - DEBUG - http://10.10.15.94:3000 "POST /update_status_wall_to_wall HTTP/1.1" 200 66
+2024-09-12 17:30:58,732 - DEBUG - Starting new HTTP connection (1): 10.10.15.94:3000
+2024-09-12 17:30:58,755 - DEBUG - http://10.10.15.94:3000 "POST /blocked_websites HTTP/1.1" 200 64
+2024-09-12 17:30:58,799 - DEBUG - Starting new HTTP connection (1): 10.10.15.94:3000
+2024-09-12 17:30:58,821 - DEBUG - http://10.10.15.94:3000 "POST /blocked_websites HTTP/1.1" 200 64
+2024-09-12 17:32:59,280 - INFO - Current working directory: D:\Flask
+2024-09-12 17:32:59,361 - DEBUG - Starting new HTTP connection (1): 10.10.15.94:3000
+2024-09-12 17:33:01,393 - DEBUG - Starting new HTTP connection (1): 10.10.15.94:3000
+2024-09-12 17:33:01,929 - DEBUG - http://10.10.15.94:3000 "POST /blocked_websites HTTP/1.1" 200 64
+2024-09-12 17:33:01,971 - DEBUG - Starting new HTTP connection (1): 10.10.15.94:3000
+2024-09-12 17:33:01,989 - DEBUG - http://10.10.15.94:3000 "POST /blocked_websites HTTP/1.1" 200 64
+2024-09-12 17:33:33,029 - INFO - Current working directory: D:\Flask
+2024-09-12 17:33:33,116 - DEBUG - Starting new HTTP connection (1): 10.10.15.94:3000
+2024-09-12 17:33:33,119 - DEBUG - http://10.10.15.94:3000 "POST /update_status_wall_to_wall HTTP/1.1" 200 66
+2024-09-12 17:33:33,121 - DEBUG - Starting new HTTP connection (1): 10.10.15.94:3000
+2024-09-12 17:33:33,135 - DEBUG - http://10.10.15.94:3000 "POST /blocked_websites HTTP/1.1" 200 64
+2024-09-12 17:33:33,168 - DEBUG - Starting new HTTP connection (1): 10.10.15.94:3000
+2024-09-12 17:33:33,179 - DEBUG - http://10.10.15.94:3000 "POST /blocked_websites HTTP/1.1" 200 64
+2024-09-12 17:34:16,589 - INFO - Current working directory: D:\Flask
+2024-09-12 17:34:16,755 - DEBUG - Starting new HTTP connection (1): 10.10.15.94:3000
+2024-09-12 17:34:16,757 - DEBUG - http://10.10.15.94:3000 "POST /update_status_wall_to_wall HTTP/1.1" 200 66
+2024-09-12 17:34:16,757 - DEBUG - Starting new HTTP connection (1): 10.10.15.94:3000
+2024-09-12 17:34:16,787 - DEBUG - http://10.10.15.94:3000 "POST /blocked_websites HTTP/1.1" 200 64
+2024-09-12 17:34:16,936 - DEBUG - Starting new HTTP connection (1): 10.10.15.94:3000
+2024-09-12 17:34:16,960 - DEBUG - http://10.10.15.94:3000 "POST /blocked_websites HTTP/1.1" 200 64
+2024-09-12 17:34:53,350 - INFO - Current working directory: D:\Flask
+2024-09-12 17:34:53,441 - DEBUG - Starting new HTTP connection (1): 10.10.15.94:3000
+2024-09-12 17:34:53,446 - DEBUG - http://10.10.15.94:3000 "POST /update_status_wall_to_wall HTTP/1.1" 200 66
+2024-09-12 17:34:53,448 - DEBUG - Starting new HTTP connection (1): 10.10.15.94:3000
+2024-09-12 17:34:53,468 - DEBUG - http://10.10.15.94:3000 "POST /blocked_websites HTTP/1.1" 200 64
+2024-09-12 17:34:53,503 - DEBUG - Starting new HTTP connection (1): 10.10.15.94:3000
+2024-09-12 17:34:53,518 - DEBUG - http://10.10.15.94:3000 "POST /blocked_websites HTTP/1.1" 200 64
+2024-09-12 17:35:23,817 - INFO - Current working directory: D:\Flask
+2024-09-12 17:35:23,898 - DEBUG - Starting new HTTP connection (1): 10.10.15.94:3000
+2024-09-12 17:35:23,901 - DEBUG - http://10.10.15.94:3000 "POST /update_status_wall_to_wall HTTP/1.1" 200 66
+2024-09-12 17:35:23,903 - DEBUG - Starting new HTTP connection (1): 10.10.15.94:3000
+2024-09-12 17:35:23,943 - DEBUG - http://10.10.15.94:3000 "POST /blocked_websites HTTP/1.1" 200 64
+2024-09-12 17:35:24,026 - DEBUG - Starting new HTTP connection (1): 10.10.15.94:3000
+2024-09-12 17:35:24,049 - DEBUG - http://10.10.15.94:3000 "POST /blocked_websites HTTP/1.1" 200 64
+2024-09-12 17:40:43,591 - INFO - Current working directory: D:\Flask
+2024-09-12 17:40:43,693 - DEBUG - Starting new HTTP connection (1): 10.10.15.94:3000
+2024-09-12 17:40:43,695 - DEBUG - http://10.10.15.94:3000 "POST /update_status_wall_to_wall HTTP/1.1" 200 66
+2024-09-12 17:40:43,695 - DEBUG - Starting new HTTP connection (1): 10.10.15.94:3000
+2024-09-12 17:40:43,708 - DEBUG - http://10.10.15.94:3000 "POST /blocked_websites HTTP/1.1" 200 64
+2024-09-12 17:40:43,757 - DEBUG - Starting new HTTP connection (1): 10.10.15.94:3000
+2024-09-12 17:40:43,774 - DEBUG - http://10.10.15.94:3000 "POST /blocked_websites HTTP/1.1" 200 64
+2024-09-12 17:55:08,084 - WARNING - Another instance detected.
+2024-09-12 17:55:21,068 - INFO - Current working directory: D:\Flask
+2024-09-12 17:55:21,208 - DEBUG - Starting new HTTP connection (1): 10.10.15.94:3000
+2024-09-12 17:55:21,208 - DEBUG - http://10.10.15.94:3000 "POST /update_status_wall_to_wall HTTP/1.1" 200 66
+2024-09-12 17:55:21,226 - DEBUG - Starting new HTTP connection (1): 10.10.15.94:3000
+2024-09-12 17:55:21,253 - DEBUG - http://10.10.15.94:3000 "POST /blocked_websites HTTP/1.1" 200 64
+2024-09-12 17:55:21,254 - INFO - Response Status Code: 200
+2024-09-12 17:55:21,254 - INFO - Response Text: {
+  "message": "Successfully wrote blocked websites to file."
+}
+
+2024-09-12 17:55:21,254 - INFO - Successfully wrote blocked websites to file.
+2024-09-12 17:55:21,254 - DEBUG - File Path: I:\test\block\W2403030NN.txt
+2024-09-12 17:55:21,260 - DEBUG - Reading from file: I:\test\block\W2403030NN.txt
+2024-09-12 17:55:21,265 - DEBUG - Websites found in file: []
+2024-09-12 17:55:21,266 - INFO - All previously blocked domains have been removed.
+2024-09-12 17:55:21,296 - DEBUG - Starting new HTTP connection (1): 10.10.15.94:3000
+2024-09-12 17:55:21,319 - DEBUG - http://10.10.15.94:3000 "POST /blocked_websites HTTP/1.1" 200 64
+2024-09-12 17:55:21,320 - INFO - Response Status Code: 200
+2024-09-12 17:55:21,320 - INFO - Response Text: {
+  "message": "Successfully wrote blocked websites to file."
+}
+
+2024-09-12 17:55:21,320 - INFO - Successfully wrote blocked websites to file.
+2024-09-12 17:55:21,320 - DEBUG - File Path: I:\test\block\W2403030NN.txt
+2024-09-12 17:55:21,326 - DEBUG - Reading from file: I:\test\block\W2403030NN.txt
+2024-09-12 17:55:21,333 - DEBUG - Websites found in file: []
+2024-09-12 17:55:21,334 - INFO - All previously blocked domains have been removed.
+2024-09-12 18:06:55,515 - INFO - Current working directory: D:\Flask
+2024-09-12 18:06:55,605 - DEBUG - Starting new HTTP connection (1): 10.10.15.94:3000
+2024-09-12 18:06:57,624 - DEBUG - Starting new HTTP connection (1): 10.10.15.94:3000
+2024-09-12 18:06:58,671 - DEBUG - http://10.10.15.94:3000 "POST /blocked_websites HTTP/1.1" 200 64
+2024-09-12 18:06:58,672 - INFO - Response Status Code: 200
+2024-09-12 18:06:58,672 - INFO - Response Text: {
+  "message": "Successfully wrote blocked websites to file."
+}
+
+2024-09-12 18:06:58,672 - INFO - Successfully wrote blocked websites to file.
+2024-09-12 18:06:58,672 - DEBUG - File Path: I:\test\block\W2403030NN.txt
+2024-09-12 18:06:58,681 - DEBUG - Reading from file: I:\test\block\W2403030NN.txt
+2024-09-12 18:06:58,685 - DEBUG - Websites found in file: []
+2024-09-12 18:06:58,686 - INFO - All previously blocked domains have been removed.
+2024-09-12 18:06:58,718 - DEBUG - Starting new HTTP connection (1): 10.10.15.94:3000
+2024-09-12 18:06:58,760 - DEBUG - http://10.10.15.94:3000 "POST /blocked_websites HTTP/1.1" 200 64
+2024-09-12 18:06:58,761 - INFO - Response Status Code: 200
+2024-09-12 18:06:58,761 - INFO - Response Text: {
+  "message": "Successfully wrote blocked websites to file."
+}
+
+2024-09-12 18:06:58,761 - INFO - Successfully wrote blocked websites to file.
+2024-09-12 18:06:58,761 - DEBUG - File Path: I:\test\block\W2403030NN.txt
+2024-09-12 18:06:58,766 - DEBUG - Reading from file: I:\test\block\W2403030NN.txt
+2024-09-12 18:06:58,772 - DEBUG - Websites found in file: []
+2024-09-12 18:06:58,773 - INFO - All previously blocked domains have been removed.
+2024-09-12 18:07:27,303 - DEBUG - Starting new HTTP connection (1): 10.10.15.94:3000
+2024-09-12 18:07:27,321 - DEBUG - http://10.10.15.94:3000 "POST /update_status_wall_to_wall HTTP/1.1" 200 66
+2024-09-12 18:16:35,695 - INFO - Current working directory: D:\Flask
+2024-09-12 18:16:35,809 - DEBUG - Starting new HTTP connection (1): 10.10.15.94:3000
+2024-09-12 18:16:35,819 - DEBUG - http://10.10.15.94:3000 "POST /update_status_wall_to_wall HTTP/1.1" 200 66
+2024-09-12 18:16:35,822 - DEBUG - Starting new HTTP connection (1): 10.10.15.94:3000
+2024-09-12 18:16:35,839 - DEBUG - http://10.10.15.94:3000 "POST /blocked_websites HTTP/1.1" 200 64
+2024-09-12 18:16:35,841 - INFO - Response Status Code: 200
+2024-09-12 18:16:35,841 - INFO - Response Text: {
+  "message": "Successfully wrote blocked websites to file."
+}
+
+2024-09-12 18:16:35,841 - INFO - Successfully wrote blocked websites to file.
+2024-09-12 18:16:35,841 - DEBUG - File Path: I:\test\block\W2403030NN.txt
+2024-09-12 18:16:35,846 - DEBUG - Reading from file: I:\test\block\W2403030NN.txt
+2024-09-12 18:16:35,850 - DEBUG - Websites found in file: []
+2024-09-12 18:16:35,851 - INFO - All previously blocked domains have been removed.
+2024-09-12 18:16:35,901 - DEBUG - Starting new HTTP connection (1): 10.10.15.94:3000
+2024-09-12 18:16:35,928 - DEBUG - http://10.10.15.94:3000 "POST /blocked_websites HTTP/1.1" 200 64
+2024-09-12 18:16:35,928 - INFO - Response Status Code: 200
+2024-09-12 18:16:35,928 - INFO - Response Text: {
+  "message": "Successfully wrote blocked websites to file."
+}
+
+2024-09-12 18:16:35,929 - INFO - Successfully wrote blocked websites to file.
+2024-09-12 18:16:35,929 - DEBUG - File Path: I:\test\block\W2403030NN.txt
+2024-09-12 18:16:35,951 - DEBUG - Reading from file: I:\test\block\W2403030NN.txt
+2024-09-12 18:16:35,955 - DEBUG - Websites found in file: []
+2024-09-12 18:16:35,956 - INFO - All previously blocked domains have been removed.
+2024-09-12 18:19:47,990 - INFO - Current working directory: D:\Flask
+2024-09-12 18:19:48,075 - DEBUG - Starting new HTTP connection (1): 10.10.15.94:3000
+2024-09-12 18:19:48,080 - DEBUG - http://10.10.15.94:3000 "POST /update_status_wall_to_wall HTTP/1.1" 200 66
+2024-09-12 18:19:48,083 - DEBUG - Starting new HTTP connection (1): 10.10.15.94:3000
+2024-09-12 18:19:48,110 - DEBUG - http://10.10.15.94:3000 "POST /blocked_websites HTTP/1.1" 200 64
+2024-09-12 18:19:48,111 - INFO - Response Status Code: 200
+2024-09-12 18:19:48,111 - INFO - Response Text: {
+  "message": "Successfully wrote blocked websites to file."
+}
+
+2024-09-12 18:19:48,111 - INFO - Successfully wrote blocked websites to file.
+2024-09-12 18:19:48,111 - DEBUG - File Path: I:\test\block\W2403030NN.txt
+2024-09-12 18:19:48,116 - DEBUG - Reading from file: I:\test\block\W2403030NN.txt
+2024-09-12 18:19:48,122 - DEBUG - Websites found in file: []
+2024-09-12 18:19:48,122 - INFO - All previously blocked domains have been removed.
+2024-09-12 18:19:48,155 - DEBUG - Starting new HTTP connection (1): 10.10.15.94:3000
+2024-09-12 18:19:48,174 - DEBUG - http://10.10.15.94:3000 "POST /blocked_websites HTTP/1.1" 200 64
+2024-09-12 18:19:48,175 - INFO - Response Status Code: 200
+2024-09-12 18:19:48,175 - INFO - Response Text: {
+  "message": "Successfully wrote blocked websites to file."
+}
+
+2024-09-12 18:19:48,175 - INFO - Successfully wrote blocked websites to file.
+2024-09-12 18:19:48,176 - DEBUG - File Path: I:\test\block\W2403030NN.txt
+2024-09-12 18:19:48,181 - DEBUG - Reading from file: I:\test\block\W2403030NN.txt
+2024-09-12 18:19:48,187 - DEBUG - Websites found in file: []
+2024-09-12 18:19:48,187 - INFO - All previously blocked domains have been removed.
+2024-09-12 18:24:08,283 - WARNING - Another instance detected.
+2024-09-12 18:24:21,368 - INFO - Current working directory: D:\Flask
+2024-09-12 18:24:21,461 - DEBUG - Starting new HTTP connection (1): 10.10.15.94:3000
+2024-09-12 18:24:21,468 - DEBUG - http://10.10.15.94:3000 "POST /update_status_wall_to_wall HTTP/1.1" 200 66
+2024-09-12 18:24:21,482 - DEBUG - Starting new HTTP connection (1): 10.10.15.94:3000
+2024-09-12 18:24:21,508 - DEBUG - http://10.10.15.94:3000 "POST /blocked_websites HTTP/1.1" 200 64
+2024-09-12 18:24:21,509 - INFO - Response Status Code: 200
+2024-09-12 18:24:21,509 - INFO - Response Text: {
+  "message": "Successfully wrote blocked websites to file."
+}
+
+2024-09-12 18:24:21,509 - INFO - Successfully wrote blocked websites to file.
+2024-09-12 18:24:21,532 - DEBUG - Reading from file: I:\test\block\W2403030NN.txt
+2024-09-12 18:24:21,535 - DEBUG - Websites found in file: []
+2024-09-12 18:24:21,536 - INFO - All previously blocked domains have been removed.
+2024-09-12 18:24:21,569 - INFO - Timestamp file updated: I:\test\block\W2403030NN.txt.timestamp
+2024-09-12 18:24:21,569 - DEBUG - Starting new HTTP connection (1): 10.10.15.94:3000
+2024-09-12 18:24:21,598 - DEBUG - http://10.10.15.94:3000 "POST /blocked_websites HTTP/1.1" 200 64
+2024-09-12 18:24:21,599 - INFO - Response Status Code: 200
+2024-09-12 18:24:21,599 - INFO - Response Text: {
+  "message": "Successfully wrote blocked websites to file."
+}
+
+2024-09-12 18:24:21,599 - INFO - Successfully wrote blocked websites to file.
+2024-09-12 18:24:21,620 - DEBUG - Reading from file: I:\test\block\W2403030NN.txt
+2024-09-12 18:24:21,622 - DEBUG - Websites found in file: []
+2024-09-12 18:24:21,623 - INFO - All previously blocked domains have been removed.
+2024-09-12 18:24:21,646 - INFO - Timestamp file updated: I:\test\block\W2403030NN.txt.timestamp
+2024-09-12 18:34:03,090 - INFO - Current working directory: D:\Flask
+2024-09-12 18:34:03,168 - DEBUG - Starting new HTTP connection (1): 10.10.15.94:3000
+2024-09-12 18:34:03,168 - DEBUG - http://10.10.15.94:3000 "POST /update_status_wall_to_wall HTTP/1.1" 200 66
+2024-09-12 18:34:03,185 - DEBUG - Starting new HTTP connection (1): 10.10.15.94:3000
+2024-09-12 18:34:03,208 - DEBUG - http://10.10.15.94:3000 "POST /blocked_websites HTTP/1.1" 200 64
+2024-09-12 18:34:03,209 - INFO - Response Status Code: 200
+2024-09-12 18:34:03,209 - INFO - Response Text: {
+  "message": "Successfully wrote blocked websites to file."
+}
+
+2024-09-12 18:34:03,209 - INFO - Successfully wrote blocked websites to file.
+2024-09-12 18:34:03,230 - DEBUG - Reading from file: I:\test\block\W2403030NN.txt
+2024-09-12 18:34:03,232 - DEBUG - Websites found in file: []
+2024-09-12 18:34:03,232 - INFO - All previously blocked domains have been removed.
+2024-09-12 18:34:03,260 - INFO - Timestamp file updated: I:\test\block\W2403030NN.txt.timestamp
+2024-09-12 18:34:03,276 - DEBUG - Starting new HTTP connection (1): 10.10.15.94:3000
+2024-09-12 18:34:03,299 - DEBUG - http://10.10.15.94:3000 "POST /blocked_websites HTTP/1.1" 200 64
+2024-09-12 18:34:03,300 - INFO - Response Status Code: 200
+2024-09-12 18:34:03,300 - INFO - Response Text: {
+  "message": "Successfully wrote blocked websites to file."
+}
+
+2024-09-12 18:34:03,300 - INFO - Successfully wrote blocked websites to file.
+2024-09-12 18:34:03,318 - DEBUG - Reading from file: I:\test\block\W2403030NN.txt
+2024-09-12 18:34:03,321 - DEBUG - Websites found in file: []
+2024-09-12 18:34:03,321 - INFO - All previously blocked domains have been removed.
+2024-09-12 18:34:03,343 - INFO - Timestamp file updated: I:\test\block\W2403030NN.txt.timestamp

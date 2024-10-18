@@ -1,0 +1,1 @@
+echo "api_key: gggLpJFv2kujF87UjGbRrROSJUIYbGfq" > ~/.ultrahook

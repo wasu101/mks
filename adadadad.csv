@@ -1,0 +1,30 @@
+id,ticket_number,title,description,status,created_at,close_at,department,reason,type,issuetype
+24,20240400007,K.Smile,Driver Printer Error,Finish,2024-04-05 10:19,2024-04-05 10:20,BI(NAVISION),Repair install driver,low,SoftwareError
+27,20240400009,Recruit,Add finger scan,Finish,2024-04-05 11:51,2024-04-05 12:04,HR,Done.,low,OtherIssue
+28,20240400010,Badan,Notified that the CCTV still did not show the complete picture and wanted to place the camera in their perspective.,open,2024-04-05 12:00,,SECURITY,,low,OtherIssue
+29,20240400011,Chet,New computer,open,2024-04-05 12:01,,CNC,,middle,OtherIssue
+48,20240400012,K.Nongnuch,Printer PaperJam,Finish,2024-04-05 12:33,2024-04-05 12:36,OPC,"Upon inspection, it was found that one of the printer parts had fallen out. So we put it back.",low,HardwareError
+57,20240400013,OPC,Can't find pictures in NAVISION,Finish,2024-04-05 16:07,2024-04-05 16:34,OPC,Tell user call BI(NAVISION) Department for solution,low,UserError
+61,20240400021,W220513AP,Can't scan barcode for Navison,Finish,2024-04-06 10:41,0204-04-06 11:30,OPC,Reinstall Font on this computer user,low,UserError
+124,20240400022,Sine,Unable to retrieve employee entry-exit information.,Finish,2024-04-06 16:17,2024-04-06 16:20,HR,Regenerate employee entry-exit information. wait for 2 minutes.,low,SoftwareError
+145,20240400025,Parameth,Move location Computer Form Accounting to GoldStock,open,2024-04-08 19:31,,GOLD STOCK,,low,OtherIssue
+20240400020,20240400026,Smile,CPU Overload ทรัพยากรเครื่องไม่เพียงพอต่อการใช้งาน,Finish,2024-04-10 18:42,2024-04-12 09:57,BI(NAVISION),ทำเครื่องให้เสร็จพร้อมใช้งานแล้ว ยกไปให้เวลา 14.30 110424,middle,HardwareError
+20240400021,20240400027,Tangkwa,คอมค้างที่รีสตาร์ท และ ปริ๊นต์เตอร์ปริ๊นต์หมึกไม่ออก,Finish,2024-04-11 12:27,2024-04-11 12:28,ACCOUNTING,คอมรีเครื่องอัพเดทวินโดว์ และ ปริ๊นต์เตอร์ให้เบิกหมึกมาเติม และทำการล้างหัวปริ๊นต์,low,HardwareError
+20240400022,20240400028,Jam,Mail box full,Finish,2024-04-11 12:29,2024-04-11 12:30,PACKING,Send backup to Server,low,SoftwareError
+20240400023,20240400029,Nim,Network has a problem,Finish,2024-04-11 12:31,2024-04-11 12:32,OPC,Chang lan cable and test use again,low,NetworkError
+20240400024,20240400030,Apple,Check laptop use meeting.,Finish,2024-04-11 12:33,2024-04-11 12:35,ACCOUNTING,Check update config. and login meeting again.,low,OtherIssue
+20240400025,20240400031,Vivek,He want reset password cad8,Finish,2024-04-11 12:36,2024-04-11 12:37,DESIGN/CAD/MODEL,Reset Password cad8 and mail to K. Vivek check again.,low,OtherIssue
+20240400026,20240400032,Bee,IP phone has a problem,Finish,2024-04-12 09:34,2024-04-12 09:34,GOLD STOCK,There is a problem with the LAN network cable. Bring a new cable to use. and test use,low,NetworkError
+20240400029,20240400033,OPC,คอมเปิดไม่ติด 2 เครื่อง,Finish,2024-04-17 08:49,2024-04-17 08:58,OPC,ต่อไฟโดยตรง โดยไม่ผ่าน UPS,low,HardwareError
+20240400030,20240400034,Pookkie,เปลี่ยนภาษาไม่ได้,Finish,2024-04-17 15:30,2024-04-17 15:31,BI(NAVISION),ทำการReset การตั้งค่า Keyboard ใหม่และตั้งค่าใหม่,low,UserError
+20240400031,20240400035,Pwan,user error after changing the ink tank,Finish,2024-04-19 10:28,2024-04-19 10:29,SETTING-EXPRESS,Clean Ink Tank then It's worked,low,UserError
+20240400032,20240400036,Vivek,Can't print.,Finish,2024-04-19 13:07,2024-04-19 13:08,DESIGN/CAD/MODEL,Restart Computer & Add Printer driver,low,HardwareError
+20240400033,20240400037,Apple,Can't open door scan.,Finish,2024-04-19 13:09,2024-04-19 13:11,ACCOUNTING,App Error config. Restart service & open app again. Config again.,middle,SoftwareError
+20240400034,20240400038,Noon,Internet Issue,Finish,2024-04-20 09:29,2024-04-20 09:29,OPC,Change New LAN Cable,low,NetworkError
+20240400035,20240400039,Smile,ต้องการลงโปรแกรม Nav Development Environment และ ให้กำหนดสิทธิ์การใช้ไฟล์ในแชร์ไฟล์ Departments I : / BI&HR ให้ใช้ได้แค่ คุณมาจิด คุณผึ้ง สมาย เท่านั้น ,Finish,2024-04-20 12:54,2024-04-20 12:55,BI(NAVISION),ทำการติดตั้งโปรแกรมเพิ่มเติมให้ และ กำหนดสิทธิ์การใช้งานแชร์ไฟล์ให้ตามที่สมายแจ้ง,middle,OtherIssue
+20240400038,20240400040,Mai,ทำการเซ็ตปริ๊นต์เตอร์ให้ใช้งานง่านขึ้น แอดปริ๊นต์ให้กับคุณแซนดิพ และ คุณเต้,Finish,2024-04-20 12:57,2024-04-20 13:30,SALES,รีเช็คไดรฟ์เวอร์เครื่องคุณใหม่ ลงไดรฟ์เวอร์ เครื่องคุณเต้ และ คุณแซนดิพ พร้อมใช้งาน,low,OtherIssue
+20240400041,20240400041,Sandip,Backup Mail,Finish,2024-04-20 13:31,2024-04-20 13:31,SALES,Backup mail in Server share,high,SoftwareError
+20240400042,20240400042,Chet,Change Location Computer ,open,2024-04-20 15:25,,CNC,,middle,OtherIssue
+20240400043,20240400043,Toon,เดินสาย Fax,open,2024-04-20 15:26,,ACCOUNTING,ลากสายโทรศัพท์ชั้น 2 ไป ชั้น 3 ณ เครื่องปรินต์ Toshiba,middle,OtherIssue
+20240400044,20240400044,Bell,ต้องการคลิปวีดีโอ และ ภาพนิ่ง เพื่อยืนยันการแพ็คส่งของกับลูกค้า,Finish,2024-04-23 11:01,2024-04-23 11:02,PACKING,เซฟงานตามที่สั่งใส่ แฟล๊ชไดรฟ์ ส่งให้เจ้าหน้าที่มารับ,high,OtherIssue
+20240400045,20240400045,Bell,Change Location Department,Finish,2024-04-25 17:49,2024-04-25 17:50,PACKING,เดินสาย LAN ใหม่ 2 เส้น,middle,OtherIssue

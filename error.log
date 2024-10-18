@@ -1,0 +1,271 @@
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 720-818-033
+INFO:werkzeug: * Detected change in 'c:\\Users\\it-support002\\Desktop\\Flask\\ticket.py', reloading
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 720-818-033
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 720-818-033
+INFO:werkzeug:[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://10.10.14.85:5000
+INFO:werkzeug:[33mPress CTRL+C to quit[0m
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 720-818-033
+INFO:werkzeug:10.10.14.85 - - [06/Apr/2024 08:49:50] "GET /home HTTP/1.1" 200 -
+INFO:werkzeug:10.10.14.85 - - [06/Apr/2024 08:49:55] "[35m[1mGET /alltickets HTTP/1.1[0m" 500 -
+INFO:werkzeug:10.10.14.85 - - [06/Apr/2024 08:49:55] "GET /alltickets?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1" 200 -
+INFO:werkzeug:10.10.14.85 - - [06/Apr/2024 08:49:55] "GET /alltickets?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1" 200 -
+INFO:werkzeug:10.10.14.85 - - [06/Apr/2024 08:49:55] "GET /alltickets?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1" 200 -
+INFO:werkzeug:10.10.14.85 - - [06/Apr/2024 08:49:55] "[36mGET /alltickets?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+INFO:werkzeug: * Detected change in 'c:\\Users\\it-support002\\Desktop\\Flask\\ticket.py', reloading
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 720-818-033
+INFO:werkzeug: * Detected change in 'c:\\Users\\it-support002\\Desktop\\Flask\\ticket.py', reloading
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 720-818-033
+INFO:werkzeug:10.10.14.85 - - [06/Apr/2024 08:51:10] "[35m[1mGET /alltickets HTTP/1.1[0m" 500 -
+INFO:werkzeug:10.10.14.85 - - [06/Apr/2024 08:51:11] "[36mGET /alltickets?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:10.10.14.85 - - [06/Apr/2024 08:51:11] "[36mGET /alltickets?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:10.10.14.85 - - [06/Apr/2024 08:51:11] "[36mGET /alltickets?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+INFO:werkzeug:10.10.14.85 - - [06/Apr/2024 08:51:11] "[36mGET /alltickets?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+INFO:werkzeug:10.10.14.85 - - [06/Apr/2024 08:52:49] "[35m[1mGET /alltickets HTTP/1.1[0m" 500 -
+INFO:werkzeug:10.10.14.85 - - [06/Apr/2024 08:52:49] "[36mGET /alltickets?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:10.10.14.85 - - [06/Apr/2024 08:52:49] "[36mGET /alltickets?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:10.10.14.85 - - [06/Apr/2024 08:52:49] "[36mGET /alltickets?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+INFO:werkzeug:10.10.14.85 - - [06/Apr/2024 08:52:49] "[36mGET /alltickets?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+INFO:werkzeug:10.10.14.85 - - [06/Apr/2024 08:52:50] "[35m[1mGET /alltickets HTTP/1.1[0m" 500 -
+INFO:werkzeug:10.10.14.85 - - [06/Apr/2024 08:52:50] "[36mGET /alltickets?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:10.10.14.85 - - [06/Apr/2024 08:52:50] "[36mGET /alltickets?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:10.10.14.85 - - [06/Apr/2024 08:52:50] "[36mGET /alltickets?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+INFO:werkzeug:10.10.14.85 - - [06/Apr/2024 08:52:50] "[36mGET /alltickets?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+INFO:werkzeug:[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://10.10.14.85:5000
+INFO:werkzeug:[33mPress CTRL+C to quit[0m
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 720-818-033
+INFO:werkzeug:10.10.14.85 - - [06/Apr/2024 08:53:23] "[35m[1mGET /alltickets HTTP/1.1[0m" 500 -
+INFO:werkzeug:10.10.14.85 - - [06/Apr/2024 08:53:23] "[36mGET /alltickets?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:10.10.14.85 - - [06/Apr/2024 08:53:23] "[36mGET /alltickets?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:10.10.14.85 - - [06/Apr/2024 08:53:23] "[36mGET /alltickets?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+INFO:werkzeug:10.10.14.85 - - [06/Apr/2024 08:53:23] "[36mGET /alltickets?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+INFO:werkzeug:10.10.14.85 - - [06/Apr/2024 08:53:24] "[35m[1mGET /alltickets HTTP/1.1[0m" 500 -
+INFO:werkzeug:10.10.14.85 - - [06/Apr/2024 08:53:24] "[36mGET /alltickets?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:10.10.14.85 - - [06/Apr/2024 08:53:24] "[36mGET /alltickets?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:10.10.14.85 - - [06/Apr/2024 08:53:24] "[36mGET /alltickets?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+INFO:werkzeug:10.10.14.85 - - [06/Apr/2024 08:53:24] "[36mGET /alltickets?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+INFO:werkzeug: * Detected change in 'c:\\Users\\it-support002\\Desktop\\Flask\\ticket.py', reloading
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 720-818-033
+INFO:werkzeug:[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://10.10.14.85:5000
+INFO:werkzeug:[33mPress CTRL+C to quit[0m
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 720-818-033
+INFO:werkzeug:10.10.14.85 - - [06/Apr/2024 08:55:24] "[35m[1mGET /alltickets HTTP/1.1[0m" 500 -
+INFO:werkzeug:10.10.14.85 - - [06/Apr/2024 08:55:24] "[36mGET /alltickets?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:10.10.14.85 - - [06/Apr/2024 08:55:24] "[36mGET /alltickets?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:10.10.14.85 - - [06/Apr/2024 08:55:24] "[36mGET /alltickets?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+INFO:werkzeug:10.10.14.85 - - [06/Apr/2024 08:55:24] "[36mGET /alltickets?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+INFO:werkzeug: * Detected change in 'c:\\Users\\it-support002\\Desktop\\Flask\\ticket.py', reloading
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 720-818-033
+INFO:werkzeug:[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://10.10.14.85:5000
+INFO:werkzeug:[33mPress CTRL+C to quit[0m
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 720-818-033
+INFO:werkzeug:10.10.14.85 - - [06/Apr/2024 08:56:28] "[35m[1mGET /alltickets HTTP/1.1[0m" 500 -
+INFO:werkzeug:10.10.14.85 - - [06/Apr/2024 08:56:28] "[36mGET /alltickets?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:10.10.14.85 - - [06/Apr/2024 08:56:28] "[36mGET /alltickets?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:10.10.14.85 - - [06/Apr/2024 08:56:28] "[36mGET /alltickets?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+INFO:werkzeug:10.10.14.85 - - [06/Apr/2024 08:56:28] "[36mGET /alltickets?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+INFO:werkzeug:10.10.14.85 - - [06/Apr/2024 08:58:02] "[35m[1mGET /alltickets HTTP/1.1[0m" 500 -
+INFO:werkzeug:10.10.14.85 - - [06/Apr/2024 08:58:02] "[36mGET /alltickets?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:10.10.14.85 - - [06/Apr/2024 08:58:02] "[36mGET /alltickets?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:10.10.14.85 - - [06/Apr/2024 08:58:02] "[36mGET /alltickets?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+INFO:werkzeug:10.10.14.85 - - [06/Apr/2024 08:58:02] "[36mGET /alltickets?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+INFO:werkzeug:10.10.14.85 - - [06/Apr/2024 08:58:03] "[35m[1mGET /alltickets HTTP/1.1[0m" 500 -
+INFO:werkzeug:10.10.14.85 - - [06/Apr/2024 08:58:03] "[36mGET /alltickets?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:10.10.14.85 - - [06/Apr/2024 08:58:03] "[36mGET /alltickets?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:10.10.14.85 - - [06/Apr/2024 08:58:03] "[36mGET /alltickets?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+INFO:werkzeug:10.10.14.85 - - [06/Apr/2024 08:58:04] "[36mGET /alltickets?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+INFO:werkzeug:[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://10.10.14.85:5000
+INFO:werkzeug:[33mPress CTRL+C to quit[0m
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 720-818-033
+INFO:werkzeug:10.10.14.85 - - [06/Apr/2024 08:58:17] "[35m[1mGET /alltickets HTTP/1.1[0m" 500 -
+INFO:werkzeug:10.10.14.85 - - [06/Apr/2024 08:58:18] "[36mGET /alltickets?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:10.10.14.85 - - [06/Apr/2024 08:58:18] "[36mGET /alltickets?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:10.10.14.85 - - [06/Apr/2024 08:58:18] "[36mGET /alltickets?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+INFO:werkzeug:10.10.14.85 - - [06/Apr/2024 08:58:18] "[36mGET /alltickets?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+INFO:werkzeug:10.10.14.85 - - [06/Apr/2024 09:00:47] "GET /alltickets HTTP/1.1" 200 -
+INFO:werkzeug:10.10.14.85 - - [06/Apr/2024 09:01:08] "GET /home HTTP/1.1" 200 -
+INFO:werkzeug:10.10.14.85 - - [06/Apr/2024 09:01:13] "[35m[1mPOST /add HTTP/1.1[0m" 500 -
+INFO:werkzeug:10.10.14.85 - - [06/Apr/2024 09:01:17] "[35m[1mPOST /add HTTP/1.1[0m" 500 -
+INFO:werkzeug:10.10.14.85 - - [06/Apr/2024 09:01:20] "[35m[1mPOST /add HTTP/1.1[0m" 500 -
+INFO:werkzeug:10.10.14.85 - - [06/Apr/2024 09:01:21] "[35m[1mPOST /add HTTP/1.1[0m" 500 -
+INFO:werkzeug:10.10.14.85 - - [06/Apr/2024 09:01:21] "[35m[1mPOST /add HTTP/1.1[0m" 500 -
+INFO:werkzeug:10.10.14.85 - - [06/Apr/2024 09:01:21] "[35m[1mPOST /add HTTP/1.1[0m" 500 -
+INFO:werkzeug: * Detected change in 'c:\\Users\\it-support002\\Desktop\\Flask\\ticket.py', reloading
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 720-818-033
+INFO:werkzeug: * Detected change in 'c:\\Users\\it-support002\\Desktop\\Flask\\ticket.py', reloading
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 720-818-033
+INFO:werkzeug:[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://10.10.14.85:5000
+INFO:werkzeug:[33mPress CTRL+C to quit[0m
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 720-818-033
+INFO:werkzeug:10.10.14.85 - - [06/Apr/2024 09:03:55] "GET /home HTTP/1.1" 200 -
+INFO:werkzeug:10.10.14.85 - - [06/Apr/2024 09:04:00] "[32mPOST /add HTTP/1.1[0m" 302 -
+INFO:werkzeug:10.10.14.85 - - [06/Apr/2024 09:04:00] "GET /alltickets?department=IT HTTP/1.1" 200 -
+INFO:werkzeug:10.10.14.85 - - [06/Apr/2024 09:04:02] "GET /alltickets HTTP/1.1" 200 -
+INFO:werkzeug:10.10.14.85 - - [06/Apr/2024 09:04:38] "[35m[1mPOST /save_chat HTTP/1.1[0m" 500 -
+INFO:werkzeug:10.10.14.85 - - [06/Apr/2024 09:04:49] "GET /alltickets HTTP/1.1" 200 -
+INFO:werkzeug:10.10.14.85 - - [06/Apr/2024 09:04:54] "[35m[1mPOST /status/56/submit HTTP/1.1[0m" 500 -
+INFO:werkzeug:10.10.14.85 - - [06/Apr/2024 09:04:54] "GET /status/56/submit?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1" 200 -
+INFO:werkzeug:10.10.14.85 - - [06/Apr/2024 09:04:54] "GET /status/56/submit?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1" 200 -
+INFO:werkzeug:10.10.14.85 - - [06/Apr/2024 09:04:54] "GET /status/56/submit?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1" 200 -
+INFO:werkzeug:10.10.14.85 - - [06/Apr/2024 09:04:54] "[36mGET /status/56/submit?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+INFO:werkzeug: * Detected change in 'c:\\Users\\it-support002\\Desktop\\Flask\\ticket.py', reloading
+INFO:werkzeug: * Restarting with stat
+INFO:werkzeug:[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://10.10.14.85:5000
+INFO:werkzeug:[33mPress CTRL+C to quit[0m
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 720-818-033
+INFO:werkzeug:10.10.14.85 - - [06/Apr/2024 09:08:23] "[32mPOST /status/56/submit HTTP/1.1[0m" 302 -
+INFO:werkzeug:10.10.14.85 - - [06/Apr/2024 09:08:23] "[35m[1mGET /alltickets HTTP/1.1[0m" 500 -
+INFO:werkzeug:10.10.14.85 - - [06/Apr/2024 09:08:23] "[36mGET /alltickets?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:10.10.14.85 - - [06/Apr/2024 09:08:23] "[36mGET /alltickets?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:10.10.14.85 - - [06/Apr/2024 09:08:23] "[36mGET /alltickets?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+INFO:werkzeug:10.10.14.85 - - [06/Apr/2024 09:08:23] "[36mGET /alltickets?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+INFO:werkzeug: * Detected change in 'c:\\Users\\it-support002\\Desktop\\Flask\\ticket.py', reloading
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 720-818-033
+INFO:werkzeug:[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://10.10.14.85:5000
+INFO:werkzeug:[33mPress CTRL+C to quit[0m
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 720-818-033
+INFO:werkzeug:10.10.14.85 - - [06/Apr/2024 09:10:02] "GET /alltickets HTTP/1.1" 200 -
+INFO:werkzeug: * Detected change in 'c:\\Users\\it-support002\\Desktop\\Flask\\ticket.py', reloading
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 720-818-033
+INFO:werkzeug:[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://10.10.14.85:5000
+INFO:werkzeug:[33mPress CTRL+C to quit[0m
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 720-818-033
+INFO:werkzeug:10.10.14.85 - - [06/Apr/2024 09:17:09] "[35m[1mGET /alltickets HTTP/1.1[0m" 500 -
+INFO:werkzeug:10.10.14.85 - - [06/Apr/2024 09:17:09] "[36mGET /alltickets?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:10.10.14.85 - - [06/Apr/2024 09:17:09] "[36mGET /alltickets?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:10.10.14.85 - - [06/Apr/2024 09:17:09] "[36mGET /alltickets?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+INFO:werkzeug:10.10.14.85 - - [06/Apr/2024 09:17:09] "[36mGET /alltickets?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+INFO:werkzeug: * Detected change in 'c:\\Users\\it-support002\\Desktop\\Flask\\ticket.py', reloading
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 720-818-033
+INFO:werkzeug:[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://10.10.14.85:5000
+INFO:werkzeug:[33mPress CTRL+C to quit[0m
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 720-818-033
+INFO:werkzeug:10.10.14.85 - - [06/Apr/2024 09:18:20] "GET /alltickets HTTP/1.1" 200 -
+INFO:werkzeug:10.10.14.85 - - [06/Apr/2024 09:18:35] "GET /alltickets HTTP/1.1" 200 -
+INFO:werkzeug:10.10.14.85 - - [06/Apr/2024 09:18:35] "[33mPOST /status//submit HTTP/1.1[0m" 404 -
+INFO:werkzeug:10.10.14.85 - - [06/Apr/2024 09:18:45] "GET /alltickets HTTP/1.1" 200 -
+INFO:werkzeug:10.10.14.85 - - [06/Apr/2024 09:18:45] "[33mPOST /status//submit HTTP/1.1[0m" 404 -
+INFO:werkzeug:10.10.14.85 - - [06/Apr/2024 09:20:44] "[33mPOST /status//submit HTTP/1.1[0m" 404 -
+INFO:werkzeug:10.10.14.85 - - [06/Apr/2024 09:20:47] "GET /alltickets HTTP/1.1" 200 -
+INFO:werkzeug:10.10.14.85 - - [06/Apr/2024 09:20:48] "GET /alltickets HTTP/1.1" 200 -
+INFO:werkzeug:10.10.14.85 - - [06/Apr/2024 09:21:11] "[33mPOST /status//submit HTTP/1.1[0m" 404 -
+INFO:werkzeug:[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://10.10.14.85:5000
+INFO:werkzeug:[33mPress CTRL+C to quit[0m
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 720-818-033
+INFO:werkzeug:10.10.14.85 - - [06/Apr/2024 09:22:29] "GET /alltickets HTTP/1.1" 200 -
+INFO:werkzeug:10.10.14.85 - - [06/Apr/2024 09:22:30] "GET /alltickets HTTP/1.1" 200 -
+INFO:werkzeug:10.10.14.85 - - [06/Apr/2024 09:22:44] "GET /alltickets HTTP/1.1" 200 -
+INFO:werkzeug:10.10.14.85 - - [06/Apr/2024 09:22:48] "POST /report HTTP/1.1" 200 -
+INFO:werkzeug: * Detected change in 'c:\\Users\\it-support002\\Desktop\\Flask\\ticket.py', reloading
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 720-818-033
+INFO:werkzeug:[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://10.10.14.85:5000
+INFO:werkzeug:[33mPress CTRL+C to quit[0m
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 720-818-033
+INFO:werkzeug:10.10.14.85 - - [06/Apr/2024 09:24:13] "GET /alltickets HTTP/1.1" 200 -
+INFO:werkzeug:10.10.14.85 - - [06/Apr/2024 09:24:15] "GET /alltickets HTTP/1.1" 200 -
+INFO:werkzeug:10.10.14.85 - - [06/Apr/2024 09:24:15] "GET /alltickets HTTP/1.1" 200 -
+INFO:werkzeug:10.10.14.85 - - [06/Apr/2024 09:24:15] "GET /alltickets HTTP/1.1" 200 -
+INFO:werkzeug:10.10.14.85 - - [06/Apr/2024 09:24:44] "GET /managealltickets HTTP/1.1" 200 -
+INFO:werkzeug: * Detected change in 'c:\\Users\\it-support002\\Desktop\\Flask\\ticket.py', reloading
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 720-818-033
+INFO:werkzeug:10.10.14.85 - - [06/Apr/2024 09:31:23] "GET /managealltickets HTTP/1.1" 200 -
+INFO:werkzeug:10.10.14.85 - - [06/Apr/2024 09:31:24] "GET /managealltickets HTTP/1.1" 200 -
+INFO:werkzeug:[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://10.10.14.85:5000
+INFO:werkzeug:[33mPress CTRL+C to quit[0m
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 720-818-033
+INFO:werkzeug:10.10.14.85 - - [06/Apr/2024 09:31:38] "GET /managealltickets HTTP/1.1" 200 -
+INFO:werkzeug:10.10.14.85 - - [06/Apr/2024 09:31:39] "GET /managealltickets HTTP/1.1" 200 -
+INFO:werkzeug:10.10.14.85 - - [06/Apr/2024 09:31:39] "GET /managealltickets HTTP/1.1" 200 -
+INFO:werkzeug:10.10.14.85 - - [06/Apr/2024 09:31:49] "GET /managealltickets HTTP/1.1" 200 -
+INFO:werkzeug:10.10.14.85 - - [06/Apr/2024 09:31:49] "[33mPOST /status//submit HTTP/1.1[0m" 404 -
+INFO:werkzeug: * Detected change in 'c:\\Users\\it-support002\\Desktop\\Flask\\ticket.py', reloading
+INFO:werkzeug: * Restarting with stat
