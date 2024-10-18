@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Select Date for Booking</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <link href='https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/css/bootstrap.css' rel='stylesheet'>
+    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.14/index.global.min.js'></script>
+    <link href='https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.13.1/css/all.css' rel='stylesheet'>
+    <link href='https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css' rel='stylesheet'>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="icon" href="{{ url_for('static', filename='images/logo1.ico') }}" type="image/x-icon">
+    <style>
+ body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 20px;
+}
+
+.container {
+    max-width: 1200px;
+    margin: auto;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+}
+
+h1 {
+    text-align: center;
+    color: #333;
+}
+
+#calendar {
+    max-width: 900px;
+    margin: 40px auto;
+}
+
+.task-info {
+    margin-top: 20px;
+    font-size: 18px;
+    background-color: #f8f9fa;
+    padding: 15px;
+    border-radius: 5px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.task-info ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.task-info li {
+    margin-bottom: 10px;
+}
+
+.fc-day-past {
+    background-color: #e9ecef;
+}
+
+.fc-day-selected {
+    background-color: #007bff;
+    color: white !important;
+}
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Select Date for Booking</h1>
+        <div class="row">
+            <div class="col-md-8">
+                <div id="calendar"></div>
+            </div>
+
+            <div class="col-md-4"   >
+                <h1> Messenger Status </h1>
+                <div class="car-status-container2 mt-2 " >
+                    <div class="task-info" id="taskInfo">
+                        Loading task info...
+                    </div>
+                </div>
+            </div >
+        </div>
+    </div>
+    <script>
+        var currentUser = {
+            roles: []
+        };
+        
+        {% if current_user.is_authenticated %}
+            currentUser.roles = {{ current_user.roles | tojson }};
+        {% endif %}
+    </script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/6.1.14/index.global.min.js"></script>
+    <script>
+document.addEventListener('DOMContentLoaded', function() {
+    var calendarEl = document.getElementById('calendar');
+    var taskInfo = document.getElementById('taskInfo');
+
+    var today = new Date();
+    var todayStr = today.toISOString().split('T')[0];
+    var tomorrow = new Date();
+    tomorrow.setDate(today.getDate() + 1);
+    var tomorrowStr = tomorrow.toISOString().split('T')[0];
+
+    var getFutureDates = function(numDays) {
+        var dates = [];
+        for (var i = 0; i < numDays; i++) {
+            var futureDate = new Date();
+            futureDate.setDate(today.getDate() + i + 1);
+            dates.push(futureDate.toISOString().split('T')[0]);
+        }
+        return dates;
+    };
+
+    var futureDates = getFutureDates(5);
+
+    function fetchTaskInfo(dateStr, callback) {
+        $.ajax({
+            url: `/api/tasks?date=${dateStr}`,
+            method: 'GET',
+            success: function(data) {
+                var tasksCount = data.count;
+                var maxTasks = 10; // หรือค่าอื่นๆ
+                callback(null, tasksCount, maxTasks);
+            },
+            error: function() {
+                callback('Error loading task info');
+            }
+        });
+    }
+
+    function updateTaskInfo() {
+        var html = '<ul>';
+        var remainingRequests = futureDates.length;
+
+        futureDates.forEach(function(dateStr, index) {
+            fetchTaskInfo(dateStr, function(error, tasksCount, maxTasks) {
+                if (error) {
+                    html += `<li>${dateStr}: ${error}</li>`;
+                } else if (tasksCount >= maxTasks) {
+                    html += `<li>${dateStr}: The booking limit for this date has been reached. Please contact admin.</li>`;
+                } else {
+                    html += `<li>${dateStr}: ${tasksCount}/${maxTasks} tasks</li>`;
+                }
+
+                remainingRequests--;
+                if (remainingRequests === 0) {
+                    html += '</ul>';
+                    taskInfo.innerHTML = html;
+                }
+            });
+        });
+    }
+
+    var calendar = new FullCalendar.Calendar(calendarEl, {
+        initialView: 'dayGridMonth',
+        selectable: true,
+        dateClick: function(info) {
+            var selectedDate = info.dateStr;
+            var now = new Date();
+            var selectedDateTime = new Date(selectedDate + 'T' + '10:00:00');
+
+            // Check if the selected date is available for booking
+            var isBookingAllowed = currentUser.roles.includes('admincbk') || currentUser.roles.includes('all');
+
+            // Check if current time is before 10 AM of the selected date
+            if (!isBookingAllowed && selectedDate === todayStr && now > selectedDateTime) {
+                alert('Booking is only available until 10 AM on the current date.');
+                return;
+            }
+
+            if (!isBookingAllowed && selectedDate < tomorrowStr) {
+                alert('Booking is only available for tomorrow or future dates.');
+                return;
+            }
+
+            fetchTaskInfo(selectedDate, function(error, tasksCount, maxTasks) {
+                if (error) {
+                    taskInfo.textContent = error;
+                } else if (tasksCount >= maxTasks) {
+                    alert('The booking limit for this date has been reached. Please contact admin.');
+                } else {
+                    taskInfo.textContent = `Tasks for ${selectedDate}: ${tasksCount}/${maxTasks}`;
+                    localStorage.setItem('selectedDate', selectedDate);
+                    window.location.href = `/tasks?date=${selectedDate}`;
+                }
+            });
+        },
+
+        viewDidMount: function() {
+            updateTaskInfo(); // Update task info for 5 days
+        },
+        dayCellDidMount: function(info) {
+            if (info.dateStr < tomorrowStr) {
+                info.el.classList.add('fc-day-past');
+            }
+        }
+    });
+
+    calendar.render();
+});
+
+    </script>
+</body>
+</html>

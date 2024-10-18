@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Upload Excel File</title>
+</head>
+<body>
+    <h1>Upload Excel File</h1>
+    <form method="post" enctype="multipart/form-data">
+        <input type="file" name="file">
+        <input type="submit" value="Upload">
+    </form>
+
+    <h2>Uploaded Files</h2>
+    <ul>
+        {% for file in files %}
+            <li><a href="{{ url_for('show_data', filename=file.filename) }}">{{ file.filename }}</a></li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Health Record</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='add_em_styles.css') }}">
+    <link href='https://fonts.googleapis.com/css?family=Sarabun' rel='stylesheet'>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='add_em_styles.css') }}">
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Add Health Record for Employee: {{ employee_code }}</h1>
+        <form method="POST" action="{{ url_for('add_health_record', employee_code=employee_code) }}" enctype="multipart/form-data">
+            {{ form.hidden_tag() }}
+    
+            <!-- Employee ID -->
+            <div class="form-group">
+                <label for="employee_id">Employee ID: {{ employee_code }}</label>
+                <p style="display: none;" id="employee_id">{{ employee_code }}</p> <!-- Display employee_code -->
+                <input type="hidden" name="employee_id" value="{{ employee_code }}"> <!-- Hidden input to pass employee_code -->
+            </div>
+            
+            <!-- Checkup Type -->
+            <div class="form-group">
+                {{ form.checkup_type.label }}
+                {{ form.checkup_type(class="form-control") }}
+                {% for error in form.checkup_type.errors %}
+                    <div class="error">{{ error }}</div>
+                {% endfor %}
+            </div>
+
+            <!-- Checkup Date -->
+            <div class="form-group">
+                {{ form.checkup_date.label }}
+                {{ form.checkup_date(class="form-control") }}
+                {% for error in form.checkup_date.errors %}
+                    <div class="error">{{ error }}</div>
+                {% endfor %}
+            </div>
+
+            <!-- Doctor Name -->
+            <div class="form-group">
+                {{ form.doctor_name.label }}
+                {{ form.doctor_name(class="form-control") }}
+                {% for error in form.doctor_name.errors %}
+                    <div class="error">{{ error }}</div>
+                {% endfor %}
+            </div>
+
+            <!-- Doctor License Number -->
+            <div class="form-group">
+                {{ form.doctor_license_number.label }}
+                {{ form.doctor_license_number(class="form-control") }}
+                {% for error in form.doctor_license_number.errors %}
+                    <div class="error">{{ error }}</div>
+                {% endfor %}
+            </div>
+
+            <!-- Health Service Unit Name -->
+            <div class="form-group">
+                {{ form.health_service_unit_name.label }}
+                {{ form.health_service_unit_name(class="form-control") }}
+                {% for error in form.health_service_unit_name.errors %}
+                    <div class="error">{{ error }}</div>
+                {% endfor %}
+            </div>
+
+            <!-- Health Service Unit Number -->
+            <div class="form-group">
+                {{ form.health_service_unit_number.label }}
+                {{ form.health_service_unit_number(class="form-control") }}
+                {% for error in form.health_service_unit_number.errors %}
+                    <div class="error">{{ error }}</div>
+                {% endfor %}
+            </div>
+
+            <!-- Health Service Unit Address -->
+            <div class="form-group">
+                {{ form.health_service_unit_address.label }}
+                {{ form.health_service_unit_address(class="form-control") }}
+                {% for error in form.health_service_unit_address.errors %}
+                    <div class="error">{{ error }}</div>
+                {% endfor %}
+            </div>
+            
+            <!-- Weight -->
+            <div class="form-group">
+                {{ form.weight.label }}
+                {{ form.weight(class="form-control") }}
+                {% for error in form.weight.errors %}
+                    <div class="error">{{ error }}</div>
+                {% endfor %}
+            </div>
+            
+            <!-- Height -->
+            <div class="form-group">
+                {{ form.height.label }}
+                {{ form.height(class="form-control") }}
+                {% for error in form.height.errors %}
+                    <div class="error">{{ error }}</div>
+                {% endfor %}
+            </div>
+            
+            <!-- BMI -->
+            <div class="form-group">
+                {{ form.bmi.label }}
+                {{ form.bmi(class="form-control") }}
+                {% for error in form.bmi.errors %}
+                    <div class="error">{{ error }}</div>
+                {% endfor %}
+            </div>
+            
+            <!-- Blood Pressure -->
+            <div class="form-group">
+                {{ form.blood_pressure.label }}
+                {{ form.blood_pressure(class="form-control") }}
+                {% for error in form.blood_pressure.errors %}
+                    <div class="error">{{ error }}</div>
+                {% endfor %}
+            </div>
+            
+            <!-- Pulse -->
+            <div class="form-group">
+                {{ form.pulse.label }}
+                {{ form.pulse(class="form-control") }}
+                {% for error in form.pulse.errors %}
+                    <div class="error">{{ error }}</div>
+                {% endfor %}
+            </div>
+            
+            <!-- Physical Examination Result -->
+            <div class="form-group">
+                {{ form.physical_examination_result.label }}
+                {{ form.physical_examination_result(class="form-control") }}
+                {% for error in form.physical_examination_result.errors %}
+                    <div class="error">{{ error }}</div>
+                {% endfor %}
+            </div>
+            
+            <!-- Lab Test Result -->
+            <div class="form-group">
+                {{ form.lab_test_result.label }}
+                {{ form.lab_test_result(class="form-control") }}
+                {% for error in form.lab_test_result.errors %}
+                    <div class="error">{{ error }}</div>
+                {% endfor %}
+            </div>
+            
+            <!-- Submit Button -->
+            <div class="form-group">
+                {{ form.submit(class="btn btn-primary") }}
+            </div>
+        </form>
+    </div>
+</body>
+</html>

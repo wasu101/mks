@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link href="{{ url_for('static', filename='fontawesomefree/css/fontawesome.css') }}" rel="stylesheet" type="text/css">
+    <link href="{{ url_for('static', filename='fontawesomefree/css/brands.css') }}" rel="stylesheet" type="text/css">
+    <link href="{{ url_for('static', filename='fontawesomefree/css/solid.css') }}" rel="stylesheet" type="text/css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <link rel="icon" href="{{ url_for('static', filename='images/logo1.ico') }}" type="image/x-icon">
+    <title>Login</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #666666;
+            background-color: #f0f0f0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            max-width: 100%;
+            max-height: 100%;
+        }
+        .form-container {
+            background: rgba(255, 255, 255, 0.8);
+            padding: 100px;
+            width: 900px;
+            border-radius: 10px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            animation: fadeIn 1s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        h1 {
+            color: #333333;
+            margin-bottom: 20px;
+            text-align: center;
+            font-size: 30px;
+        }
+        form {
+            width: 100%;
+        }
+        label {
+            color: #333333;
+            font-weight: bold;
+            display: block;
+            margin-bottom: 5px;
+        }
+        input[type="text"],
+        input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        input[type="submit"] {
+            background-color: #007bff;
+            color: #ffffff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+            transition: background-color 0.3s ease;
+        }
+        input[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+        .message {
+            margin-top: 20px;
+            padding: 10px;
+            border-radius: 4px;
+        }
+        .success {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        .error {
+            background-color: #f8d7da;
+            color: #721c24;
+            display: none;
+        }
+        .form-container {
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-top: 50px;
+        }
+        @media (max-width: 400px) {
+            .container{
+                width: 100%;
+                margin: 0 auto;
+            }
+            .form-container {
+            max-width: 100%;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-top: 50px;
+        }
+        }
+        @media (max-width: 900px) {
+            .container{
+                width: 100%;
+                margin: 0 auto;
+            }
+            .form-container {
+            max-width: 100%;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-top: 50px;
+        }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="form-container">
+            <h1><i class="fa fa-lock" style="font-size:48px;color:#333333"></i> Login</h1>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="username"><i class="fa fa-user" style="color:#333333"></i> Username:</label>
+                    <input type="text" id="username" name="username" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="password"><i class="fa fa-key" style="color:#333333"></i> Password:</label>
+                    <input type="password" id="password" name="password" class="form-control" required>
+                </div>
+                <br>
+                
+                <input type="submit" value="Login" class="btn btn-primary btn-block mt-4">
+            </form>
+            <br>
+            <br>
+            <p class="small">Don't have a username? Click <strong><a href="/register">here</a></strong> to register.</p>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            function showSuccessAlert(prevUrl) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Success',
+                    text: 'Login successful.',
+                    allowOutsideClick: false,
+                    allowEscapeKey: false
+                }).then((result) => {
+                    if (result.isConfirmed || result.isDismissed) {
+                        window.location.replace(prevUrl); // Redirect to the previous URL
+                    }
+                });
+            }
+        
+            function showErrorAlert(message) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: message,
+                    allowOutsideClick: false,
+                    allowEscapeKey: false
+                });
+            }
+        
+            $('#loginForm').submit(function(event) {
+                event.preventDefault();
+        
+                var username = $('#username').val();
+                var password = $('#password').val();
+        
+                $.ajax({
+                    url: '/login_process',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({ username: username, password: password }),
+                    success: function(response) {
+                        if (response.success) {
+                            // Get the previous URL from sessionStorage
+                            var prevUrl = sessionStorage.getItem('prev_url') || '/main'; 
+                            
+                            // Check if the previous URL is '/register'
+                            if (prevUrl === '/register') {
+                                prevUrl = '/main'; // Redirect to the main page if coming from register
+                            }
+                            
+                            showSuccessAlert(prevUrl); // Call the success alert function with prevUrl
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error:', error);
+                        if (xhr.responseJSON && xhr.responseJSON.error === 'missing_fields') {
+                            showErrorAlert('Please fill in both username and password.');
+                        } else if (xhr.status === 401) {
+                            showErrorAlert('ไม่พบไอดีของคุณ กรุณาตรวจสอบอีกครั้ง \nNo match for username. Please try again.');
+                        } else if (xhr.status === 402) {
+                            showErrorAlert('รหัสผ่านของคุณผิด กรุณาลองอีกครั้ง \nIncorrect password. Please try again.');
+                        } else if (xhr.status === 403) {
+                            showErrorAlert('ไอดีของคุณยังไม่ได้รับการตรวจสอบหรือยืนยัน กรุณารอ 10 นาที หรือ ติดต่อไอที. \nYour ID has not been confirmed. Please contact IT.');
+                        } else if (xhr.status === 409) {
+                            showErrorAlert('คุณได้ล็อกอินในระบบอยู่แล้ว กรุณาออกจากระบบ หรือ ติดต่อ IT สำหรับความช่วยเหลือ. \nYou are already logged into the system. Please log out or contact IT for assistance.');
+
+                        } else {
+                            showErrorAlert('Invalid username or password. Please try again.');
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+    
+    
+        
+    
+    
+
+</body>
+</html>

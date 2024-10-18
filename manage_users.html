@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Users</title>
+    <style>
+        /* CSS styles */
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        th, td {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 8px;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        .edit-button {
+            background-color: #4CAF50; /* Green */
+            border: none;
+            color: white;
+            padding: 5px 10px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Manage Users</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Username</th>
+                <th>Password</th> <!-- เพิ่มคอลัมน์ Password -->
+                <th>Department</th> <!-- เพิ่มคอลัมน์ Department -->
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in users %}
+                <tr>
+                    <td>{{ user.username }}</td>
+                    <td>{{ user.password }}</td> <!-- แสดงข้อมูล Password -->
+                    <td>{{ user.department }}</td> <!-- แสดงข้อมูล Department -->
+                    <td>
+                        <!-- เปลี่ยนการใช้ form เป็นลิงก์โดยใช้ JavaScript -->
+                        <a href="/admin/edit_user/{{ user.username }}" class="edit-button">Edit</a>
+                        <a href="/admin/user_info/{{ user.username }}" class="edit-button">User Info</a>
+                        <form action="/admin/delete_user/{{ user.username }}" method="post">
+                            <input type="submit" value="Delete">
+                        </form>                        
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

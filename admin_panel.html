@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="en">
+<html lang="th">    
+    
+
+    
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Manage All Tickets</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        footer {
+            text-align: center;
+            padding: 20px 0;
+            background-color: #333;
+            color: #fff;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: #ffffff;
+            overflow-x: auto; /* เพิ่มการเลื่อนแนวนอนเมื่อตารางขนาดใหญ่เกิน */
+        }
+
+        th, td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #c0c0c0;
+            padding: 5px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 200px; /* ตั้งค่าความกว้างสูงสุดของเซลล์ */
+        }
+        th {
+            background-color: #007bff;
+            color: white;
+        }
+
+        tbody tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        tfoot {
+            font-weight: bold;
+        }
+        @media screen and (max-width: 600px) {
+            table {
+                border: 0;
+            }
+            table caption {
+                font-size: 1.3em;
+            }
+            table thead {
+                border: none;
+                clip: rect(0 0 0 0);
+                height: 1px;
+                margin: -1px;
+                overflow: hidden;
+                padding: 0;
+                position: absolute;
+                width: 1px;
+            }
+            table tr {
+                border-bottom: 3px solid #ddd;
+                display: block;
+                margin-bottom: .625em; /* 10px */
+            }
+            table td {
+                border-bottom: 1px solid #ddd;
+                display: block;
+                font-size: .8em; /* 80% of the normal size */
+                text-align: right;
+            }
+            table td::before {
+                content: attr(data-label);
+                float: left;
+                font-weight: bold;
+                text-transform: uppercase;
+            }
+            table td:last-child {
+                border-bottom: 0;
+            }
+        }
+
+        .controlbt{
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 250px;
+            height: 100%;
+            background-color: #ffffff00;
+            overflow-y: auto;
+            padding: 10px;
+        }
+
+        .green-text {
+            color: green;
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        .red-text {
+            color: red;
+            font-weight: bold;
+            font-size: 16px;
+        }
+        textarea {
+            border: 2px solid #969696;
+        }
+
+        html,
+        body {
+            font-family: Arial, sans-serif;
+            height: 100%;
+            width: 100%;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+        .modal-content {
+            z-index: 9999;
+        }
+        .banner {
+            position: sticky;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 22%;
+            z-index: 100;
+            background-color: #ffffff;
+            padding: 10px;
+        }
+        body {
+            font-family: 'Thonburi', sans-serif; /* ใช้ฟอนต์ Thonburi สำหรับเว็บไซต์ */
+        }
+        .container {
+            background-color: #f0f0f0;
+            margin-top: 150px;
+        }
+
+        .ticket {
+            background-color: #ffffff;
+            padding: 15px;
+            border: 1px solid #ccc;
+            margin-bottom: 20px;
+        }
+        textarea:hover {
+            background-color: lightgray;
+        }
+    /* สไตล์ของส่วน chat */
+        .chat {
+            background-color: #f1f1f1; /* สีพื้นหลัง */
+            border: 1px solid #ccc; /* เส้นขอบ */
+            border-radius: 5px; /* รูปร่างขอบ */
+            padding: 10px; /* การเว้นระยะห่างของเนื้อหาภายใน */
+            margin-bottom: 10px; /* การเว้นระยะห่างด้านล่าง */
+        }
+
+        /* สไตล์ของปุ่มลบ */
+        .delete-message {
+            cursor: pointer; /* เปลี่ยนเคอร์เซอร์เป็นรูปแบบมือ */
+            color: red; /* สีข้อความ */
+            margin-left: 5px; /* การเว้นระยะห่างด้านซ้ายของปุ่ม */
+        }
+        .chat-container {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+        }
+
+        .form-control {
+            flex-grow: 1; /* ขยายให้เต็มพื้นที่เท่าที่จะเป็นไปได้ */
+            height: auto; /* ปรับความสูงให้พอดีกับเนื้อหา */
+            resize: none; /* ป้องกันการเปลี่ยนขนาด */
+            margin-right: 10px; /* ระยะห่างขวาของปุ่ม Send */
+        }
+
+        .btn-primary {
+            height: auto; /* ปรับความสูงของปุ่มให้เท่ากับความสูงของ textarea */
+        }
+
+    </style>
+</head>
+<body>
+  
+<!-- Modal สำหรับการปิดตั๋ว (Close Modal) -->
+        {% for ticket in tickets %}
+        <div class="modal fade" id="closeModal_{{ ticket.id }}" tabindex="-1" role="dialog" aria-labelledby="closeModalLabel" aria-hidden="true">
+            <!-- เนื้อหาของ Modal -->
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="closeModalLabel">Close Confirmation</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        Are you sure you want to close this ticket (Ticket No: {{ ticket.ticket_number }})?
+                    </div>
+                    <div class="modal-footer">
+                        <!-- ปุ่ม 'Cancel' -->
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                        <!-- ปุ่ม 'Close' สำหรับยืนยันและส่งคำร้องขอไปยังเซิร์ฟเวอร์ -->
+                        <button type="submit" class="btn btn-secondary" onclick="closeTicket('{{ ticket.id }}')">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+
+        <!-- Modal สำหรับการลบตั๋ว (Delete Modal) -->
+        {% for ticket in tickets %}
+        <div class="modal fade" id="deleteModal_{{ ticket.id }}" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+            <!-- เนื้อหาของ Modal -->
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="deleteModalLabel">Delete Confirmation</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        Are you sure you want to delete this ticket (Ticket No: {{ ticket.ticket_number }})?
+                    </div>
+                    <div class="modal-footer">
+                        <!-- ปุ่ม Cancel -->
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                        <!-- ปุ่ม 'Delete' สำหรับยืนยันและส่งคำร้องขอไปยังเซิร์ฟเวอร์ -->
+                        <button type="submit" class="btn btn-danger" onclick="deleteTicket('{{ ticket.id }}')">Delete</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    <!-- JavaScript for refreshing page after form submission -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        function deleteTicket(ticketId) {
+            // สร้าง URL สำหรับลบตั๋วโดยใช้ ID ของตั๋ว
+            var deleteUrl = '/delete/' + ticketId;
+    
+            // ส่งคำขอลบโดยใช้ AJAX
+            $.ajax({
+                url: deleteUrl,
+                type: 'POST',
+                success: function(result) {
+                    console.log('Ticket deleted successfully');
+                    // ปิด Modal หลังจากลบสำเร็จ
+                    $('#deleteModal_' + ticketId).modal('hide');
+                    // รีโหลดหน้าหลังจากลบสำเร็จ (หากต้องการ)
+                    location.reload(); // หรือปรับปรุงตามที่ต้องการ
+                },
+                error: function(err) {
+                    console.error('Failed to delete ticket', err);
+                    // แสดงข้อความผิดพลาด (หากต้องการ)
+                    alert('Failed to delete ticket. Please try again.'); // หรือปรับปรุงตามที่ต้องการ
+                }
+            });
+        }
+        function closeTicket(ticketId) {
+            $('#closeModal_' + ticketId).modal('show'); // เปิด Modal สำหรับยืนยันการปิดงาน
+
+            var now = new Date(); // เวลาปัจจุบันในโซนเวลาของเครื่อง
+            var reason = document.getElementById("reason_" + ticketId).value;
+
+            // สร้างข้อมูล FormData เพื่อส่งไปยังเซิร์ฟเวอร์
+            var formData = new FormData();
+            formData.append("reason", reason);
+            formData.append("close_at", now.toISOString());
+
+            // ทำ HTTP request โดยใช้ fetch
+            fetch("/status/" + ticketId + "/submit", {
+                method: "POST",
+                body: formData
+            })
+            .then(function(response) {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json(); // แปลงข้อมูล JSON จาก response
+            })
+            .then(function(data) {
+                console.log('Ticket closed successfully');
+                var formElement = document.getElementById("closeForm_" + ticketId);
+                formElement.style.display = "none"; // ซ่อนแบบฟอร์มหลังจากส่งค่าแล้ว
+                $('#closeModal_' + ticketId).modal('hide'); // ปิด Modal หลังจากปิดงานสำเร็จ
+                location.reload(); // รีโหลดหน้าหลังจากปิดงานสำเร็จ
+            })
+            .catch(function(error) {
+                console.error("Error:", error);
+                alert('Failed to close ticket. Please try again.'); // แสดงข้อความแจ้งเตือนในกรณีเกิดข้อผิดพลาด
+            });
+        }
+
+    </script>
+    <script>
+        $(document).ready(function() {
+            // เมื่อได้รับการตอบกลับจากการเพิ่ม ticket สำเร็จ
+            socket.on('new_ticket', function(data) {
+                if (data.success) {
+                    // รีเฟรชหน้าเว็บหลังจากเพิ่ม ticket เสร็จสิ้น
+                    location.reload();
+                }
+            });
+        });
+        $.ajax({
+            url: '/add',  // URL ของ Flask route ที่ใช้ในการเพิ่ม ticket
+            type: 'POST',
+            data: formData,  // ข้อมูลที่จะส่งไปยัง server
+            success: function(response) {
+                // หลังจากเพิ่ม ticket เสร็จสิ้นแล้ว
+                console.log('Ticket added successfully');
+                // รีเฟรชหน้าเว็บหลังจากที่เพิ่ม ticket เสร็จสิ้น
+                location.reload();
+            },
+            error: function(error) {
+                console.error('Failed to add ticket', error);
+            }
+        });
+
+    </script>
+    <script>
+
+    </script>
+    <script>
+        function sendChat(ticketId) {
+            var messageInput = document.getElementById("chat_" + ticketId);
+            var message = messageInput.value.trim();
+
+            if (message !== '') {
+                var data = {
+                    "ticket_id": ticketId,
+                    "message": message
+                };
+                console.log("Sending chat message:", data);
+
+                fetch("/save_chat", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(data)
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.success) {
+                        // Clear input field after sending
+                        messageInput.value = '';
+                        // Reload the page after sending message successfully
+                        window.location.reload();
+                    } else {
+                        throw new Error('Failed to send message');
+                    }
+                })
+                .catch(error => {
+                    console.error("Error:", error);
+                    alert("An error occurred while sending the message.");
+                });
+            } else {
+                alert("Please enter a message.");
+            }
+
+            // Prevent the form from submitting and refreshing the page
+            event.preventDefault();
+            location.reload(); // หรือปรับปรุงตามที่ต้องการ
+        }
+
+        function updateChatLog(ticketId) {
+            // ส่งคำขอ HTTP GET ไปยัง URL /update_chat/<ticketId> เพื่อดึงข้อมูลแชทล่าสุด
+            fetch('/update_chat/' + ticketId)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    // ใช้ข้อมูลที่ได้รับจากการส่งคำขอ
+                    if (data.success) {
+                        // อัพเดท chat log ด้วยข้อมูลที่ได้รับ
+                        var chatLogElement = document.getElementById('chat_log_' + ticketId);
+                        if (chatLogElement) {
+                            chatLogElement.innerHTML = data.updatedChatLog;
+                        } else {
+                            console.error('Element chat_log_' + ticketId + ' not found');
+                        }
+                    } else {
+                        console.error('Failed to update chat log');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error updating chat log:', error);
+                });
+        }
+
+
+
+    </script>
+    
+    <script src="//cdnjs.cloudflare.com/ajax/libs/socket.io/4.3.2/socket.io.js"></script>
+    <script type="text/javascript">
+        var socket = io.connect('http://' + document.domain + ':' + location.port);
+    
+        socket.on('connect', function() {
+            console.log('Connected to server');
+        });
+    
+        socket.on('disconnect', function() {
+            console.log('Disconnected from server');
+        });
+    
+        socket.on('update_chat_log', function(data) {
+            var ticketId = data.ticket_id;
+            var updatedChatLog = data.updatedChatLog;
+    
+            // Update chat log section for the specific ticket
+            var chatLogDiv = document.getElementById('chat_log_' + ticketId);
+            if (chatLogDiv) {
+                chatLogDiv.innerHTML = updatedChatLog;
+            }
+        });
+        socket.on('new_ticket', function(data) {
+            alert('New Ticket: ' + data.title);
+            location.reload();
+            // ทำการแสดงการแจ้งเตือนหรือปรับเปลี่ยนหน้าเว็บตามต้องการ
+        });
+
+        socket.on('ticket_deleted', function(data) {
+            console.log('Ticket deleted:', data);
+            location.reload();
+            // ปรับปรุงหน้าเว็บเพื่อลบข้อมูล ticket ที่ถูกลบ
+        });
+        function deleteMessage(messageId) {
+            // ส่งคำขอไปยังเซิร์ฟเวอร์เพื่อลบข้อความโดยใช้ API หรือเมธอดที่เหมาะสม
+            fetch("/delete_message/" + messageId, {
+                method: "DELETE"
+            })
+            .then(response => {
+                if (response.ok) {
+                    // ลบข้อความออกจาก DOM เมื่อลบสำเร็จ
+                    var messageElement = document.getElementById("message_" + messageId);
+                    if (messageElement) {
+                        messageElement.remove();
+                    }
+                } else {
+                    throw new Error("Failed to delete message");
+                }
+            })
+            .catch(error => {
+                console.error("Error:", error);
+                console.error("Response:", response); // Log detailed response for debugging
+                alert("Failed to delete message. Please try again.");
+            });
+        }
+        // สร้างตัวแปร formData เป็นอ็อบเจกต์ของ FormData
+            // สร้างตัวแปร formData เป็นอ็อบเจกต์ของ FormData
+        
+
+    </script>
+    <script>
+        $(document).ready(function() {
+            // เมื่อได้รับการตอบกลับจากการเพิ่ม ticket สำเร็จ
+            socket.on('new_ticket', function(data) {
+                if (data && data.title) {
+                    alert('New Ticket: ' + data.title);
+                    // ทำการแสดงการแจ้งเตือนหรือปรับเปลี่ยนหน้าเว็บตามต้องการ
+                    updateTicketList(); // อัพเดตรายการ ticket ที่ต้องการแสดงผล
+                } else {
+                    console.error('Invalid or missing data in new_ticket event:', data);
+                }
+            });
+        });
+
+    </script>
+    <script>
+        // ฟังก์ชันสำหรับรีเฟรชหน้าเว็บ
+        function refreshPage() {
+            location.reload(); // รีเฟรชหน้าเว็บ
+        }
+
+        // รีเฟรชหน้าเว็บทุก ๆ 3 นาที
+        setInterval(refreshPage, 180000); // 180000 มิลลิวินาที = 3 นาที
+
+        // ฟังก์ชันสำหรับรีเฟรชหน้าเว็บ
+
+        function changeLanguage(lang) {
+            // ส่งค่าภาษาไปยังหน้าเว็บที่ต้องการ
+            window.location.href = `/${lang}/ticket_detial`; // เปลี่ยน URL ตามที่ต้องการ
+        }
+
+    </script>
+    
+    <h1>Admin Manage All Tickets View</h1>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Ticket Number</th>
+                <th>Name</th>
+                <th>Issue Description</th>
+                <th>Type</th>
+                <th>Issue Type</th>
+                <th>Status</th>
+                <th>Created At</th>
+                <th>Finished At</th>
+                <th>Action</th>
+
+            </tr>
+        </thead>
+        <tbody>
+            {% for ticket in tickets %}
+            <tr>
+                <td>{{ ticket['ticket_number'] }}</td>
+                <td>{{ ticket['title'] }}</td>
+                <td style="width: 35%;">{{ ticket['description'] }}</td>
+                <td>{{ ticket['type'] }}</td>
+                <td>{{ ticket['issuetype'] }}</td>
+                <td>{{ ticket['status'] }}</td>
+                <td>{{ ticket['created_at'] }}</td>
+                <td>{{ ticket['close_at'] }}</td>
+                <td>
+                    <form action="/admin_delete/{{ ticket.id }}" method="post" class="d-inline-block mr-2" id="deleteForm_{{ ticket.id }}">
+                        <button type="button" class="btn btn-danger custom-btn btn-sm" data-toggle="modal" data-target="#deleteModal_{{ ticket.id }}">
+                            Delete
+                        </button>
+                    </form>
+                    <a href="/admin_panel_detial/{{ ticket.id }}" class="btn btn-primary custom-btn btn-sm d-inline-block">
+                        View more
+                    </a>
+                </td>
+                
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <footer>
+        <p>&copy; 2024 IT Support MKS. All rights reserved.</p>
+    </footer>
+</body>
+</html>

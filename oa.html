@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ค้นหาและเพิ่มสถานที่บนแผนที่</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <style>
+        #map {
+            height: 600px;
+            width: 100%;
+        }
+        #inputBox {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            z-index: 1000;
+            background: white;
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.5);
+        }
+    </style>
+</head>
+<body>
+    <h1>ค้นหาและเพิ่มสถานที่บนแผนที่</h1>
+    <div id="inputBox">
+        <input type="text" id="searchText" placeholder="ค้นหาสถานที่">
+        <button id="searchButton">ค้นหา</button>
+        <ul id="resultList"></ul>
+        <button id="saveButton">บันทึกสถานที่</button>
+    </div>
+    <div id="map"></div>
+    
+    <script>
+        const map = L.map('map').setView([13.7563, 100.5018], 12);
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+        const searchButton = document.getElementById('searchButton');
+        const saveButton = document.getElementById('saveButton');
+        const resultList = document.getElementById('resultList');
+        let selectedLocation = null;
+
+        searchButton.addEventListener('click', function() {
+            const searchText = document.getElementById('searchText').value;
+
+            if (!searchText) {
+                alert("กรุณาใส่ข้อความที่ต้องการค้นหา");
+                return;
+            }
+
+            fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${searchText}`)
+                .then(response => response.json())
+                .then(data => {
+                    resultList.innerHTML = '';
+                    data.forEach(location => {
+                        const listItem = document.createElement('li');
+                        listItem.textContent = location.display_name;
+                        listItem.dataset.lat = location.lat;
+                        listItem.dataset.lon = location.lon;
+                        resultList.appendChild(listItem);
+                    });
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        });
+
+        resultList.addEventListener('click', function(event) {
+            if (event.target.tagName === 'LI') {
+                const lat = parseFloat(event.target.dataset.lat);
+                const lon = parseFloat(event.target.dataset.lon);
+                const name = event.target.textContent;
+
+                selectedLocation = { name, lat, lon };
+
+                const marker = L.marker([lat, lon]).addTo(map)
+                    .bindPopup(name);
+
+                map.setView([lat, lon], 14);
+            }
+        });
+
+        saveButton.addEventListener('click', function() {
+            if (!selectedLocation) {
+                alert("กรุณาเลือกสถานที่ก่อนบันทึก");
+                return;
+            }
+
+            fetch('/api/add_place', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(selectedLocation)
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert(data.message);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        });
+    </script>
+</body>
+</html>

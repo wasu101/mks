@@ -1,0 +1,1507 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Car Booking Data</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="icon" href="{{ url_for('static', filename='images/logo1.ico') }}" type="image/x-icon">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.3.2/socket.io.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <link href="{{ url_for('static', filename='fontawesomefree/css/fontawesome.css') }}" rel="stylesheet" type="text/css">
+    <link href="{{ url_for('static', filename='fontawesomefree/css/brands.css') }}" rel="stylesheet" type="text/css">
+    <link href="{{ url_for('static', filename='fontawesomefree/css/solid.css') }}" rel="stylesheet" type="text/css">
+
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+            margin: 20px 0;
+        }
+        .bookings {
+            margin-top: 20px;
+        }
+        .booking {
+            padding: 20px;
+            border: 1px solid #ddd;
+            margin-bottom: 10px;
+            border-radius: 4px;
+            background-color: #fff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+        }
+        .booking-icon {
+            font-size: 40px;
+            color: #28a745;
+            margin-right: 20px;
+        }
+        .booking-details {
+            flex-grow: 1;
+        }
+        .booking-details p {
+            margin: 0;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f4f4f4;
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #555;
+        }
+        input[type="text"], input[type="email"], input[type="datetime-local"], textarea {
+            width: 100%;
+            padding: 10px;
+            box-sizing: border-box;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .alert {
+            padding: 10px;
+            margin-top: 10px;
+            border-radius: 4px;
+            color: #fff;
+        }
+        .alert-success {
+            background-color: #28a745;
+        }
+        .alert-error {
+            background-color: #dc3545;
+        }
+        .bookings {
+            margin-top: 20px;
+        }
+        .booking {
+            padding: 10px;
+            border: 1px solid #ddd;
+            margin-bottom: 10px;
+            border-radius: 4px;
+            background-color: #f9f9f9;
+        }
+        .modal {
+    display: none;
+    position: fixed;
+    z-index: 2; /* ลด z-index ของ modal */
+    padding-top: 10px;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.4);
+    animation-name: fadeIn;
+    animation-duration: 0.4s;
+    animation-fill-mode: both; /* Ensure the element stays in its final state */
+}
+
+.booking-map {
+    z-index: 1;
+    height: 200px; /* Adjust height as needed */
+    width: 90%; /* Ensure full width */
+    border: 1px solid #ccc; /* Optional: Add border for clarity */
+    border-radius: 5px; /* Optional: Add border radius */
+    margin-bottom: 10px; /* Optional: Add margin for spacing */
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.modal-content {
+        background-color: #fefefe;
+        margin: auto;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 80%;
+        max-width: 1000px; /* Limit maximum width */
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+        overflow-y: auto; /* Enable scrolling if content overflows */
+    }
+
+    .modal-content h1 {
+        text-align: center;
+    }
+
+    .modal-content #modalMapContainer {
+        position: relative;
+        height: 600px; /* Adjust height as needed */
+        width: 100%;
+    }
+    .modal-content .btn {
+        width: 100%;
+        padding: 10px;
+        margin-top: 10px;
+        background-color: #007bff;
+        border: none;
+        color: white;
+        cursor: pointer;
+        border-radius: 4px;
+    }
+
+    .modal-content .btn:hover {
+        background-color: #0056b3;
+    }
+
+    .modal-content .close {
+        color: #aaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+        cursor: pointer;
+    }
+    .closer {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            color: #aaa;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .closer:hover,
+        .closer:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+    .modal-content .close:hover,
+    .modal-content .close:focus {
+        color: black;
+        text-decoration: none;
+        cursor: pointer;
+    }
+
+
+        label {
+            color: #666666;
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        input[type="text"],
+        textarea,
+        select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #cccccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+            transition: border-color 0.3s;
+        }
+
+        input[type="text"]:focus,
+        textarea:focus,
+        select:focus {
+            border-color: #4a90e2;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+        input[type="submit"] {
+            background-color: #4a90e2;
+            color: #ffffff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            display: block;
+            margin: 20px auto 0;
+            transition: background-color 0.3s ease;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #357ab8;
+        }
+        .custom-tooltip {
+            position: absolute;
+            z-index: 1070;
+            display: none;
+            padding: 0.25rem 0.5rem;
+            font-size: 0.875rem;
+            color: #fff;
+            background-color: rgba(0, 0, 0, 0.75);
+            border-radius: 0.25rem;
+        }
+        .chat-window {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.1);
+            overflow-y: auto;
+            padding: 10px;
+        }
+
+        /* General body styling */
+        body {
+            font-family: Arial, sans-serif;
+            height: 100%;
+            width: 100%;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+        .width-100 {
+            width: 100%;
+        }
+        #deleteTicketModal {
+            position: fixed;
+            bottom: 20px; /* ระยะห่างจากด้านล่าง */
+            right: 20px; /* ระยะห่างจากด้านขวา */
+            z-index: 1050; /* ค่า z-index เพื่อให้ Popup แสดงหน้าที่สูงกว่าตัวหน้าหลัง */
+        }
+
+        #navbar {
+        overflow: hidden;
+        background-color: #ffffff;
+        padding: 50px 5px; /* Large padding which will shrink on scroll (using JS) */
+        transition: 0.4s; /* Adds a transition effect when the padding is decreased */
+        position: fixed; /* Sticky/fixed navbar */
+        width: 100%;
+        top: 0; /* At the top */
+        z-index: 2;
+        }
+
+        /* Style the navbar links */
+        #navbar a {
+        float: left;
+        color: black;
+        text-align: center;
+        padding: 12px;
+        text-decoration: none;
+        font-size: 18px;
+        line-height: 25px;
+        border-radius: 4px;
+        }
+
+        /* Style the logo */
+        #navbar #logo {
+        font-size: 35px;
+        font-weight: bold;
+        transition: 0.4s;
+        }
+
+        /* Links on mouse-over */
+        #navbar a:hover {
+        background-color: #ddd;
+        color: black;
+        }
+
+        /* Style the active/current link */
+        #navbar a.active {
+        background-color: dodgerblue;
+        color: white;
+        }
+
+        /* Display some links to the right */
+        #navbar-right {
+        float: right;
+        }
+
+        /* Add responsiveness - on screens less than 580px wide, display the navbar vertically instead of horizontally */
+        @media screen and (max-width: 580px) {
+        #navbar {
+            padding: 20px 10px !important; /* Use !important to make sure that JavaScript doesn't override the padding on small screens */
+        }
+        #navbar a {
+            float: none;
+            display: block;
+            text-align: left;
+        }
+        #navbar-right {
+            float: none;
+        }
+        }
+        .center-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 10vh; /* Full viewport height */
+            width: 100%; /* Full width */
+            top: 0;
+            left: 0;
+        }
+        .modal-bookcontent {
+        background-color: #fefefe;
+        margin:  auto;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 50%;
+        max-width: 600px; /* Limit maximum width */
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+        overflow-y: auto; /* Enable scrolling if content overflows */
+    }
+
+    .modal-bookcontent h1 {
+        text-align: center;
+    }
+
+    .modal-bookcontent .form-group {
+        margin-bottom: 15px;
+    }
+
+    .modal-bookcontent label {
+        display: block;
+        font-weight: bold;
+        margin-bottom: 5px;
+    }
+
+    .modal-bookcontent input[type="text"],
+    .modal-bookcontent input[type="email"],
+    .modal-bookcontent textarea,
+    .modal-bookcontent select {
+        width: 100%;
+        padding: 8px;
+        margin-top: 5px;
+        margin-bottom: 10px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+        font-size: 14px;
+    }
+
+    .modal-bookcontent button[type="submit"] {
+        width: 100%;
+        background-color: #4CAF50;
+        color: white;
+        padding: 10px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 16px;
+    }
+
+    .modal-bookcontent button[type="submit"]:hover {
+        background-color: #45a049;
+    }
+
+    .modal-bookcontent .close {
+        color: #aaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+        cursor: pointer;
+    }
+
+    .modal-bookcontent .close:hover,
+    .modal-bookcontent .close:focus {
+        color: black;
+        text-decoration: none;
+        cursor: pointer;
+    }
+
+    /* Responsive adjustments */
+    @media only screen and (max-width: 600px) {
+        .modal-bookcontent {
+            width: 80%;
+        }
+    }
+   
+        .form-group {
+            display: grid;
+            grid-template-columns: 150px 1fr;
+            gap: 10px;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .form-group label {
+            font-weight: bold;
+            color: #343a40;
+        }
+        .form-group input, .form-group select, .form-group textarea {
+            border: 1px solid #ced4da;
+            border-radius: 5px;
+            padding: 10px;
+            font-size: 1rem;
+            color: #495057;
+            background-color: #fff;
+            background-clip: padding-box;
+            transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+            width: 100%;
+        }
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+            border-color: #80bdff;
+            outline: 0;
+            box-shadow: 0 0 5px rgba(0, 123, 255, .25);
+        }
+        .form-group .grid {
+            display: grid;
+            grid-template-columns: auto auto auto;
+            gap: 10px;
+        }
+        .time-group {
+            display: grid;
+            grid-template-columns: 185px 1fr 185px 1fr;
+            gap: 10px;
+            align-items: center;
+        }
+        .time-group label {
+            text-align: center;
+        }
+        button[type="submit"] {
+            background-color: #007bff;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color .3s;
+        }
+        button[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+        .center-container {
+        background-color: #d4d4d4;
+        transition: background-color 0.3s ease; /* เพิ่ม transition เพื่อให้การเปลี่ยนสีเน้นมีการแสดงผลที่นุ่มนวล */
+    }
+    .loading-spinner {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+
+.spinner {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid #3498db;
+    animation: spin 1s linear infinite;
+    margin-bottom: 10px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+
+    .center-container:hover {
+        background-color: #a9a9a9; /* สีพื้นหลังที่เข้มขึ้นเมื่อชี้ */
+    }
+    .status-approve {
+            background-color: lightgreen;
+        }
+        .status-deny {
+            background-color: lightcoral;
+        }
+        .status-pending {
+            background-color: white;
+        }
+        .time-grouper {
+            display: flex;
+            background-color: #e2e2e2;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .time-grouper label {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.5rem 1rem;
+            background-color: #ffffff;
+            margin: 0;
+            border: 1px solid #e2e2e2;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .time-grouper input[type="checkbox"] {
+            display: none;
+        }
+
+        .time-grouper input[type="checkbox"]:checked + label {
+            background-color: #ff6600;
+            color: #ffffff;
+        }
+
+        .time-grouper label:hover {
+            cursor: pointer;
+            background-color: #ffd699;
+        }
+        .button-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 20px;
+        }
+        .hh-grayBox {
+            margin-left: 35px;
+    background-color: #F8F8F8; /* สีพื้นหลัง */
+    margin-bottom: 20px; /* ระยะห่างด้านล่าง */
+    padding: 35px; /* Padding รอบ ๆ */
+    margin-top: 20px; /* ระยะห่างด้านบน */
+    border-radius: 8px; /* มุมโค้ง */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* เงา */
+    width: 400px; /* ความกว้าง */
+    min-width: 350px; /* ความกว้างขั้นต่ำ */
+}
+
+.order-tracking {
+    text-align: center;
+    width: 25%; /* คงที่เพื่อให้แสดงในแถวเดียว */
+    position: relative;
+    display: flex; /* ใช้ flexbox เพื่อจัดเรียงในแนวเดียว */
+    flex-direction: column; /* แนวตั้ง */
+    align-items: center; /* จัดให้อยู่กลาง */
+}
+
+.order-tracking .is-complete {
+    display: block;
+    position: relative;
+    border-radius: 50%;
+    height: 30px;
+    width: 30px;
+    background-color: #f7be16; /* สีเริ่มต้น */
+    margin: 0 auto;
+    transition: background 0.25s linear;
+    z-index: 0;
+}
+
+.order-tracking.completed .is-complete {
+    background-color: #27aa80; /* สีเขียวเมื่อเสร็จ */
+}
+
+.order-tracking::before {
+    content: '';
+    display: block;
+    height: 3px;
+    width: calc(100% - 40px); /* ความกว้างของเส้น */
+    background-color: #f7be16; /* สีเริ่มต้น */
+    top: 13px;
+    position: absolute;
+    left: calc(-50% + 20px);
+    z-index: 0;
+}
+
+.order-tracking.completed:before {
+    background-color: #27aa80; /* สีเขียวเมื่อเสร็จ */
+}
+
+.order-tracking:first-child:before {
+    display: none; /* ซ่อนเส้นสำหรับสถานะแรก */
+}
+
+.order-tracking.completed {
+    color: green; /* เปลี่ยนสีข้อความเป็นสีเขียว */
+}
+
+.is-complete.completed i {
+    color: rgb(255, 255, 255); /* เปลี่ยนสีเครื่องหมายถูกเป็นสีขาว */
+}
+
+.is-complete {
+    position: relative; /* ให้สามารถจัดตำแหน่งภายในได้ */
+}
+
+.is-complete i {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); /* ให้อยู่กลางวงกลม */
+    color: white; /* เปลี่ยนสีของเครื่องหมายถูก */
+    font-size: 16px; /* ขนาดของเครื่องหมายถูก */
+}
+.container1{
+    width: 800px;
+}
+.order-tracking-container {
+        display: flex;
+        align-items: center;
+        gap: 1rem; /* Adjust gap as needed */
+    }
+    .order-tracking.completed.booked {
+        color: green; /* Change text color to green */
+    }
+    .order-tracking.completed.booked .is-complete {
+        background-color: green; /* Change background color of the checkmark to green */
+    }
+
+/* Modal content adjustments for smaller screens */
+@media only screen and (max-width: 600px) {
+    .modal-content {
+        width: 80%;
+    }
+}
+@media screen and (max-width: 580px) {
+    #navbar {
+        padding: 20px 10px !important;
+    }
+    #navbar a {
+        float: none;
+        display: block;
+        text-align: left;
+    }
+    #navbar-right {
+        float: none;
+    }
+}
+
+    </style>
+    <head>
+        <!-- Flatpickr CSS -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+        <!-- Optional Flatpickr Theme -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/themes/material_blue.css">
+    </head>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <!-- Initialize Flatpickr -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Initialize Flatpickr for start time
+            flatpickr("#start", {
+                enableTime: true,
+                noCalendar: true,
+                dateFormat: "H:i",
+                time_24hr: true
+            });
+
+            // Initialize Flatpickr for end time
+            flatpickr("#end", {
+                enableTime: true,
+                noCalendar: true,
+                dateFormat: "H:i",
+                time_24hr: true
+            });
+        });
+    </script>    
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        // Function to set the background color based on status
+        function setStatusColor() {
+            const bookings = document.querySelectorAll('.booking');
+            bookings.forEach(booking => {
+                const status = booking.getAttribute('data-status');
+                if (status === 'Approved') {
+                    booking.classList.add('status-approve');
+                } else if (status === 'Denied') {
+                    booking.classList.add('status-deny');
+                } else if (status === 'Pending') {
+                    booking.classList.add('status-pending');
+                }
+            });
+        }
+
+        // Call the function to set the initial status colors
+        document.addEventListener('DOMContentLoaded', setStatusColor);
+    </script>
+
+<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+
+<script>
+// Function to initialize modal map
+
+
+async function fetchBookings(date) {
+    const bookingsContainer = document.getElementById('bookings-container');
+    bookingsContainer.innerHTML = `
+    <div class="loading-spinner">
+        <div class="spinner"></div>
+    </div>
+    `;
+
+    try {
+        const response = await fetch(`/api/bookings1?date=${date}`);
+        const data = await response.json();
+
+        if (data.error) {
+            bookingsContainer.innerHTML = `<div class="alert alert-error">${data.error}</div>`;
+        } else if (data.length === 0) {
+            bookingsContainer.innerHTML = '<div class="alert alert-error">No data booking</div>';
+        } else {
+            bookingsContainer.innerHTML = ''; // Clear loading message
+
+            data.forEach(event => {
+                const bookingElement = document.createElement('div');
+                bookingElement.className = 'booking mt-2 mb-2';
+                bookingElement.setAttribute('data-booking-id', event.bookingId);
+                bookingElement.setAttribute('data-status', event.status);
+
+                // Determine status classes
+                const isPending = event.status === 'Pending';
+                const isBooked = event.status === 'Booked' || isPending;
+                const isWaiting = event.status === 'Waiting for Accept';
+                const isInUse = event.status === 'In Use';
+                const isCompleted = event.status === 'Completed';
+                const isDenied = event.status === 'Denied';
+
+                let statusTrackerHtml = `
+                    <div class="container1">
+                        <div class="row">
+                            <div class="col-12 col-md-10 hh-grayBox pt45 pb20">
+                                <h2 class="booking-id">Booking ID: ${event.bookingId}</h2> <!-- Show Booking ID -->
+                                <div class="row justify-content-between">
+                `;
+
+                if (isDenied) {
+                    statusTrackerHtml += `
+                        <div class="order-tracking-container">
+                            <br>
+                            <br>
+                            <br>
+                            <br>
+                            <div class="order-tracking denied">
+                                <span class="is-complete denied">
+                                    <i class="fa-solid fa-xmark" style="color: red;"></i>
+                                </span>
+                                <p>Denied<br><span>${event.denied_timestamp || ''}</span></p>
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    statusTrackerHtml += `
+                                    <div class="order-tracking ${isBooked || isWaiting || isInUse || isCompleted ? 'completed' : ''}">
+                                        <span class="is-complete ${isBooked || isWaiting || isInUse || isCompleted ? 'completed' : ''}">
+                                            ${isBooked || isWaiting || isInUse || isCompleted ? '<i class="fa-solid fa-check"></i>' : ''}
+                                        </span>
+                                        <p>Booked<br><span>${event.start_timestamp || ''}</span></p>
+                                    </div>
+                                    <div class="order-tracking ${isWaiting || isInUse || isCompleted ? 'completed' : ''}">
+                                        <span class="is-complete ${isWaiting || isInUse || isCompleted ? 'completed' : ''}">
+                                            ${isWaiting || isInUse || isCompleted ? '<i class="fa-solid fa-check"></i>' : ''}
+                                        </span>
+                                        <p>Waiting for Accept<br><span>${event.accept_timestamp || ''}</span></p>
+                                    </div>
+                                    <div class="order-tracking ${isInUse || isCompleted ? 'completed' : ''}">
+                                        <span class="is-complete ${isInUse || isCompleted ? 'completed' : ''}">
+                                            ${isInUse || isCompleted ? '<i class="fa-solid fa-check"></i>' : ''}
+                                        </span>
+                                        <p>In Use<br><span>${event.inuse_timestamp || ''}</span></p>
+                                    </div>
+                                    <div class="order-tracking ${isCompleted ? 'completed' : ''}">
+                                        <span class="is-complete ${isCompleted ? 'completed' : ''}">
+                                            ${isCompleted ? '<i class="fa-solid fa-check"></i>' : ''}
+                                        </span>
+                                        <p>Completed<br><span>${event.driver_endtime || ''}</span></p>
+                                    </div>
+
+                
+                    `;
+                }
+
+                statusTrackerHtml += `
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+
+                bookingElement.innerHTML = `
+                    ${statusTrackerHtml}
+                    <div class="booking-details">
+                        <p><strong>Name:</strong> ${event.name}</p>
+                        <p><strong>Email:</strong> ${event.email}</p>
+                        <p><strong>Department:</strong> ${event.department}</p>
+                        <p><strong>Car Type:</strong> ${event.car_type}</p>
+                        <p><strong>Need Driver:</strong> ${event.need_driver}</p>
+                        ${event.need_driver === 'need' ? `<p><strong>Driver By:</strong> ${event.rider_name}</p>` : ''}
+                        <p><strong>Time:</strong> ${event.display}</p>
+                        <p><strong>Duration:</strong> ${event.duration2}</p>
+                        ${isCompleted ? `<p><strong>Real time use:</strong> ${event.duration3}</p>` : ''}
+                        <p><strong>Status:</strong> ${event.status}</p>
+                        <p><strong>Description:</strong> ${event.description}</p>
+                        <p><strong>Pickup-point:</strong> ${event.pickup1}</p>
+                        <p><strong>Destination:</strong> ${event.destination1}</p>
+                    </div>
+                    {% if 'adminmcbk' in current_user.roles or 'all' in current_user.roles %}
+                    <div style="display: flex; flex-direction: column;" class="mt-2 mb-2">
+                        <button class="delete-button btn btn-danger mt-2 mb-2" onclick="deleteBooking(${event.bookingId})">Delete</button>
+                        <button class="approve-button btn btn-success mt-2 mb-2" onclick="approveBooking(${event.bookingId}, '${encodeURIComponent(JSON.stringify(event))}')" style="display: ${event.status === 'Pending' ? 'block' : 'none'}">Approve</button>
+                        <button class="notapprove-button btn btn-info mt-2 mb-2" onclick="notApproveBooking(${event.bookingId})" style="display: ${event.status === 'Pending' ? 'block' : 'none'}">Not Approve</button>
+                    </div>
+                    {% endif %}
+                `;
+
+                bookingsContainer.appendChild(bookingElement);
+            });
+        }
+    } catch (error) {
+        console.error('Error fetching bookings:', error);
+        bookingsContainer.innerHTML = '<div class="alert alert-error">Error fetching bookings</div>';
+    }
+}
+
+async function fetchDrivers() {
+            try {
+                const response = await fetch('/api/drivers');
+                if (!response.ok) {
+                    throw new Error('Failed to fetch drivers');
+                }
+                const data = await response.json();
+                return data; // Assuming data is an array of objects with 'id' and 'name' fields
+            } catch (error) {
+                console.error('Error fetching drivers:', error);
+                return []; // Return an empty array or handle error as needed
+            }
+        }
+
+        async function approveBooking(bookingId, eventData) {
+    try {
+        const confirmApprove = await Swal.fire({
+            title: 'Confirm Approval',
+            text: 'Do you want to approve this booking?',
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonText: 'Approve',
+            cancelButtonText: 'Cancel'
+        });
+
+        if (!confirmApprove.isConfirmed) {
+            return; // Exit if the user cancels the approval
+        }
+
+        // Decode the event data
+        const event = JSON.parse(decodeURIComponent(eventData));
+
+        // Ensure event data is defined
+        if (!event) {
+            throw new Error('No valid bookings data');
+        }
+
+        // Check if "Need Driver" checkbox is checked
+        if (event.need_driver === 'need') {
+            // Fetch available drivers from API
+            const drivers = await fetchDrivers();
+
+            // Create dropdown select element
+            const driverSelect = document.createElement('select');
+            driverSelect.classList.add('swal2-select', 'form-control');
+
+            // Add options for available drivers
+            drivers.forEach(driver => {
+                const option = document.createElement('option');
+                option.value = driver.name; // Assigning driver name as value
+                option.textContent = driver.name;
+                driverSelect.appendChild(option);
+            });
+
+            const driverInput = await Swal.fire({
+                title: 'Select Driver',
+                html: driverSelect.outerHTML,
+                showCancelButton: true,
+                confirmButtonText: 'Save',
+                cancelButtonText: 'Cancel',
+                preConfirm: () => {
+                    // Retrieve the selected driver name correctly
+                    const selectedDriver = document.querySelector('.swal2-select').value;
+                    return selectedDriver || null; // Return null if no driver selected
+                }
+            });
+
+            if (driverInput.isConfirmed && driverInput.value) { // Check if a driver is selected
+                const selectedDriverName = driverInput.value;
+
+                // Check driver availability for the new booking
+                const saveAvailabilityResponse = await fetch('/api/driver-availability', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        bookingId: bookingId,
+                        start_datetime: event.start_datetime,
+                        end_datetime: event.end_datetime,
+                        driver_name: selectedDriverName
+                    })
+                });
+
+                const availabilityData = await saveAvailabilityResponse.json();
+                if (saveAvailabilityResponse.ok) {
+                    // Send approval request to server with selected driver name
+                    const response = await fetch(`/api/approve/${bookingId}`, {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ approved: true, riderName: selectedDriverName })
+                    });
+
+                    const data = await response.json();
+                    if (response.ok) {
+                        Swal.fire('Approval Successful', '', 'success')
+                            .then(() => {
+                                window.location.reload();
+                            });
+                    } else {
+                        // Handle error
+                        Swal.fire('Error', data.error || 'Error approving booking', 'error');
+                    }
+                } else {
+                    // Handle overlapping booking error
+                    Swal.fire('Error', availabilityData.error || 'Driver is already assigned to another booking during this time', 'error');
+                }
+            }
+        } else {
+            // If "No Need Driver" checkbox is checked or not specified, proceed without selecting a driver
+            const response = await fetch(`/api/approve/${bookingId}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ approved: true, riderName: null }) // Pass null for riderName
+            });
+
+            const data = await response.json();
+            if (response.ok) {
+                Swal.fire('Approval Successful', '', 'success')
+                    .then(() => {
+                        window.location.reload();
+                    });
+            } else {
+                // Handle error
+                Swal.fire('Error', data.error || 'Error approving booking', 'error');
+            }
+        }
+    } catch (error) {
+        console.error('Error approving booking:', error);
+        Swal.fire('Error', 'Error approving booking: ' + error.message, 'error');
+    }
+}
+
+
+        async function notApproveBooking(bookingId) {
+            try {
+                const confirmDeny = await Swal.fire({
+                    title: 'Confirm Denial',
+                    text: 'Do you want to deny this booking?',
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonText: 'Deny',
+                    cancelButtonText: 'Cancel'
+                });
+
+                if (confirmDeny.isConfirmed) {
+                    const response = await fetch(`/api/notapprove/${bookingId}`, {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ approved: false })
+                    });
+
+                    const data = await response.json();
+                    if (response.ok) {
+                        // Update status in UI
+                        const bookingElement = document.querySelector(`.booking[data-booking-id="${bookingId}"]`);
+                        if (bookingElement && data.status === 'Pending') {
+                            const statusElement = bookingElement.querySelector('.booking-details p:nth-child(7)');
+                        } else if (bookingElement) {
+                        }
+                        Swal.fire('Denial Successful', '', 'success')
+                        .then(() => {
+                            window.location.reload();
+                        });
+                    } else {
+                        // Handle error
+                        console.error('Error denying booking:', data.error);
+                        Swal.fire('Error', data.error || 'Error denying booking', 'error');
+                    }
+                }
+            } catch (error) {
+                console.error('Error denying booking:', error);
+                Swal.fire('Error', 'Error denying booking', 'error');
+            }
+        }
+
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const startDate = urlParams.get('start');
+            const endDate = urlParams.get('end');
+            if (startDate) {
+                document.getElementById('start').value = startDate;
+                document.getElementById('booking-date').innerText = startDate;
+            }
+            if (endDate) {
+                document.getElementById('end').value = endDate;
+            }
+
+            if (startDate) {
+                fetchBookings(startDate);
+            }
+
+            // Tooltip handling
+            var $tooltip = $('#custom-tooltip');
+
+            $('.custom-tooltip-button').on('mouseenter', function(e) {
+                var tooltipText = $(this).attr('data-tooltip');
+                $tooltip.text(tooltipText).show();
+            }).on('mousemove', function(e) {
+                $tooltip.css({
+                    left: e.pageX + 10 + 'px', // Offset from the mouse pointer
+                    top: e.pageY - 30 + 'px' // Adjusted offset from the mouse pointer
+                });
+            }).on('mouseleave', function() {
+                $tooltip.hide();
+            });
+        });
+        document.addEventListener('DOMContentLoaded', function() {
+            var modal = document.getElementById("myModal");
+            var btn = document.getElementById("myBtn");
+            var span = document.getElementsByClassName("close")[0];
+
+            btn.onclick = function() {
+                modal.style.display = "block";
+            }
+
+            span.onclick = function() {
+                modal.style.display = "none";
+            }
+
+            window.onclick = function(event) {
+                if (event.target == modal) {
+                    modal.style.display = "none";
+                }
+            }
+            
+        });
+// Function to initialize modal map
+function showModalMap(lat, lng, name) {
+    const modal = document.getElementById('modalMap');
+    modal.style.display = 'block';
+
+    const mapContainer = document.getElementById('modalMapContainer');
+
+    // Initialize map only if it's not initialized already
+    if (!mapContainer.map) {
+        const map = L.map(mapContainer).setView([lat, lng], 18);
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap | M K S JEWELRY INTERNATIONAL CO., LTD.</a> contributors',
+            maxZoom: 19,
+        }).addTo(map);
+
+        L.marker([lat, lng]).addTo(map)
+            .bindPopup(`Destination: ${name}`).openPopup();
+
+        // Store map instance in mapContainer
+        mapContainer.map = map;
+    }
+}
+
+function closeModalMap() {
+    const modal = document.getElementById('modalMap');
+    modal.style.display = 'none';
+
+    // Clear map container when closing modal
+    const mapContainer = document.getElementById('modalMapContainer');
+    if (mapContainer.map) {
+        mapContainer.map.remove();
+        delete mapContainer.map;
+    }
+// Close modal map when clicking outside modal or map container
+window.onclick = function(event) {
+    const modal = document.getElementById('modalMap');
+    if (event.target === modal) {
+        closeModalMap();
+    }
+};
+
+}
+
+
+
+
+    </script>
+</head>
+<body>
+    <div class="topnav" id="navbar">
+        <p class="small mb-1">You are logged in as <strong>{{ current_user.displayname }}</strong> from <strong>{{ current_user.department }}</strong>.</p>
+        <h1 class="text-center">Car Booking Date: <span id="booking-date"></span></h1>
+        
+        <div class="chat-window d-flex justify-content-end mt-4">
+            <form action="{{ url_for('main') }}" class="ml-2 mr-2">
+                <button type="submit" class="btn btn-secondary custom-tooltip-button" data-tooltip="Go to Home">
+                    <i class="fa fa-home mt-1" style="font-size:28px;color:rgb(255, 255, 255)"></i>
+                </button>
+            </form>
+            <form action="{{ url_for('overall') }}" class="ml-2 mr-2">
+                <button type="submit" class="btn btn-secondary custom-tooltip-button" data-tooltip="Back">
+                    <i class="fa-solid fa-arrow-left mt-1" style="font-size:28px;color:rgb(255, 255, 255)"></i>
+                </button>
+            </form>
+
+        </div>
+    </div>
+
+    <div class="bookings" style="margin-top: 225px;" id="bookings-container">
+    </div>
+    <!-- Modal for full map view -->
+    <!-- Modal for full map view -->
+
+
+
+    <div id="myBtn" class="center-container border " style=" height: 250px;"data-tooltip="Create New Car Book">
+            <p style="font-size:48px; color: #969696;"><i class="fa fa-plus" style="font-size:48px; color: #969696;"></i> Create New Book</p>
+    </div>
+    <!-- Modal for full map view -->
+
+
+    <div id="custom-tooltip" class="custom-tooltip"></div>
+    <div id="modalMap" class="modal">
+        <div class="modal-content">
+            <span class="closer" onclick="closeModalMap()">&times;</span>
+            <h1>Full Map</h1>
+            <div id="modalMapContainer"></div>
+            <div class="button-container">
+                <button class="btn btn-primary mt-3" style="width: 15%;" onclick="closeModalMap()">Close</button>
+            </div>
+        </div>
+    </div>
+    
+    <div id="myModal" class="modal">
+        <div class="modal-bookcontent">
+            <span class="close">&times;</span>
+            <h1>Car Booking</h1>
+            <form id="booking-form" method="POST" action="/booking">
+                <div class="form-group">
+                    <label for="name"><i class="fas fa-user"></i> Name:</label>
+                    <input type="text" id="name" name="name" required>
+                </div>
+    
+                <div class="form-group">
+                    <label for="email"><i class="fas fa-envelope"></i> Email:</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+    
+                <div class="form-group">
+                    <label for="description"><i class="fas fa-comment"></i> Description:</label>
+                    <textarea id="description" name="description" rows="4"></textarea>
+                </div>
+    
+                <div class="form-group">
+                    <label for="department"><i class="fas fa-building"></i> Department:</label>
+                    <select id="department" name="department" required>
+                        <option value="">--select--</option>
+                        <option value="IT">IT</option>
+                        <option value="DESIGN/CAD/MODEL">DESIGN/CAD/MODEL</option>
+                        <option value="HR">HR</option>
+                        <option value="GOLD STOCK">GOLD STOCK</option>
+                        <option value="CASTING">CASTING</option>
+                        <option value="REFINERY">REFINERY</option>
+                        <option value="WAXING">WAXING</option>
+                        <option value="WAX-SET">WAX-SET</option>
+                        <option value="CNC">CNC</option>
+                        <option value="VOLUME">VOLUME</option>
+                        <option value="COMMERCIAL">COMMERCIAL</option>
+                        <option value="AUTO">AUTO</option>
+                        <option value="BRANDED">BRANDED</option>
+                        <option value="SETTING-EXPRESS">SETTING-EXPRESS</option>
+                        <option value="PT-US">PT-US</option>
+                        <option value="PT-JP">PT-JP</option>
+                        <option value="EXPRESS">EXPRESS</option>
+                        <option value="PREMIUM">PREMIUM</option>
+                        <option value="SETTING-SUPPORT">SETTING-SUPPORT</option>
+                        <option value="SEB-CON">SEB-CON</option>
+                        <option value="PLATING">PLATING</option>
+                        <option value="QC">QC</option>
+                        <option value="DIAMOND/STONE/GEMS">DIAMOND/STONE/GEMS</option>
+                        <option value="BI(NAVISION)">BI(NAVISION)</option>
+                        <option value="PACKING">PACKING</option>
+                        <option value="EXPORT-IMPORT">EXPORT-IMPORT</option>
+                        <option value="OPC">OPC</option>
+                        <option value="MAINTENANCE">MAINTENANCE</option>
+                        <option value="PURCHASE">PURCHASE</option>
+                        <option value="STORE">STORE</option>
+                        <option value="SECURITY">SECURITY</option>
+                        <option value="SALES">SALES</option>
+                        <option value="ACCOUNTING">ACCOUNTING</option>
+                        <option value="SENIOR MANAGER">SENIOR MANAGER</option>
+                        <!-- Add more options here -->
+                    </select>
+                </div>
+    
+                <div class="form-group">
+                    <label for="car_type"><i class="fas fa-car"></i> Car Type:</label>
+                    <select id="car_type" name="car_type" required>
+                        <option value="">--select--</option>
+                        {% for car in cars %}
+                        <option value="{{ car.car_name }}">{{ car.car_name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label><i class="fas fa-car"></i> Need Driver:</label>
+                    <div class="time-grouper">
+                        <input type="checkbox" name="driver_need" value="true" id="need_driver">
+                        <label for="need_driver">Need</label>
+                        <input type="checkbox" name="driver_need" value="false" id="no_need_driver">
+                        <label for="no_need_driver">No Need</label>
+                    </div>
+                </div>
+                
+                
+                
+                <div class="form-group">
+                    <label for="pickup"><i class="fas fa-map-marker-alt"></i> Pick-up point:</label>
+                    <select id="pickup" name="pickup" required onchange="toggleTextInput()">
+                        <option value="">--select--</option>
+                        <option value="MKS JEWELRY INTERNATIONAL CO., LTD.">บริษัท เอ็ม เค เอส จิวเวลรี่ อินเตอร์เนชั่นแนล จำกัด</option>
+                        <option value="other">other</option>
+                    </select>
+                </div>
+    
+                <div class="form-group">
+                    <label for="pickupText"></label>
+                    <input type="text" id="pickupText" name="pickupText" style="display: none;" placeholder="Specify other location">
+                </div>
+    
+                <div class="form-group">
+                    <label for="destination"><i class="fas fa-map-marker-alt"></i> Destination:</label>
+                    <input type="text" id="destination" name="destination" required>
+                </div>
+    
+                <div class="form-group">
+                    <label><i class="far fa-clock"></i> Time:</label>
+                    <div class="time-group">
+                        <input type="text" id="start" name="start" required placeholder="HH:MM">
+                        <label for="end"> - </label>
+                        <input type="text" id="end" name="end" required placeholder="HH:MM">
+                    </div>
+                </div>
+                
+    
+                <input type="hidden" id="booking-date-input" name="booking-date-input">
+    
+                <button type="submit">Book</button>
+            </form>
+        </div>
+    </div>
+</body>
+<script>
+    function toggleTextInput() {
+        var pickupSelect = document.getElementById('pickup');
+        var pickupTextInput = document.getElementById('pickupText');
+        
+        if (pickupSelect.value === 'other') {
+            pickupTextInput.style.display = 'block';
+            pickupTextInput.setAttribute('required', 'required'); // เพิ่ม required attribute เมื่อแสดง input
+        } else {
+            pickupTextInput.style.display = 'none';
+            pickupTextInput.removeAttribute('required'); // ลบ required attribute เมื่อซ่อน input
+        }
+    }
+    // เมื่อเริ่มต้นโหลดข้อมูลหรือกำลังทำการโหลดข้อมูล
+
+</script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Checkboxes behavior
+        const checkboxes = document.querySelectorAll('input[type="checkbox"][name="driver_need"]');
+
+        checkboxes.forEach(checkbox => {
+            checkbox.addEventListener('change', function() {
+                checkboxes.forEach(cb => {
+                    if (cb !== this) {
+                        cb.checked = false;
+                    }
+                });
+            });
+        });
+    });
+</script>
+
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    console.log("DOM fully loaded and parsed");
+
+    // Function to get query parameter by name
+    function getQueryParam(name) {
+        let urlParams = new URLSearchParams(window.location.search);
+        return urlParams.get(name);
+    }
+
+    // Get the 'start' query parameter
+    let startDate = getQueryParam('start');
+    if (startDate) {
+        console.log("Start date found:", startDate);
+        // Set the value of the 'start' datetime-local input field
+        let startInput = document.getElementById('start');
+        let endInput = document.getElementById('end');
+
+        // Set the booking-date-input value
+        document.getElementById('booking-date-input').value = startDate;
+
+        // Optionally, you can also set default times for start and end
+        startInput.value = '09:00'; // Default start time
+        endInput.value = '10:00'; // Default end time
+    }
+
+    // Handle checkbox for driver selection
+    let needDriverCheckbox = document.getElementById('need_driver');
+    if (needDriverCheckbox) {
+        needDriverCheckbox.addEventListener('change', function() {
+            let driverSelect = document.getElementById('driver_select');
+            console.log("Need driver checkbox changed:", needDriverCheckbox.checked);
+
+            if (needDriverCheckbox.checked) {
+                driverSelect.style.display = 'block';
+                driverSelect.setAttribute('required', 'required'); // Make driver selection required
+            } else {
+                driverSelect.style.display = 'none';
+                driverSelect.removeAttribute('required'); // Remove required attribute when not selecting driver
+            }
+        });
+    }
+
+    // Handle form submission
+    var form = document.getElementById('booking-form');
+    if (form) {
+        form.addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent default form submission
+            console.log("Form submission prevented");
+
+            var formData = new FormData(form);
+            console.log("Form data collected");
+
+            fetch(form.action, {
+                    method: form.method,
+                    body: formData
+                })
+                .then(response => {
+                    if (response.ok) {
+                        console.log("Form submitted successfully");
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Booking successful!',
+                            showConfirmButton: true,
+                            timer: 1500,
+                            timerProgressBar: true
+                        }).then(() => {
+                            window.location.reload();
+                        });
+                    } else {
+                        console.log("Form submission failed with status:", response.status);
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Booking failed',
+                            text: response.status === 409 ? 'Time slot already booked. Please choose a different time.' : 'Please try again.',
+                            confirmButtonText: 'OK'
+                        });
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Booking failed',
+                        text: 'An error occurred. Please try again later.',
+                        confirmButtonText: 'OK'
+                    });
+                });
+        });
+    }
+
+});
+
+
+</script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const needDriverCheckbox = document.getElementById('need_driver');
+        const noNeedDriverCheckbox = document.getElementById('no_need_driver');
+
+        needDriverCheckbox.addEventListener('change', function() {
+            if (needDriverCheckbox.checked) {
+                noNeedDriverCheckbox.checked = false;
+            }
+        });
+
+        noNeedDriverCheckbox.addEventListener('change', function() {
+            if (noNeedDriverCheckbox.checked) {
+                needDriverCheckbox.checked = false;
+            }
+        });
+    });
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert2/10.16.6/sweetalert2.min.js"></script>
+<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+
+<!-- Leaflet JavaScript -->
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+<script>
+    function deleteBooking(bookingId) {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: 'You will not be able to recover this booking!',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                fetch(`/api/bookings1/${bookingId}`, {
+                    method: 'DELETE'
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.error) {
+                        Swal.fire('Error', data.error, 'error');
+                    } else {
+                        Swal.fire('Deleted!', 'Your booking has been deleted.', 'success')
+                        // Reload the page or remove the deleted row from the table
+                        .then(() => {
+                            window.location.reload();
+                        });
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    Swal.fire('Error', 'An error occurred while deleting the booking.', 'error');
+                });
+            }
+        });
+    }
+// ใช้ Leaflet.js
+</script>
+
+</html>

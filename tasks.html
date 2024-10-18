@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tasks</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <link rel="icon" href="{{ url_for('static', filename='images/logo1.ico') }}" type="image/x-icon">
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
+    <!-- Custom CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link href="{{ url_for('static', filename='fontawesomefree/css/fontawesome.css') }}" rel="stylesheet" type="text/css">
+    <link href="{{ url_for('static', filename='fontawesomefree/css/brands.css') }}" rel="stylesheet" type="text/css">
+    <link href="{{ url_for('static', filename='fontawesomefree/css/solid.css') }}" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10.16.6/dist/sweetalert2.min.css">
+    <style>
+        .container {
+            margin-top: 20px;
+        }
+        table {
+            margin-top: 20px;
+        }
+        #map {
+            height: 500px;
+            width: 100%;
+            margin-top: 20px;
+        }
+        .print-container {
+            display: none; /* Hide by default */
+        }
+        @media print {
+    #map,
+    button.btn-primary,
+    .data {
+        display: none;
+    }
+    h1{
+        display: none;
+    }
+
+}
+.data{
+    text-align: center;
+}
+    </style>
+</head>
+<body>
+    <h1 id="heading">Booking Messenger Date: <span id="current-date"></span></h1>
+    <div id="map"></div>
+    <br>
+    <button type="button" class="btn btn-success" style="width: 100%;" onclick="window.location.href='/create_task';">
+        Add New Task
+    </button>
+    <br>
+    <div class="data ">
+        <table class="table table-striped " >
+            <thead>
+                <tr>
+                    <th>Queue</th>
+                    <th>ID</th>
+                    <th>Pickup Address</th>
+                    <th>Delivery Address</th>
+                    <th>Status</th>
+                    <th>Date</th>
+                    <th>Return Required</th>
+                    <th>Distance (km)</th>
+                    <th>Duration (hours)</th>
+                    <th>Next Location</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="tasks-body" >
+                {% for task in tasks %}
+                <tr>
+                    <td class="queue">{{ task.queue }}</td>
+                    <td>{{ task.task_id }}</td>
+                    <td>{{ task.pickup_address }}</td>
+                    <td>{{ task.delivery_address }}</td>
+                    <td>{{ task.status }}</td>
+                    <td>{{ task.created_at }}</td>
+                    <td>{{ 'Yes' if task.return_required == 1 else 'No' }}</td>
+                    <td>{{ task.distance }}</td>
+                    <td>{{ task.duration }}</td>
+                    <td>{{ task.next_location }}</td>
+                    <td>
+                        <button type="button" class="btn btn-primary" onclick="printTask(${task.task_id});">
+                            Print
+                        </button>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="7"><strong>Total Distance: </strong><span id="total-distance">0.00</span></td>
+                    <td colspan="4"><strong>Total Duration: </strong><span id="total-duration">0.00</span> hours</td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+    <div id="print-container" class="print-container"></div>
+<!-- Leaflet and Leaflet Routing Machine JavaScript -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.js"></script>
+<script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', async function() {
+        // Check if Leaflet and Leaflet Routing Machine are loaded
+        if (typeof L === 'undefined' || typeof L.Routing === 'undefined') {
+            console.error('Leaflet or Leaflet Routing Machine is not loaded.');
+            return;
+        }
+    
+        const map = L.map('map').setView([13.759, 100.516], 13);
+    
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+    
+        const tasks = {{ tasks|tojson }};
+        const mksLocation = L.latLng(13.687839901982516, 100.70355515828582);
+    
+        // Function to calculate Haversine distance
+        function haversineDistance(lat1, lon1, lat2, lon2) {
+            function toRad(degrees) {
+                return degrees * (Math.PI / 180);
+            }
+    
+            const R = 6371; // Radius of the Earth in km
+            const dLat = toRad(lat2 - lat1);
+            const dLon = toRad(lon2 - lon1);
+            const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+                      Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) *
+                      Math.sin(dLon / 2) * Math.sin(dLon / 2);
+            const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+            return R * c;
+        }
+    
+        // Calculate distances and sort tasks
+        tasks.forEach(task => {
+            if (task.pickup_lat && task.pickup_lon && task.delivery_lat && task.delivery_lon) {
+                task.distance = haversineDistance(mksLocation.lat, mksLocation.lng, task.delivery_lat, task.delivery_lon);
+            } else {
+                console.error(`Missing coordinates for task ${task.task_id}:`, task);
+            }
+        });
+    
+        tasks.sort((a, b) => a.distance - b.distance);
+        tasks.forEach((task, index) => {
+            task.queue = index + 1;
+        });
+    
+        // Populate table with tasks
+        const tableBody = document.getElementById('tasks-body');
+        tableBody.innerHTML = ''; // Clear existing rows
+    
+        if (tasks.length === 0) {
+            const noDataRow = document.createElement('tr');
+            noDataRow.innerHTML = `
+                <td colspan="11" style="text-align: center;">No data available</td>
+            `;
+            tableBody.appendChild(noDataRow);
+        } else {
+            tasks.forEach((task) => {
+                const row = document.createElement('tr');
+                row.dataset.taskId = task.task_id;
+    
+                // ตรวจสอบค่า task.return_required และเปลี่ยนเป็น "Yes" หรือ "No"
+                const returnRequiredText = task.return_required === 1 ? 'Yes' : 'No';
+    
+                row.innerHTML = `
+                    <td class="queue" data-task-id="${task.task_id}">${task.queue}</td>
+                    <td>${task.task_id}</td>
+                    <td>${task.pickup_address}</td>
+                    <td>${task.delivery_address}</td>
+                    <td>${task.status}</td>
+                    <td>${task.created_at}</td>
+                    <td>${returnRequiredText}</td>
+                    <td class="distance" data-task-id="${task.task_id}">${task.distance.toFixed(2)} km</td>
+                    <td class="duration" data-task-id="${task.task_id}"></td>
+                    <td class="next-location" data-task-id="${task.task_id}"></td>
+                    <td>
+                        <button type="button" class="btn btn-primary" onclick="printTask(${task.task_id});">
+                            <i class="fa-solid fa-print"></i>
+                        </button>
+                    </td>
+                `;
+                tableBody.appendChild(row);
+            });
+        }
+    
+        const waypoints = [mksLocation];
+    
+        // Add marker for MKS
+        L.marker(mksLocation).addTo(map)
+            .bindPopup('บริษัท เอ็ม เค เอส จิวเวลรี่ อินเตอร์เนชั่นแนล จำกัด')
+            .openPopup();
+    
+        // Process tasks to determine waypoints
+        let previousLocation = mksLocation;
+    
+        tasks.forEach(task => {
+            if (task.delivery_lat && task.delivery_lon) {
+                L.marker([task.delivery_lat, task.delivery_lon]).addTo(map)
+                    .bindPopup(`Delivery Location: ${task.delivery_address}`)
+                    .bindTooltip(`Queue ${task.queue}`).openTooltip();
+    
+                waypoints.push(L.latLng(task.delivery_lat, task.delivery_lon));
+                previousLocation = L.latLng(task.delivery_lat, task.delivery_lon);
+            }
+        });
+    
+        // Add MKS as the final destination
+        waypoints.push(mksLocation);
+    
+        L.Routing.control({
+            waypoints: waypoints,
+            router: L.Routing.osrmv1({
+                serviceUrl: 'http://localhost:5001/route/v1'
+            }),
+            createMarker: function() { return null; },
+            routeWhileDragging: true
+        }).addTo(map);
+    
+        // Function to fetch distances and durations
+        async function fetchDistancesAndCalculateQueue() {
+            let totalDistance = 0;
+            let totalDuration = 0;
+    
+            // Define starting location as MKS
+            const startingLocation = mksLocation;
+            let previousLocation = startingLocation;
+    
+            for (let i = 0; i < tasks.length; i++) {
+                const task = tasks[i];
+                const currentDelivery = L.latLng(task.delivery_lat, task.delivery_lon);
+    
+                try {
+                    // Fetch distance and duration from previous location to current delivery
+                    const response = await fetch(`http://localhost:5001/table/v1/bike/${previousLocation.lng},${previousLocation.lat};${currentDelivery.lng},${currentDelivery.lat}?annotations=distance,duration`);
+                    const data = await response.json();
+    
+                    if (!data.distances || !data.distances[0] || !data.distances[0][1] ||
+                        !data.durations || !data.durations[0] || !data.durations[0][1]) {
+                        throw new Error(`Unexpected data format: ${JSON.stringify(data)}`);
+                    }
+    
+                    const distance = data.distances[0][1] / 1000; // Convert meters to kilometers
+                    const duration = data.durations[0][1] / 60; // Convert seconds to minutes
+                    totalDistance += distance;
+                    totalDuration += duration;
+    
+                    const distanceElement = document.querySelector(`.distance[data-task-id="${task.task_id}"]`);
+                    const durationElement = document.querySelector(`.duration[data-task-id="${task.task_id}"]`);
+                    if (distanceElement) distanceElement.textContent = distance.toFixed(2) + ' km';
+                    if (durationElement) durationElement.textContent = duration.toFixed(2) + ' min';
+    
+                    if (i < tasks.length - 1) {
+                        const nextTask = tasks[i + 1];
+                        const nextDelivery = L.latLng(nextTask.delivery_lat, nextTask.delivery_lon);
+    
+                        try {
+                            // Fetch distance and duration to next task
+                            const response = await fetch(`http://localhost:5001/table/v1/bike/${currentDelivery.lng},${currentDelivery.lat};${nextDelivery.lng},${nextDelivery.lat}?annotations=distance,duration`);
+                            const data = await response.json();
+    
+                            if (!data.distances || !data.distances[0] || !data.distances[0][1] ||
+                                !data.durations || !data.durations[0] || !data.durations[0][1]) {
+                                throw new Error(`Unexpected data format: ${JSON.stringify(data)}`);
+                            }
+    
+                            const distanceToNextTask = data.distances[0][1] / 1000; // Convert meters to kilometers
+                            const durationToNextTask = data.durations[0][1] / 60; // Convert seconds to minutes
+    
+                            totalDistance += distanceToNextTask;
+                            totalDuration += durationToNextTask;
+    
+                            const nextLocationElement = document.querySelector(`.next-location[data-task-id="${task.task_id}"]`);
+                            if (nextLocationElement) nextLocationElement.textContent = `To Task ${nextTask.task_id}: ${distanceToNextTask.toFixed(2)} km`;
+    
+                        } catch (error) {
+                            console.error('Error fetching next location data:', error);
+                        }
+                    } else if (i === tasks.length - 1) {
+                        const distanceToMKS = haversineDistance(currentDelivery.lat, currentDelivery.lng, mksLocation.lat, mksLocation.lng);
+                        const nextLocationElement = document.querySelector(`.next-location[data-task-id="${task.task_id}"]`);
+                        if (nextLocationElement) nextLocationElement.textContent = `To MKS: ${distanceToMKS.toFixed(2)} km`;
+                    }
+    
+                    previousLocation = currentDelivery;
+    
+                } catch (error) {
+                    console.error('Error fetching data:', error);
+                }
+            }
+    
+            // Update the total distance and duration in the UI
+            document.getElementById('total-distance').textContent = totalDistance.toFixed(2) + ' km';
+            document.getElementById('total-duration').textContent = totalDuration.toFixed(2) + ' min';
+    
+            // Send the updated queue numbers to the server
+            await updateTaskQueueNumbers(tasks);
+        }
+    
+        // Function to send updated queue numbers to the server
+        async function updateTaskQueueNumbers(tasks) {
+            try {
+                const response = await fetch('/update_queue', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(tasks.map(task => ({
+                        task_id: task.task_id,
+                        queue: task.queue
+                    })))
+                });
+    
+                if (!response.ok) {
+                    throw new Error('Failed to update task queue numbers');
+                }
+    
+                console.log('Task queue numbers updated successfully');
+            } catch (error) {
+                console.error('Error updating task queue numbers:', error);
+            }
+        }
+    
+        // Call the function to calculate distances, durations, and update queue numbers
+        await fetchDistancesAndCalculateQueue();
+    });
+</script>
+
+        <script>
+function printTask(taskId) {
+    // Fetch the task details from the server using AJAX
+    fetch(`/print_task/${taskId}`)
+        .then(response => response.json())
+        .then(task => {
+            if (task) {
+                // Check if elements exist before trying to access them
+                const mapElement = document.getElementById('map');
+                const addButton = document.querySelector('button.btn-success');
+                const printContainer = document.getElementById('print-container');
+                
+                if (mapElement) {
+                    mapElement.style.display = 'none';
+                }
+                if (addButton) {
+                    addButton.style.display = 'none';
+                }
+                if (printContainer) {
+                    printContainer.innerHTML = `
+                    <div class="container mt-5">
+                        <h2>ตัดส่วนนี้เพื่อแปะที่หน้าซองเอกสาร</h2>
+                        <br>
+                        <br>
+                        <span>-</span>
+                        <br>
+                        <br>
+                        <table class="table table-bordered">
+                            <tr>
+                                <th>เอกสารหมายเลข</th>
+                                <td>${task.task_id}</td>
+                            </tr>
+                            <tr>
+                                <th>สถานที่รับ</th>
+                                <td>${task.pickup_address}</td>
+                            </tr>
+                            <tr>
+                                <th>สถานที่ส่ง</th>
+                                <td>${task.delivery_address}</td>
+                            </tr>
+                            <tr>
+                                <th>เอกสารที่ต้องรอรับกลับ</th>
+                                <td>${task.return_required == 1 ? 'มี' : 'ไม่มี'}</td>
+                            </tr>
+                        </table>
+                        <br>
+                        <br>
+                        <span>-</span>
+                        <br>
+                        <br>
+                    </div>
+                `;
+                    printContainer.style.display = 'block';
+                    
+                    // Trigger the print dialog
+                    window.print();
+                    
+                    // Restore the original state after printing
+                    window.onafterprint = () => {
+                        if (mapElement) {
+                            mapElement.style.display = 'block';
+                        }
+                        if (addButton) {
+                            addButton.style.display = 'block';
+                        }
+                        if (printContainer) {
+                            printContainer.style.display = 'none';
+                        }
+                    };
+                }
+            } else {
+                alert('Task not found');
+            }
+        })
+        .catch(error => console.error('Error fetching task:', error));
+}
+const urlParams = new URLSearchParams(window.location.search);
+            const selectedDate = urlParams.get('date');
+            if (selectedDate) {
+                document.getElementById('current-date').textContent = new Date(selectedDate).toLocaleDateString('en-GB');
+            }
+        </script>
+    
+</body>
+</html>

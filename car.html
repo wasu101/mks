@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Car Management System</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.css">
+    <style>
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 20px;
+}
+
+.container {
+    max-width: 800px;
+    margin: auto;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+}
+
+h1 {
+    text-align: center;
+    color: #333;
+}
+
+button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.4);
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    border-radius: 8px;
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+label {
+    font-weight: bold;
+    margin-top: 10px;
+    display: block;
+}
+
+input[type="text"],
+input[type="date"] {
+    width: calc(100% - 20px);
+    padding: 10px;
+    margin: 5px 0 15px 0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.car-item {
+    background: #f9f9f9;
+    margin: 15px 0;
+    padding: 15px;
+    border-radius: 5px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.car-item h3 {
+    margin: 0;
+    color: #007bff;
+}
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 34px;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: .4s;
+    border-radius: 34px;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 26px;
+    width: 26px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
+}
+
+input:checked + .slider {
+    background-color: #2196F3;
+}
+
+input:checked + .slider:before {
+    transform: translateX(26px);
+}
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Car Management System</h1>
+
+        <!-- Button to open modal -->
+        <button id="addCarButton">Add Car</button>
+
+        <!-- The Modal -->
+        <div id="myModal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <h2>Add New Car</h2>
+
+                <form id="carForm">
+                    <label for="carName">Car Name:</label>
+                    <input type="text" id="carName" name="carName" required><br><br>
+                    
+                    <label for="insuranceExpiry">Insurance Expiry:</label>
+                    <input type="date" id="insuranceExpiry" name="insuranceExpiry"><br><br>
+                    
+                    <label for="taxExpiry">Tax Expiry:</label>
+                    <input type="date" id="taxExpiry" name="taxExpiry"><br><br>
+                    
+                    <label for="maintenanceDate">Maintenance Date:</label>
+                    <input type="date" id="maintenanceDate" name="maintenanceDate"><br><br>
+                    
+                    <label for="licensePlate">License Plate:</label>
+                    <input type="text" id="licensePlate" name="licensePlate" required><br><br>
+            
+                    <button type="submit">Add Car</button>
+                </form>
+            </div>
+        </div>
+
+        <hr>
+
+        <h2>Car List</h2>
+        <div id="carList"></div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
+    <script>
+        // Function to redirect to update page
+        function updateCar(carId) {
+            window.location.href = `/update_car/${carId}`;
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const addCarButton = document.getElementById('addCarButton');
+            const modal = document.getElementById('myModal');
+            const span = document.getElementsByClassName('close')[0];
+
+            addCarButton.addEventListener('click', function() {
+                modal.style.display = 'block';
+            });
+
+            span.addEventListener('click', function() {
+                modal.style.display = 'none';
+            });
+
+            window.addEventListener('click', function(event) {
+                if (event.target === modal) {
+                    modal.style.display = 'none';
+                }
+            });
+
+            const carForm = document.getElementById('carForm');
+            carForm.addEventListener('submit', function(event) {
+                event.preventDefault();
+                const formData = new FormData(carForm);
+                const carData = {
+                    car_name: formData.get('carName'),
+                    insurance_expiry: formData.get('insuranceExpiry'),
+                    tax_expiry: formData.get('taxExpiry'),
+                    maintenance_date: formData.get('maintenanceDate'),
+                    license_plate: formData.get('licensePlate')
+                };
+
+                const requestOptions = {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(carData)
+                };
+
+                fetch('/api/cars', requestOptions)
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log('Success:', data);
+                        loadCars();
+                        carForm.reset();
+                        modal.style.display = 'none'; // Close the modal after adding car
+                        swal('Success', 'Car added successfully!', 'success');
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        swal('Error', 'Failed to add car. Please try again.', 'error');
+                    });
+            });
+
+            // Define formatDate function in global scope
+            function formatDate(dateString) {
+                const options = { year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric' };
+                const date = new Date(dateString);
+                return date.toLocaleDateString('en-US', options);
+            }
+
+            // Load cars when DOM content is loaded
+            loadCars();
+
+            function loadCars() {
+                fetch('/api/cars')
+                    .then(response => response.json())
+                    .then(data => {
+                        const carList = document.getElementById('carList');
+                        carList.innerHTML = '';
+
+                        if (Array.isArray(data.cars)) {
+                            data.cars.forEach(car => {
+                                const carItem = document.createElement('div');
+                                carItem.classList.add('car-item');
+
+                                let lastUpdate = car.last_update_date ? formatDate(car.last_update_date) : 'new car';
+
+                                carItem.innerHTML = `
+                                    <h3>${car.car_name}</h3>
+                                    <p><strong>Insurance Expiry:</strong> ${car.insurance_expiry}</p>
+                                    <p><strong>Tax Expiry:</strong> ${car.tax_expiry}</p>
+                                    <p><strong>Maintenance Date:</strong> ${car.maintenance_date}</p>
+                                    <p><strong>License Plate:</strong> ${car.license_plate}</p>
+                                    <p><strong>Last Updated:</strong> ${lastUpdate}</p>
+                                    <label class="switch">
+                                        <input type="checkbox" ${car.is_available ? 'checked' : ''} onchange="toggleAvailability(${car.id}, this)">
+                                        <span class="slider round"></span>
+                                    </label>
+                                    <span>${car.is_available ? 'Available' : 'Not Available'}</span>
+                                    <br><br>
+                                    <button onclick="updateCar(${car.id})">Update</button>
+                                `;
+
+
+
+                                carList.appendChild(carItem);
+                            });
+                        } else {
+                            console.error('Data.cars is not an array:', data.cars);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('Failed to fetch cars. Please refresh the page.');
+                    });
+            }
+
+        });
+        function toggleAvailability(carId, checkbox) {
+            const isAvailable = checkbox.checked;
+
+            // Debugging: Log the values being sent
+            console.log(`Car ID: ${carId}, Availability: ${isAvailable}`);
+
+            fetch(`/api/cars/${carId}/availability`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ is_available: isAvailable })
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Debugging: Log the response
+                console.log('Response from server:', data);
+
+                if (data.message) {
+                    swal('Success', `Car is now ${isAvailable ? 'Available' : 'Not Available'}`, 'success');
+                } else {
+                    swal('Error', 'Failed to update car availability. Please try again.', 'error');
+                    checkbox.checked = !isAvailable; // Revert if an error
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                swal('Error', 'An error occurred. Please try again.', 'error');
+                checkbox.checked = !isAvailable; // Revert if an error
+            });
+        }
+
+
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Blocked Website</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const websites = [
+                {url: "translate.google.com", category: "Google"},
+                {url: "www.google.com", category: "Google"},
+                {url: "drive.google.com", category: "Google"},
+                {url: "www.facebook.com", category: "Social Media"},
+                {url: "web.whatsapp.com", category: "Social Media"},
+                {url: "www.instagram.com", category: "Social Media"},
+                {url: "www.youtube.com", category: "Social Media"},
+                {url: "www.tiktok.com", category: "Social Media"},
+                {url: "web.telegram.org", category: "Social Media"},
+                {url: "www.x.com", category: "Social Media"},
+                {url: "www.pinterest.com", category: "Social Media"},
+                {url: "www.linkedin.com", category: "Social Media"},
+                {url: "www.shopee.co.th", category: "E-commerce"},
+                {url: "www.lazada.co.th", category: "E-commerce"},
+                {url: "www.tescolotus.com", category: "E-commerce"},
+                {url: "www.jobthai.com", category: "Job Website"},
+                {url: "www.jobtopgun.com", category: "Job Website"},
+                {url: "www.jobsdb.com", category: "Job Website"},
+                {url: "mksjewelry.com", category: "Other"},
+                {url: "prtr-connect.com", category: "Other"}
+            ];
+
+            const categorySelect = document.getElementById('category');
+            const websiteInput = document.getElementById('website');
+
+            // Populate the category dropdown
+            websites.forEach(function(website) {
+                const option = document.createElement('option');
+                option.value = website.url;
+                option.textContent = website.url + " (Category: " + website.category + ")";
+                categorySelect.appendChild(option);
+            });
+
+            // Event listener to update the website URL input when an option is selected
+            categorySelect.addEventListener('change', function() {
+                const selectedUrl = categorySelect.value;
+                websiteInput.value = selectedUrl;
+            });
+        });
+    </script>
+</head>
+<body>
+    <div class="container mt-4">
+        <h2>Add Blocked Website</h2>
+        <form action="{{ url_for('add_blocked_website', computer_id=computer['id']) }}" method="POST">
+            <div class="form-group">
+                <label for="website">Website URL:</label>
+                <input type="text" class="form-control" id="website" name="website" placeholder="Enter website URL" required>
+            </div>
+            <div class="form-group">
+                <label for="category">Category:</label>
+                <select class="form-control" id="category" name="category" required>
+                    <!-- Options will be added dynamically by JavaScript -->
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary">Add Website</button>
+        </form>
+
+        <hr>
+
+        <h2>Blocked Websites</h2>
+        {% if blocked_websites %}
+            <ul>
+            {% for website in blocked_websites %}
+                <li>
+                    {{ website.website }} (Category: {{ website.category }})
+                    <form action="{{ url_for('block_website', computer_id=computer['id']) }}" method="POST" style="display:inline;">
+                        <input type="hidden" name="website" value="{{ website.website }}">
+                        <button type="submit" class="btn btn-danger btn-sm">Block</button>
+                    </form>
+                    <form action="{{ url_for('unblock_website', computer_id=computer['id']) }}" method="POST" style="display:inline;">
+                        <input type="hidden" name="website" value="{{ website.website }}">
+                        <button type="submit" class="btn btn-success btn-sm">Unblock</button>
+                    </form>
+                </li>
+            {% endfor %}
+            </ul>
+        {% else %}
+            <p>No websites are blocked for this computer.</p>
+        {% endif %}
+        
+    </div>
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

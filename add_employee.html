@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Employee</title>
+    <link href='https://fonts.googleapis.com/css?family=Sarabun' rel='stylesheet'>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='add_em_styles.css') }}">
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+    <style>
+.form-control-wrapper {
+    position: relative;
+}
+
+.form-control {
+    display: block;
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+}
+
+.validation-wrapper {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    align-items: center;
+}
+
+.validation-icon {
+    font-size: 1.2em;
+    margin-right: 5px;
+}
+
+.validation-icon.valid {
+    color: green;
+}
+
+.validation-icon.invalid {
+    color: red;
+}
+
+
+.tooltip-text {
+    visibility: hidden;
+    width: 200px; /* Adjust as needed */
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    border-radius: 5px;
+    padding: 5px;
+    position: absolute;
+    z-index: 1;
+    bottom: 125%; /* Position above the icon */
+    left: 50%;
+    margin-left: -100px; /* Center the tooltip */
+    opacity: 0;
+    transition: opacity 0.3s, visibility 0.3s;
+}
+
+
+
+
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <h2>เพิ่มพนักงานใหม่</h2>
+        <form id="multi-step-form" method="POST" action="{{ url_for('add_employee') }}">
+            {{ form.hidden_tag() }}
+        
+            <!-- Step 1 -->
+            <div class="form-step active" id="step-1">
+                <h4>1/4</h4>
+                <div class="form-group">
+                    {{ form.employee_code.label(class="form-label") }} (รหัสพนักงาน)
+                    <div class="form-control-wrapper">
+                        {{ form.employee_code(class="form-control", id="employee_code") }}
+                        <div class="validation-wrapper">
+                            <i id="employee_code_status" class="validation-icon"></i>
+                            <span id="employee_code_tooltip" class="tooltip-text"></span>
+                        </div>
+                    </div>
+                    {% for error in form.employee_code.errors %}
+                        <div class="alert alert-danger">{{ error }}</div>
+                    {% endfor %}
+                </div>
+        
+                <div class="form-group">
+                    {{ form.first_name.label(class="form-label") }} (ชื่อ)
+                    {{ form.first_name(class="form-control") }}
+                    {% for error in form.first_name.errors %}
+                        <div class="alert alert-danger">{{ error }}</div>
+                    {% endfor %}
+                </div>
+        
+                <div class="form-group">
+                    {{ form.last_name.label(class="form-label") }} (นามสกุล)
+                    {{ form.last_name(class="form-control") }}
+                    {% for error in form.last_name.errors %}
+                        <div class="alert alert-danger">{{ error }}</div>
+                    {% endfor %}
+                </div>
+        
+                <div class="form-group">
+                    {{ form.date_of_birth.label(class="form-label") }} (วัน เดือน ปี เกิด)
+                    {{ form.date_of_birth(class="form-control") }}
+                    {% for error in form.date_of_birth.errors %}
+                        <div class="alert alert-danger">{{ error }}</div>
+                    {% endfor %}
+                </div>
+        
+                <div class="form-group">
+                    {{ form.sex.label(class="form-label") }} (เพศ)
+                    {{ form.sex(class="form-control") }}
+                    {% for error in form.sex.errors %}
+                        <div class="alert alert-danger">{{ error }}</div>
+                    {% endfor %}
+                </div>
+        
+                <div class="form-group">
+                    {{ form.start_work_date.label(class="form-label") }} (วันที่เข้าทำงาน)
+                    {{ form.start_work_date(class="form-control") }}
+                    {% for error in form.start_work_date.errors %}
+                        <div class="alert alert-danger">{{ error }}</div>
+                    {% endfor %}
+                </div>
+        
+                <div class="form-group">
+                    {{ form.id_card_number.label(class="form-label") }} (เลขที่บัตรประจำตัวประชาชน)
+                    <div class="form-control-wrapper">
+                        {{ form.id_card_number(class="form-control", id="id_card_number", required=True) }}
+                        <div class="validation-wrapper">
+                            <i id="id_card_number_status" class="validation-icon"></i>
+                            <span id="id_card_number_tooltip" class="tooltip-text"></span>
+                        </div>
+                    </div>
+                    {% for error in form.id_card_number.errors %}
+                        <div class="alert alert-danger">{{ error }}</div>
+                    {% endfor %}
+                </div>
+        
+                <div class="form-group">
+                    {{ form.position.label(class="form-label") }} (ตำแหน่ง)
+                    {{ form.position(class="form-control") }}
+                    {% for error in form.position.errors %}
+                        <div class="alert alert-danger">{{ error }}</div>
+                    {% endfor %}
+                </div>
+        
+                <div class="form-group">
+                    {{ form.department.label(class="form-label") }} (แผนก)
+                    {{ form.department(class="form-control") }}
+                    {% for error in form.department.errors %}
+                        <div class="alert alert-danger">{{ error }}</div>
+                    {% endfor %}
+                </div>
+        
+                <div class="form-group">
+                    <button type="button" class="btn btn-primary" onclick="nextStep()">Next</button>
+                </div>
+            </div>
+        </form>
+        
+            <!-- Step 2 -->
+            <div class="form-step" id="step-2">
+                <h4>ที่อยู่ตามบัตรประชาชน</h4>
+                <h4>2/4</h4>
+                <div class="form-group">
+                    {{ form.address_number.label(class="form-label") }}(เลขที่)
+                    {{ form.address_number(class="form-control") }}
+                    {% for error in form.address_number.errors %}
+                        <div class="alert alert-danger">{{ error }}</div>
+                    {% endfor %}
+                </div>
+
+                <div class="form-group">
+                    {{ form.address_village.label(class="form-label") }}(หมู่)
+                    {{ form.address_village(class="form-control") }}
+                </div>
+
+                <div class="form-group">
+                    {{ form.address_soi.label(class="form-label") }}(ซอย)
+                    {{ form.address_soi(class="form-control") }}
+                </div>
+
+                <div class="form-group">
+                    {{ form.address_road.label(class="form-label") }}(ถนน)
+                    {{ form.address_road(class="form-control") }}
+                </div>
+
+                <div class="form-group">
+                    {{ form.address_sub_district.label(class="form-label") }}(ตำบล (แขวง))
+                    {{ form.address_sub_district(class="form-control") }}
+                </div>
+
+                <div class="form-group">
+                    {{ form.address_district.label(class="form-label") }}(อำเภอ (เขต))
+                    {{ form.address_district(class="form-control") }}
+                </div>
+
+                <div class="form-group">
+                    {{ form.address_province.label(class="form-label") }}(จังหวัด)
+                    {{ form.address_province(class="form-control") }}
+                </div>
+
+                <div class="form-group">
+                    {{ form.address_postcode.label(class="form-label") }}(รหัสไปรษณี)
+                    {{ form.address_postcode(class="form-control") }}
+                </div>
+
+                <div class="form-group">
+                    {{ form.address_phone.label(class="form-label") }}(โทรศัพท์)
+                    {{ form.address_phone(class="form-control") }}
+                </div>
+
+                <div class="form-group">
+                    <button type="button" class="btn btn-secondary" onclick="prevStep()">Previous</button>
+                    <button type="button" class="btn btn-primary" onclick="nextStep()">Next</button>
+                </div>
+            </div>
+
+            <!-- Step 3 -->
+            <div class="form-step" id="step-3">
+                <!-- Contact Address Fields -->
+                <h4>ที่อยู่ที่สามารถติดต่อได้</h4>
+                <h4>3/4</h4>
+
+                <div class="form-group form-check">
+                    <input type="checkbox" class="form-check-input" id="sameAsAddress" onclick="copyAddress()">
+                    <label class="form-check-label" for="sameAsAddress">เหมือนกับที่อยู่บนบัตรประชาชน</label>
+                </div>
+
+                <div class="form-group">
+                    {{ form.contact_address_number.label(class="form-label") }}(เลขที่)
+                    {{ form.contact_address_number(class="form-control", id="contact_address_number") }}
+                    {% for error in form.contact_address_number.errors %}
+                        <div class="alert alert-danger">{{ error }}</div>
+                    {% endfor %}
+                </div>
+
+                <div class="form-group">
+                    {{ form.contact_village.label(class="form-label") }}(หมู่)
+                    {{ form.contact_village(class="form-control", id="contact_village") }}
+                </div>
+
+                <div class="form-group">
+                    {{ form.contact_soi.label(class="form-label") }}(ซอย)
+                    {{ form.contact_soi(class="form-control", id="contact_soi") }}
+                </div>
+
+                <div class="form-group">
+                    {{ form.contact_road.label(class="form-label") }}(ถนน)
+                    {{ form.contact_road(class="form-control", id="contact_road") }}
+                </div>
+
+                <div class="form-group">
+                    {{ form.contact_sub_district.label(class="form-label") }}(ตำบล (แขวง))
+                    {{ form.contact_sub_district(class="form-control", id="contact_sub_district") }}
+                </div>
+
+                <div class="form-group">
+                    {{ form.contact_district.label(class="form-label") }}(อำเภอ (เขต))
+                    {{ form.contact_district(class="form-control", id="contact_district") }}
+                </div>
+
+                <div class="form-group">
+                    {{ form.contact_province.label(class="form-label") }}(จังหวัด)
+                    {{ form.contact_province(class="form-control", id="contact_province") }}
+                </div>
+
+                <div class="form-group">
+                    {{ form.contact_postcode.label(class="form-label") }}(รหัสไปรษณี)
+                    {{ form.contact_postcode(class="form-control", id="contact_postcode") }}
+                </div>
+
+                <div class="form-group">
+                    {{ form.contact_phone.label(class="form-label") }}(โทรศัพท์)
+                    {{ form.contact_phone(class="form-control", id="contact_phone") }}
+                </div>
+
+                <div class="form-group">
+                    <button type="button" class="btn btn-secondary" onclick="prevStep()">Previous</button>
+                    <button type="button" class="btn btn-primary" onclick="nextStep()">Next</button>
+                </div>
+            </div>
+
+            <!-- Step 4 -->
+            <div class="form-step" id="step-4">
+                <h4>ชื่อสถานประกอบกิจการ</h4>
+                <h4>4/4</h4>
+                <div class="form-group">
+                    {{ form.company_name.label(class="form-label") }}(ชื่อสถานประกอบกิจการ)
+                    {{ form.company_name(class="form-control", value="บริษัท เอ็ม เค เอส จิวเวลรี่ อินเตอร์เนชั่นแนล จำกัด") }}
+                    {% for error in form.company_name.errors %}
+                        <div class="alert alert-danger">{{ error }}</div>
+                    {% endfor %}
+                </div>
+
+                <div class="form-group">
+                    {{ form.company_address_number.label(class="form-label") }}(เลขที่)
+                    {{ form.company_address_number(class="form-control", value="49") }}
+                    {% for error in form.company_address_number.errors %}
+                        <div class="alert alert-danger">{{ error }}</div>
+                    {% endfor %}
+                </div>
+
+                <div class="form-group">
+                    {{ form.company_village.label(class="form-label") }}(หมู่)
+                    {{ form.company_village(class="form-control", value="-") }}
+                </div>
+
+                <div class="form-group">
+                    {{ form.company_soi.label(class="form-label") }}(ซอย)
+                    {{ form.company_soi(class="form-control", value="31") }}
+                </div>
+
+                <div class="form-group">
+                    {{ form.company_road.label(class="form-label") }}(ถนน)
+                    {{ form.company_road(class="form-control", value="สุขาภิบาล 2") }}
+                </div>
+
+                <div class="form-group">
+                    {{ form.company_sub_district.label(class="form-label") }}(ตำบล (แขวง))
+                    {{ form.company_sub_district(class="form-control", value="ดอกไม้") }}
+                </div>
+
+                <div class="form-group">
+                    {{ form.company_district.label(class="form-label") }}(อำเภอ (เขต))
+                    {{ form.company_district(class="form-control", value="ประเวศ") }}
+                </div>
+
+                <div class="form-group">
+                    {{ form.company_province.label(class="form-label") }}(จังหวัด)
+                    {{ form.company_province(class="form-control", value="กรุงเทพมหานคร") }}
+                </div>
+
+                <div class="form-group">
+                    {{ form.company_postcode.label(class="form-label") }}(รหัสไปรษณี)
+                    {{ form.company_postcode(class="form-control", value="10250") }}
+                </div>
+
+                <div class="form-group">
+                    {{ form.company_phone.label(class="form-label") }}(โทรศัพท์)
+                    {{ form.company_phone(class="form-control", value="027270150") }}
+                </div>
+
+                <div class="form-group">
+                    <button type="button" class="btn btn-secondary" onclick="prevStep()">Previous</button>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+            </div>
+
+        </form>
+    </div>
+
+    <script>
+        let currentStep = 1;
+        const totalSteps = 4;
+    
+        function showStep(step) {
+            document.querySelectorAll('.form-step').forEach((stepDiv) => {
+                stepDiv.classList.remove('active');
+            });
+            document.getElementById(`step-${step}`).classList.add('active');
+        }
+    
+        function nextStep() {
+            const currentFormStep = document.getElementById(`step-${currentStep}`);
+            const inputs = currentFormStep.querySelectorAll('input, select, textarea');
+            let isValid = true;
+    
+            inputs.forEach((input) => {
+                if (input.hasAttribute('required') && !input.value.trim()) {
+                    isValid = false;
+                    input.classList.add('is-invalid');
+                } else {
+                    input.classList.remove('is-invalid');
+                }
+                            // Custom validation for 13-digit ID card number
+            });
+    
+            if (isValid) {
+                if (currentStep < totalSteps) {
+                    currentStep++;
+                    showStep(currentStep);
+                }
+
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'คำขอไม่สำเร็จ',
+                    text: 'กรุณากรอกข้อมูลที่จำเป็นให้ครบถ้วนก่อนดำเนินการต่อ',
+                    confirmButtonText: 'ตกลง'
+                });
+            }
+        }
+    
+        function prevStep() {
+            if (currentStep > 1) {
+                currentStep--;
+                showStep(currentStep);
+            }
+        }
+    </script>
+<script>
+    function copyAddress() {
+        if (document.getElementById('sameAsAddress').checked) {
+            // Copy values from address fields to contact fields
+            document.getElementById('contact_address_number').value = document.getElementById('address_number').value;
+            document.getElementById('contact_village').value = document.getElementById('address_village').value;
+            document.getElementById('contact_soi').value = document.getElementById('address_soi').value;
+            document.getElementById('contact_road').value = document.getElementById('address_road').value;
+            document.getElementById('contact_sub_district').value = document.getElementById('address_sub_district').value;
+            document.getElementById('contact_district').value = document.getElementById('address_district').value;
+            document.getElementById('contact_province').value = document.getElementById('address_province').value;
+            document.getElementById('contact_postcode').value = document.getElementById('address_postcode').value;
+            document.getElementById('contact_phone').value = document.getElementById('address_phone').value;
+        } else {
+            // Clear values if checkbox is unchecked
+            document.getElementById('contact_address_number').value = '';
+            document.getElementById('contact_village').value = '';
+            document.getElementById('contact_soi').value = '';
+            document.getElementById('contact_road').value = '';
+            document.getElementById('contact_sub_district').value = '';
+            document.getElementById('contact_district').value = '';
+            document.getElementById('contact_province').value = '';
+            document.getElementById('contact_postcode').value = '';
+            document.getElementById('contact_phone').value = '';
+        }
+    }
+    </script>
+<script>
+    document.getElementById('multi-step-form').addEventListener('submit', function(event) {
+        event.preventDefault(); // Prevent the default form submission
+    
+        // Show SweetAlert confirmation dialog
+        Swal.fire({
+            title: 'ยืนยันการส่งข้อมูล?',
+            text: "กรุณาตรวจสอบข้อมูลให้ถูกต้องก่อนกดยืนยัน",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'ยืนยัน',
+            cancelButtonText: 'ยกเลิก'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Perform form submission via AJAX or fetch to handle it in the background
+                fetch('/add_employee', {
+                    method: 'POST',
+                    body: new FormData(document.getElementById('multi-step-form'))
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        // Show success message
+                        Swal.fire({
+                            title: 'สำเร็จ!',
+                            text: data.message,
+                            icon: 'success',
+                            confirmButtonText: 'ตกลง'
+                        }).then(() => {
+                            // Redirect to /health after successful submission
+                            window.location.href = "/health";
+                        });
+                    } else {
+                        // Show error message
+                        Swal.fire({
+                            title: 'ผิดพลาด!',
+                            text: data.message,
+                            icon: 'error',
+                            confirmButtonText: 'ตกลง'
+                        }).then(() => {
+                            // Redirect to the specific step showing duplicate error
+                            // This assumes you have IDs or classes for each step to navigate to
+                            if (data.message.includes('already exists')) {
+                                // Example: Navigate to step 2 if the duplicate issue is related to that step
+                                navigateToStep(1);
+                            } else {
+                                // Handle other errors
+                                return
+                            }
+                        });
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    Swal.fire({
+                        title: 'ผิดพลาด!',
+                        text: 'เกิดข้อผิดพลาดในการเพิ่มพนักงาน',
+                        icon: 'error',
+                        confirmButtonText: 'ตกลง'
+                    });
+                });
+            }
+        });
+    });
+    
+    // Function to navigate to a specific step
+    function navigateToStep(stepNumber) {
+        // Assuming you have a way to show/hide steps, e.g., using classes
+        const steps = document.querySelectorAll('.step');
+        steps.forEach((step, index) => {
+            if (index + 1 === stepNumber) {
+                step.style.display = 'block'; // Show the specific step
+            } else {
+                step.style.display = 'none'; // Hide other steps
+            }
+        });
+    
+        // Optionally, scroll to the top of the form to bring the new step into view
+        document.querySelector('#multi-step-form').scrollIntoView({ behavior: 'smooth' });
+    }
+    </script>
+        <script>
+document.addEventListener('DOMContentLoaded', function() {
+    const checkField = (field, value) => {
+        return fetch(`/check_duplicate?field=${field}&value=${encodeURIComponent(value)}`)
+            .then(response => response.json());
+    };
+
+    const employeeCodeInput = document.querySelector('#employee_code');
+    const employeeCodeStatus = document.querySelector('#employee_code_status');
+    const employeeCodeTooltip = document.querySelector('#employee_code_tooltip');
+
+    const idCardNumberInput = document.querySelector('#id_card_number');
+    const idCardNumberStatus = document.querySelector('#id_card_number_status');
+    const idCardNumberTooltip = document.querySelector('#id_card_number_tooltip');
+
+    // Function to validate the field and update status and tooltip
+    const validateField = (inputElement, statusElement, tooltipElement, fieldName) => {
+        if (inputElement.value.trim() === '') {
+            statusElement.innerHTML = '';
+            statusElement.className = 'validation-icon'; // or any default class
+            tooltipElement.textContent = 'ต้องมีข้อมูล'; // "This field is required"
+            tooltipElement.style.visibility = 'visible';
+            tooltipElement.style.opacity = 1;
+            return;
+        }
+
+        checkField(fieldName, inputElement.value)
+            .then(data => {
+                if (data.exists) {
+                    statusElement.innerHTML = '<i class="fa-solid fa-circle-xmark"></i>';
+                    statusElement.className = 'validation-icon invalid';
+                    tooltipElement.textContent = 'ข้อมูลนี้มีในระบบแล้ว';
+                } else {
+                    statusElement.innerHTML = '<i class="fa-solid fa-circle-check"></i>';
+                    statusElement.className = 'validation-icon valid';
+                    tooltipElement.textContent = 'ข้อมูลนี้สามารถใช้ได้';
+                }
+                tooltipElement.style.visibility = 'visible';
+                tooltipElement.style.opacity = 1;
+            });
+    };
+
+    // Function to update tooltip visibility
+    const updateTooltip = (input, tooltip) => {
+        if (input.value.trim() === '') {
+            tooltip.textContent = 'ต้องมีข้อมูล'; // "This field is required"
+            tooltip.style.visibility = 'visible';
+            tooltip.style.opacity = 1;
+        } else {
+            tooltip.style.visibility = 'hidden';
+            tooltip.style.opacity = 0;
+        }
+    };
+
+    // Initialize tooltips
+    updateTooltip(employeeCodeInput, employeeCodeTooltip);
+    updateTooltip(idCardNumberInput, idCardNumberTooltip);
+
+    // Update tooltips and validation on input
+    employeeCodeInput.addEventListener('input', () => {
+        updateTooltip(employeeCodeInput, employeeCodeTooltip);
+        validateField(employeeCodeInput, employeeCodeStatus, employeeCodeTooltip, 'employee_code');
+    });
+
+    idCardNumberInput.addEventListener('input', () => {
+        updateTooltip(idCardNumberInput, idCardNumberTooltip);
+        validateField(idCardNumberInput, idCardNumberStatus, idCardNumberTooltip, 'id_card_number');
+    });
+});
+
+        </script>
+</body>
+</html>

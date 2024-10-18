@@ -1,0 +1,1971 @@
+<!DOCTYPE html>
+<html lang="en">
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=2.0">
+    <title>Repair Requisition Detail {{ work_order.order_number }} </title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="icon" href="{{ url_for('static', filename='images/logo1.ico') }}" type="image/x-icon">
+    <link href="{{ url_for('static', filename='fontawesomefree/css/fontawesome.css') }}" rel="stylesheet" type="text/css">
+    <link href="{{ url_for('static', filename='fontawesomefree/css/brands.css') }}" rel="stylesheet" type="text/css">
+    <link href="{{ url_for('static', filename='fontawesomefree/css/solid.css') }}" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
+    <!-- Custom CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <style>
+/* General Styles */
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #f0f0f0;
+    margin: 0;
+    padding: 0;
+}
+.user-image-thumbnail {
+    width: 40px; /* Set width */
+    height: 40px; /* Set height */
+    border-radius: 50%; /* Optional: Make it round */
+    object-fit: cover; /* Maintain aspect ratio and cover the area */
+}
+.container {
+    background-color: #ffffff;
+    margin-top: 20px;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Zoom Effect */
+.zoom {
+    padding: 10px;
+    background-color: rgba(255, 255, 255, 0.9);
+    transition: transform 0.3s ease-in-out;
+    width: 100%;
+    height: 100%;
+    margin: 0 auto;
+    border-radius: 8px;
+}
+
+.zoom:hover {
+    transform: scale(1.05);
+}
+
+/* Styled Dropdown */
+.styled-dropdown {
+    margin-bottom: 15px;
+}
+
+.styled-dropdown select {
+    width: 100%;
+    font-size: 16px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #fff;
+    color: #333;
+}
+
+/* Alerts */
+.alert-container {
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    width: 300px;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column-reverse;
+    align-items: flex-end;
+    pointer-events: none;
+}
+
+.alert {
+    width: 100%;
+    padding: 15px;
+    margin-top: 10px;
+    background-color: #fff;
+    color: #333;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: opacity 0.3s ease;
+    opacity: 1;
+}
+
+.alert.success {
+    background-color: #4caf50;
+    color: #fff;
+}
+
+.alert.info {
+    background-color: #2196f3;
+    color: #fff;
+}
+
+.alert.warning {
+    background-color: #ff9800;
+    color: #fff;
+}
+
+/* Close Button */
+.closebtn {
+    margin-left: 15px;
+    color: white;
+    font-weight: bold;
+    float: right;
+    font-size: 22px;
+    cursor: pointer;
+    transition: color 0.3s;
+}
+
+.closebtn:hover {
+    color: #000;
+}
+
+/* Navigation */
+nav {
+    background-color: #333;
+    padding: 10px 0;
+    text-align: center;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+nav ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+nav ul li {
+    display: inline;
+    margin-right: 20px;
+}
+
+nav ul li a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 16px;
+    transition: color 0.3s ease;
+}
+
+nav ul li a:hover {
+    color: #f0f0f0;
+}
+
+/* Footer */
+footer {
+    text-align: center;
+    padding: 20px;
+    background-color: #333;
+    color: #fff;
+}
+
+/* Form Controls */
+.form-control {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+/* Buttons */
+.btn-primary {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+}
+
+.btn-primary:hover {
+    background-color: #0056b3;
+}
+
+/* Chat and Messages */
+.chat {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.delete-message {
+    color: red;
+    cursor: pointer;
+}
+
+.chat-image-thumbnail {
+    max-width: 200px;
+    margin-top: 10px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Modal Container */
+.modal {
+    display: none; /* ซ่อน modal เริ่มต้น */
+    position: fixed; /* ใช้ position fixed เพื่อให้ modal อยู่กลางจอ */
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgb(0,0,0); /* สีพื้นหลังของ modal */
+    background-color: rgba(0,0,0,0.8); /* ให้พื้นหลังโปร่งแสง */
+}
+
+/* Modal Content (Image) */
+.modal-content {
+    display: block;
+    margin: auto;
+    max-width: 90%;
+    max-height: 80vh; /* จำกัดความสูงเพื่อไม่ให้เกินความสูงของ viewport */
+    object-fit: contain; /* ทำให้รูปภาพแสดงอย่างสมส่วน */
+    transition: transform 0.25s ease; /* การเปลี่ยนแปลงของ scale */
+}
+
+/* Zoom Controls */
+.zoom-controls {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    display: flex;
+    gap: 5px;
+}
+
+.zoom-button {
+    padding: 10px;
+    font-size: 20px;
+    color: white;
+    background-color: rgba(0, 0, 0, 0.5);
+    border: none;
+    cursor: pointer;
+    border-radius: 3px;
+}
+
+.zoom-button:hover {
+    background-color: rgba(0, 0, 0, 0.8);
+}
+.close {
+    position: absolute;
+    top: 20px; /* Position from the top */
+    right: 20px; /* Position from the right */
+    color: white; /* Close button color */
+    font-size: 30px; /* Close button size */
+    font-weight: bold; /* Close button weight */
+    cursor: pointer; /* Pointer on hover */
+    z-index: 1001; /* Ensure it is on top of the image */
+}
+.nav-button {
+    position: absolute;
+    top: 50%; /* Center vertically */
+    transform: translateY(-50%); /* Adjust for vertical centering */
+    color: white; /* Button color */
+    font-size: 30px; /* Button size */
+    font-weight: bold; /* Button weight */
+    cursor: pointer; /* Pointer on hover */
+    background-color: rgba(255, 255, 255, 0.3); /* Semi-transparent background */
+    width: 50px; /* Fixed width for perfect circular shape */
+    height: 50px; /* Fixed height for perfect circular shape */
+    border-radius: 50%; /* Make buttons circular */
+    display: flex; /* Use flexbox to center content */
+    align-items: center; /* Center vertically */
+    justify-content: center; /* Center horizontally */
+    transition: background-color 0.2s; /* Smooth background change */
+}
+
+.prev {
+    left: 20px; /* Position to the left */
+}
+
+.next {
+    right: 20px; /* Position to the right */
+}
+
+.prev:hover, .next:hover {
+    background-color: rgba(255, 255, 255, 0.5); /* Change background on hover */
+}
+
+
+/* Loading Spinner */
+.loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.loading-spinner {
+    border: 16px solid #f3f3f3;
+    border-top: 16px solid #007bff;
+    border-radius: 50%;
+    width: 120px;
+    height: 120px;
+    animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Tooltips */
+.tooltip-button {
+    position: relative;
+    display: inline-block;
+}
+
+.tooltip-text {
+    visibility: hidden;
+    width: 120px;
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    border-radius: 5px;
+    padding: 5px;
+    position: absolute;
+    z-index: 1;
+    bottom: 125%;
+    left: 50%;
+    margin-left: -60px;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.tooltip-button:hover .tooltip-text {
+    visibility: visible;
+    opacity: 1;
+}
+
+/* Toast Notifications */
+.toast-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 10000;
+    width: 300px;
+}
+
+.toast {
+    position: relative;
+    background-color: #333;
+    color: #fff;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+}
+
+.toast.show {
+    opacity: 1;
+}
+
+.toast-progress {
+    height: 4px;
+    background-color: #007bff;
+    width: 0%;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    border-radius: 0 0 5px 5px;
+}
+/* สไตล์ของภาพที่แสดงในแชท */
+.chat-image-thumbnail {
+    max-width: 200px; /* ขนาดกว้างสุดของภาพ */
+    max-height: 200px; /* ขนาดสูงสุดของภาพ */
+    border: 2px solid #000000; /* ขอบของภาพ */
+    border-radius: 10px; /* มุมของขอบภาพ */
+    object-fit: cover; /* ทำให้ภาพครอบคลุมพื้นที่ได้อย่างดี */
+    cursor: pointer; /* เปลี่ยนเคอร์เซอร์เมื่อชี้ที่ภาพ */
+    transition: transform 0.2s ease, box-shadow 0.2s ease; /* การเปลี่ยนแปลงเมื่อมีการโฮเวอร์ */
+}
+
+.chat-image-thumbnail:hover {
+    transform: scale(1.05); /* ขยายภาพเมื่อโฮเวอร์ */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* เงาให้ภาพเด่นขึ้น */
+}
+
+/* สไตล์ของ container ของภาพ */
+.image-container {
+    display: inline-block;
+    position: relative;
+    margin: 5px; /* การเว้นระยะห่างรอบ ๆ ภาพ */
+}
+
+.image-container:hover .delete-image-link {
+    display: block; /* แสดงปุ่มลบเมื่อชี้ที่ container */
+}
+
+.delete-image-link {
+    display: none; /* ซ่อนปุ่มลบเริ่มต้น */
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background-color: rgba(255, 255, 255, 0.7); /* สีพื้นหลังของปุ่มลบ */
+    padding: 5px;
+    border-radius: 3px;
+    color: #ff0000;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+    </style>
+</head>
+<body>
+
+    <!-- Modal -->
+    <div id="imageModal" class="modal">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <img class="modal-content" id="modalImage">
+        <div id="caption"></div>
+        <!-- Previous and Next buttons -->
+        <p class="nav-button prev" onclick="changeImage(-1)"><i class="fas fa-chevron-left"></i></p>
+        <p class="nav-button next" onclick="changeImage(1)"><i class="fas fa-chevron-right"></i></p>
+        
+    </div>
+    
+    
+    <header>
+
+        <div class="banner justify-content-end">
+            <h1 class="mb-4 mt-4 ml-0 mr-4 text-center">Repair Requisition Detail</h1>
+
+
+                
+
+            <div class="controlbt d-flex justify-content-end">
+                
+                <form action="{{ url_for('my_tasks')}}" method="get" class="d-inline mr-2">
+                    <button id="print-button" type="submit" class="btn btn-link"><i class="fa-solid fa-arrow-left" style="font-size:28px;color:rgb(0, 0, 0)"></i></button>
+                    <button id="print-button" class="btn btn-link " onclick="window.print()"><i class="fa-solid fa-print" style="font-size:28px;color:rgb(0, 0, 0)"></i></button>
+                    <div id="google_translate_element"></div>
+                </form>
+
+            </div>
+        </div> 
+
+    </header>        
+    <div class="container">
+        <!-- ส่วนของ Tickets (ซ้าย) -->
+        <div>
+            <!-- Iterate through tickets -->
+            <div class="ticket border p-8 mb-4">
+                <h2 class="text-primary " style="background-color: #c3e4ff; text-align: center; height: 55px;"><strong>Requisition No :</strong> {{ work_order.order_number }}</h2>
+                <!-- Ticket details -->
+                <div class="row">
+                    <div class="col-md-6">
+                        
+                        <h5 class="text-primary mb-3"><strong>Name Request :</strong> {{ work_order.title }}</h5>
+                        
+                        <div class="dropdown mt-1">
+                            <div class="styled-dropdown" style="display: flex;">
+                                <label for="status-select" class="{% if work_order.status == 'open' %}red-text{% elif work_order.status == 'in_progress' %}yellow-text{% else %}green-text{% endif %}">
+                                    <strong>Status : </strong>{{ work_order.status }}
+                                </label>
+                                {% if work_order.status not in ['Finish', 'in_progress'] %}
+                                    {% if 'adminmt' in current_user.roles or 'all' in current_user.roles %}
+                                        <form id="status-form" action="{{ url_for('update_status_work_order', order_id=work_order.id) }}" method="POST">
+                                            <a href="#" class="small Link ml-4" onclick="submitForm()">Change to In Progress</a>
+                                            <input type="hidden" name="status" value="in_progress">
+                                        </form>
+                                    {% endif %}
+                                {% endif %}
+                            </div>
+                        </div>
+    
+                        {% if work_order.status not in ['Finish'] %}
+                            <div style="display: flex;">
+                                <label class="mb-3" for="priority" ><strong>Priority : </strong></label>
+                                {% if 'adminmt' in current_user.roles or 'all' in current_user.roles %}
+                                    <select class="ml-3" style="width: 200px; height: 30px;" id="priority" name="priority" required onchange="updateWorkOrder('{{ work_order.id }}', 'priority', this.value)">
+                                        <option value="" {% if work_order.priority == '' %}selected{% endif %}>--select--</option>
+                                        <option value="Low" {% if work_order.priority == 'Low' %}selected{% endif %}>Low</option>
+                                        <option value="Medium" {% if work_order.priority == 'Medium' %}selected{% endif %}>Medium</option>
+                                        <option value="High" {% if work_order.priority == 'High' %}selected{% endif %}>High</option>
+                                    </select>
+                                {% else %}
+                                    <p>{{ work_order.priority }}</p>
+                                {% endif %}
+                            </div>
+                        {% else %}
+                            <p><strong>Priority : </strong>{{ work_order.priority }}</p>
+                        {% endif %}
+                        {% if work_order.status not in ['Finish'] %}
+                        <div style="display: flex;">
+                            <label class="mb-3" for="issuetype"><strong>Work Type :</strong></label>
+                            {% if 'adminmt' in current_user.roles or 'all' in current_user.roles %}
+                                <select class="ml-3" style="width: 200px; height: 30px;" id="issuetype" name="issuetype" required onchange="updateWorkOrder('{{ work_order.id }}', 'issuetype', this.value)">
+                                    <option value="" {% if work_order.issuetype == '' %}selected{% endif %}>--select--</option>
+                                    <option value="In Site" {% if work_order.issuetype == 'In Site' %}selected{% endif %}>In Site</option>
+                                    <option value="Out Site" {% if work_order.issuetype == 'Out Site' %}selected{% endif %}>Out Site</option>
+                                </select>
+                            {% else %}
+                                <p>{{ work_order.issuetype }}</p>
+                                <p>{{ work_order.responsible}}</p>
+                            {% endif %}
+                            
+                        </div>
+                        <div>
+                            <label class="mb-3" for="responsible"><strong>Responsible :</strong> {{ work_order.responsible}}</label>
+                            {% if 'adminmt' in current_user.roles or 'all' in current_user.roles %}
+                                <button class="btn btn-link ml-3" onclick="openResponsibleSelector('{{ work_order.id }}')">Select Responsible</button> 
+                                
+                            {% else %}
+                                <p>{{ work_order.responsible}}</p>
+                            {% endif %}
+                            
+                        </div>
+                        
+                        
+                                             
+                    {% else %}
+                        <p><strong>Work Type : </strong>{{ work_order.issuetype }}</p>
+                    {% endif %}
+                    {% if work_order.status not in ['Pending', 'in_progress'] %}
+                        <p><strong>Cost :</strong> {{ work_order.cost }} Bath</p>
+                        <p><strong>Responsible : </strong>{{ work_order.responsible}}</p>
+                    {% endif %}
+                    </div>
+                    <div class="col-md-6">
+                        <p><strong>Department :</strong> {{ work_order.department }}</p>
+                        <p><strong>Description :</strong> {{ work_order.description }}</p>
+                        
+
+                        
+                        <p><strong>Solution : </strong>{{ work_order.solution }}</p>
+
+                        <p><strong>Created at : </strong>{{ work_order.created_at }}</p>
+                        {% if work_order.status not in ['Pending', 'in_progress'] %}
+                            <p><strong>Finished at :</strong> {{ work_order.completed_at }}</p>
+                        {% endif %}
+                    </div>
+                </div>
+
+                       
+                <div class="chat-log ticket border p-4">
+                    <h4 class="small"><strong>Operation details for work_order No :</strong> {{ work_order.order_number }}</h4>
+                    <div class="chat" id="chat_box_{{ work_order.id }}">
+                        {% set messages_found = false %}
+                        {% if chat_messages is not defined or chat_messages|length == 0 %}
+                            <p class="small text-muted mt-2">No Chat History</p>
+                        {% else %}
+                            {% for message in chat_messages %}
+                                {% if message.order_id == work_order.id %}
+
+                                    <p id="message_{{ message.id }}" class="white-bg mt-1 mb-1 message-container zoom">
+                                        {% if message.image_user %}
+                                            <img src="{{ message.image_user }}" class="chat-user-image" style="width: 40px; height: 40px; border-radius: 50%;" />
+                                        {% endif %}
+                                        <strong>{{ message.sender }}:</strong> {{ message.message }}
+                                        {% if message.image_path %}
+                                            <img style="border-color: #000000;" src="{{ url_for('static', filename='uploads/' + message.image_path.split('/')[-1]) }}" class="chat-image-thumbnail image-container border" onclick="viewFullImage('{{ url_for('static', filename='uploads/' + message.image_path.split('/')[-1]) }}')" />
+                                            {% if work_order.status in ['Pending', 'in_progress'] %}
+                                                <a href="#" class="delete-image-link" data-image-id="{{ message.id }}" onclick="deleteImage(event, '{{ message.image }}')">Delete</a>
+                                            {% endif %}
+                                        {% endif %}
+                                        <small>({{ message.timestamp }})</small>
+                                        {% if work_order.status in ['Pending', 'in_progress'] %}
+                                            <span class="delete-message small" onclick="deleteMessage('{{ message.id }}')">delete</span>
+                                        {% endif %}
+                                    </p>
+                                {% endif %}
+                            {% endfor %}
+                        {% endif %}
+                    </div>
+                
+                    {% if work_order.status != 'Finish' %}
+                        <div class="chat-container mt-4">
+                            <img id="previewImage_{{ work_order.id }}" class="chat-image-preview border-4" style="display: none; width: 20%; height: 20%;">
+                            <div id="previewContainer_{{ work_order.id }}" class="image-preview-container" style="display: none;"></div>
+                        </div>
+                        <div class="border 1 mb-4">
+                            <div class="chat-container mt-4 ml-2 mr-2 mb-4">
+                                <textarea id="chat_{{ work_order.id }}" onpaste="handlePaste(event, '{{ work_order.id }}')" class="form-control mb-1" style="height: auto; resize: none;" required placeholder="Type or job description here."></textarea>
+                                <input type="file" id="singleImageUpload_{{ work_order.id }}" class="d-none mt-2" accept="image/*" onchange="handleSingleImageUpload(event, '{{ work_order.id }}')">
+                                <input type="file" id="multipleImageUpload_{{ work_order.id }}" name="images" accept="image/*" multiple style="display: none;" onchange="handleMultipleImageUpload(event, '{{ work_order.id }}')">
+                                <button class="btn btn-primary" onclick="sendChat('{{ work_order.id }}')" style="height: 40px; width: 100px;" required>
+                                    <i class="fa-solid fa-paper-plane" style="font-size:18px;color:rgb(255, 255, 255)"></i> Send
+                                </button>
+                                <div>
+                                    <label for="multipleImageUpload_{{ work_order.id }}" class="btn btn-info ml-2 mr-2 mt-2 tooltip-button">
+                                        <i class="fa-solid fa-image" style="font-size:18px;color:rgb(255, 255, 255)"></i>
+                                        <span class="tooltip-text">Upload Images</span>
+                                    </label>
+                                </div>
+                                <div id="previewContainer_{{ work_order.id }}"></div>
+                            </div>
+                        </div>
+                        
+                    {% endif %}
+                    
+                    <div id="uploadModal" class="modal">
+                        <div class="modal-content">
+                            <span class="close" onclick="closeUploadModal()">&times;</span>
+                            <h2>Upload Images</h2>
+                            <p>Your images are being uploaded. Please wait...</p>
+                        </div>
+                    </div>
+                    
+                    <div id="imageModal" class="modal">
+                        <span class="close" onclick="closeModal()">&times;</span>
+                        <img class="modal-content" id="modalImage">
+                        <div id="caption"></div>
+                    </div>
+                </div>
+                
+                    
+                    {% if work_order.status != 'Finish' %}
+                    {% if 'adminmt' in current_user.roles or 'all' in current_user.roles %}
+                    <div class="chat-log ticket border p-4 mb-4" style="height: auto; resize: none;">
+                        <form id="closeForm_{{ work_order.id }}" method="post" action="/status_mt/{{ work_order.id }}/submit" class="mb-2">
+                            <div class="form-group">
+                                <label for="reason_{{ work_order.id }}">Enter Solution Here:</label>
+                                <div class="chat-container">
+                                    <textarea id="reason_{{ work_order.id }}" name="reason" class="form-control mb-2" required>{{ work_order.solution if work_order.solution is not none else "" }}</textarea>
+                                    <button type="button" class="btn btn-primary mb-2 tooltip-button" style="height: 40px; width: 100px;" onclick="saveSolution('{{ work_order.id }}')">
+                                        <i class="fa-solid fa-save" style="font-size:18px;color:rgb(255, 255, 255)"></i> 
+                                        <span class="tooltip-text">Save Solution</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    
+                    
+                    </form>
+                    {% if 'adminmt' in current_user.roles or 'all' in current_user.roles %}
+                    <form action="/edit_mt/{{ work_order.id }}" class="d-inline mr-2"> <!-- Example orderId is 1 -->
+                        <button type="submit" class="btn btn-warning tooltip-button"> <i class="fa fa-pencil-square" style="font-size:18px;color:rgb(255, 255, 255)"></i><span class="tooltip-text">Edit</span></button>
+                    </form>
+                    <form action="/delete_mt/{{ work_order.id }}" method="delete" class="d-inline mr-2" id="deleteForm">
+                        <button type="button" class="btn btn-danger tooltip-button" onclick="deleteWorkOrder({{ work_order.id }}, '{{ work_order.order_number }}')">
+                            <i class="fa-solid fa-trash-can" style="font-size:18px;color:rgb(255, 255, 255)"></i>
+                            <span class="tooltip-text">Delete</span>
+                        </button>
+                    </form>
+                    
+                    {% if 'adminmt' in current_user.roles or 'all' in current_user.roles %}
+                    <form id="notify-creator-form" class="d-inline" action="{{ url_for('notify_creator', notification_type='work_order_detail', notification_id=work_order.id) }}" method="post">
+                        <button type="submit" class="btn btn-primary">Notify to Creator</button>
+                    </form>
+                    {%endif%}
+                    {% if work_order.solution and ('' in work_order.solution or '' in work_order.solusion) %}      
+                    <form action="/close_mt/{{ work_order.id }}" method="post" class="d-inline" id="closeForm">
+                        <button type="button" class="btn btn-success tooltip-button" onclick="closeTicket('{{ work_order.id }}')">
+                            <i class="fa-solid fa-check" style="font-size:18px;color:rgb(255, 255, 255)"></i>
+                            <span class="tooltip-text">Finish</span>
+                        </button>
+                    </form>
+                    {% endif %}
+                    {% endif %}
+                    {% endif %}
+                </div>
+             {% endif %}
+             
+             <p class="small text-muted mt-2"> Admin - 002 - Maint</p>
+        </div>
+    </div>
+
+    <!-- Modal สำหรับแจ้งผลการบันทึกข้อมูล --> 
+    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        function checkResponsible(responsible, workOrderId) {
+            if (responsible === 'none') {
+                // ใช้ SweetAlert แสดงข้อความแจ้งเตือน
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'ไม่พบข้อมูลของผู้รับผิดชอบงาน',
+                    text: 'โปรดเพิ่มผู้รับผิดชอบงานที่ responsible',
+                    confirmButtonText: 'ตกลง'
+                });
+            } else {
+                // ถ้ามีข้อมูลผู้รับผิดชอบ, ส่งฟอร์ม
+                document.getElementById('closeForm').submit();
+            }
+        }
+    </script>
+<script>
+    $(document).ready(function() {
+        $('#notify-creator-form').on('submit', function(event) {
+            event.preventDefault(); // Prevent the default form submission
+
+            $.ajax({
+                url: $(this).attr('action'), // Form action URL
+                method: 'POST',
+                data: $(this).serialize(), // Serialize form data
+                success: function(response) {
+                    // Check if the response indicates success
+                    if (response.status === 'success') {
+                        Swal.fire({
+                            title: 'Success!',
+                            text: 'Notification sent to the creator.',
+                            icon: 'success',
+                            confirmButtonText: 'OK'
+                        });
+                    } else {
+                        Swal.fire({
+                            title: 'Error!',
+                            text: response.message || 'Failed to send notification.',
+                            icon: 'error',
+                            confirmButtonText: 'OK'
+                        });
+                    }
+                },
+                error: function() {
+                    Swal.fire({
+                        title: 'Error!',
+                        text: 'Failed to send notification.',
+                        icon: 'error',
+                        confirmButtonText: 'OK'
+                    });
+                }
+            });
+        });
+    });
+</script>
+    <script>
+        function showSuccessModal() {
+            $('#successModal').modal('show');
+        }
+    </script>
+    <script>
+
+        function showSuccessMessage() {
+        Swal.fire({
+            icon: 'success',
+            title: 'Solution Saved',
+            text: 'Solution has been saved successfully.',
+            timer: 2000,
+            timerProgressBar: true,
+            showConfirmButton: false
+        }).then(() => {
+            // Optionally, you can redirect or reload the page after success
+            window.location.reload(); // Example: Reload the page
+        });
+        }
+    </script>
+    
+    <script>
+function handleKeyDown(event, orderId) {
+    if (event.key === 'Enter' && !event.shiftKey) { // ตรวจสอบว่ากดปุ่ม Enter และไม่กด Shift
+        event.preventDefault(); // ป้องกันการเพิ่มบรรทัดใหม่ใน textarea
+        sendChat(orderId); // เรียกฟังก์ชันส่งข้อความ
+    }
+}
+
+// เพิ่ม event listener ใน JavaScript
+document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('textarea').forEach(textarea => {
+        textarea.addEventListener('keydown', (event) => {
+            const orderId = textarea.id.split('_')[1]; // ดึง errorId จาก id ของ textarea
+            handleKeyDown(event, orderId);
+        });
+    });
+});
+
+function deleteWorkOrder(orderId,orderNumber) {
+    Swal.fire({
+        title: 'Delete Confirmation',
+        html: 'Are you sure you want to delete order <br>No.<strong> ' + orderNumber + '?<strong>',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: 'Delete',
+        cancelButtonText: 'Cancel'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // If confirmed, send delete request
+            fetch(`/delete_mtt/${orderId}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => {
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    throw new Error('Failed to delete order');
+                }
+            })
+            .then(data => {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Deleted!',
+                    text: 'Order has been deleted successfully.',
+                    timer: 2000,
+                    timerProgressBar: true
+                }).then(() => {
+                    window.location.href = '/my_tasks'; // Redirect to work_orders page after successful deletion
+                });
+            })
+            .catch(error => {
+                console.error('Error deleting order:', error);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'An error occurred while deleting the order.'
+                });
+            });
+        }
+    });
+}
+
+
+
+
+        function handleImageUpload2(event, orderId) {
+
+            $('#imagePreviewModal').modal('show'); // เปิด modal
+        };
+    </script>
+    <script>
+
+
+    </script>
+<script type="text/javascript" src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
+    <script type="text/javascript">
+        var socket = io.connect('http://' + document.domain + ':' + location.port);
+    
+        socket.on('connect', function() {
+            console.log('Connected to server');
+        });
+    
+        socket.on('disconnect', function() {
+            console.log('Disconnected from server');
+        });
+        socket.on('new_status', function(data) {
+            console.log('Update Status receive form flask');
+                window.location.reload();
+        });
+    // Receive chat messages from the server
+    socket.on('receive_chat', function(data) {
+    const chatBox = document.getElementById(`chat_box_${data.order_id}`);
+    
+    if (chatBox) {
+        // Create a new message element
+        const newMessage = document.createElement('p');
+        newMessage.id = `message_${data.message_id}`;
+        newMessage.className = 'white-bg mt-1 mb-1 message-container zoom';
+        
+        newMessage.innerHTML = `
+            ${data.image_user ? `<img src="${data.image_user}" alt="User Image" class="user-image-thumbnail" />` : ''}
+            <strong>${data.sender}:</strong>
+            ${data.message}
+            ${data.image_path ? `<img src="${data.image_path}" class="chat-image-thumbnail image-container" onclick="viewFullImage('${data.image_path}')" />` : ''}
+            <small>(${data.timestamp})</small>
+            ${data.work_order_status === 'Pending' || data.work_order_status === 'in_progress' ? `<span class="delete-message small" onclick="deleteMessage('${data.message_id}')">delete</span>` : ''}
+        `;
+        
+        // Optionally add a delete link for images
+        if (data.image_path) {
+            const deleteLink = document.createElement('a');
+            deleteLink.href = '#';
+            deleteLink.className = 'delete-image-link';
+            deleteLink.dataset.imageId = data.message_id;
+            deleteLink.onclick = function(event) {
+                deleteImage(event, data.image_path);
+            };
+            deleteLink.textContent = 'Delete';
+            newMessage.appendChild(deleteLink);
+        }
+        
+        // Append the new message to the chat box
+        chatBox.appendChild(newMessage);
+        
+        // Optionally scroll to the bottom of the chat box
+        chatBox.scrollTop = chatBox.scrollHeight;
+    }
+});
+
+    
+function sendChat(orderId) {
+    const messageInput = document.getElementById(`chat_${orderId}`);
+    const message = messageInput.value.trim();
+    const imageInput = document.getElementById(`imageUpload_${orderId}`);
+    const imageFile = imageInput.files[0];
+    const formData = new FormData();
+    const username = "{{ current_user.displayname }}";
+
+    formData.append("order_id", orderId);
+    formData.append("message", message);
+    formData.append("sender", username);
+
+    if (imageFile) {
+        formData.append("image", imageFile);
+    }
+
+    if (message || imageFile) {
+        fetch("/send_chat_mt", {
+            method: "POST",
+            body: formData
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Bad request');
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.success) {
+                messageInput.value = '';
+                imageInput.value = '';
+                document.getElementById(`previewImage_${orderId}`).style.display = 'none';
+            } else {
+                throw new Error(data.error || 'Failed to send message');
+            }
+        })
+        .catch(error => {
+            console.error("Error:", error);
+            alert("An error occurred while sending the message.");
+        });
+    } else {
+        alert("Please enter a message or upload an image.");
+    }
+}
+function handleImageUpload(event, orderId) {
+    const input = event.target;
+    const previewContainer = document.getElementById(`previewContainer_${orderId}`);
+    
+    // Clear any existing previews
+    if (previewContainer) {
+        previewContainer.innerHTML = '';
+    } else {
+        // Create a container for previews if it doesn't exist
+        previewContainer = document.createElement('div');
+        previewContainer.id = `previewContainer_${orderId}`;
+        input.parentElement.appendChild(previewContainer);
+    }
+
+    if (input.files) {
+        Array.from(input.files).forEach(file => {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                // Create an image element for each file
+                const img = document.createElement('img');
+                img.src = e.target.result;
+                img.style.maxWidth = '100px';
+                img.style.marginRight = '5px';
+                previewContainer.appendChild(img);
+
+                // Emit the image data to the server via socket.io
+                const imageData = {
+                    orderId: orderId,
+                    imageBase64: e.target.result
+                };
+                socket.emit('image_upload', imageData); // Assuming socket is initialized elsewhere
+            };
+            reader.readAsDataURL(file);
+        });
+    }
+}
+
+        document.addEventListener("DOMContentLoaded", function() {
+            // เลือกตัวแปร ticketStatus จากข้อมูลที่รับมาจากแบ็คเอนด์
+            var ticketStatus = "{{ work_order.status }}";
+
+            // ตรวจสอบสถานะของ ticket เพื่อปิดการใช้งานปุ่มแก้ไขและปุ่มอื่น ๆ ตามเงื่อนไข
+            if (ticketStatus === 'Finish') {
+                // หาก ticket มีสถานะเป็น 'Finish' ให้ปิดการใช้งานปุ่มแก้ไขและปุ่มอื่น ๆ
+                var buttons = document.querySelectorAll(".btn:not(.banner .btn)");
+                buttons.forEach(function(button) {
+                    button.disabled = true; // ปิดการใช้งานปุ่ม
+                });
+                var textAreas = document.querySelectorAll("textarea");
+                textAreas.forEach(function(textArea) {
+                    textArea.disabled = true; // ปิดการใช้งาน textarea
+                    textArea.style.pointerEvents = "none"; // ไม่ให้รับอีเวนต์การคลิก
+                });
+                // แสดง Popup ว่าไม่สามารถแก้ไข ticket ที่เสร็จแล้วได้
+                
+            } else {
+                // ถ้า ticket ยังเปิดให้ทำการเปิดการใช้งานปุ่มแก้ไขและปุ่มอื่น ๆ
+                var editableButtons = document.querySelectorAll(".editable");
+                editableButtons.forEach(function(button) {
+                    button.disabled = false;
+                     // เปิดการใช้งานปุ่ม
+                });
+            }
+        });
+        function closeTicket(orderId) {
+    var order_number = "{{ work_order.order_number }}";
+    var responsible = "{{ work_order.responsible }}"; // Make sure this is properly escaped
+    var reasonInput = document.getElementById("reason_" + orderId);
+    var reason = reasonInput ? reasonInput.value.trim() : '';
+    var priorityInput = document.getElementById("priority_" + orderId); // Updated ID for priority
+    var priority = "{{ work_order.priority }}";
+    var issueTypeInput = document.getElementById("issuetype_" + orderId); // Updated ID for issue type
+    var issueType = "{{ work_order.issuetype }}";
+
+    console.log("Responsible:", responsible);
+    console.log("Priority:", priority);
+    console.log("Issue Type:", issueType);
+
+    // Check if responsible is 'none'
+    if (responsible === 'None') {
+        Swal.fire({
+            icon: 'error',
+            title: 'No Responsible Person',
+            html: 'ไม่พบข้อมูลของผู้รับผิดชอบงาน<br>โปรดเพิ่มผู้รับผิดชอบงานที่ <strong>responsible</strong><br><br>No responsible person information found<br>Please add a responsible person in the <strong>responsible</strong> field.'
+        });
+        return;
+    }
+
+    // Check if a reason is provided
+    if (reason === '') {
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Please provide a reason before closing the Order.'
+        });
+        return;
+    }
+
+    // Check if Priority is valid
+    if (priority === '' || priority.toLowerCase() === 'none') {
+        Swal.fire({
+            icon: 'warning',
+            title: 'Unable to Finish',
+            text: 'ไม่สามารถปิดงานได้เนื่องจากไม่พบข้อมูล Priority.',
+            willClose: () => {
+                // Ensure priorityInput exists before focusing
+                if (priorityInput) {
+                    priorityInput.focus();
+                }
+            }
+        });
+        return;
+    }
+
+    // Check if Issue Type is provided, only if Priority is valid
+    if (priority !== '' && (issueType === '' || issueType.toLowerCase() === 'none' || issueType === '--select issuetype--')) {
+        Swal.fire({
+            icon: 'warning',
+            title: 'Unable to Finish',
+            text: 'ไม่สามารถปิดงานได้เนื่องจากไม่พบข้อมูล Work Type.',
+            willClose: () => {
+                // Ensure issueTypeInput exists before focusing
+                if (issueTypeInput) {
+                    issueTypeInput.focus();
+                }
+            }
+        });
+        return;
+    }
+
+    // Prompt for entering cost
+    Swal.fire({
+        title: 'Enter Cost',
+        input: 'text',
+        inputLabel: 'Cost:',
+        inputPlaceholder: 'Enter the cost here...',
+        showCancelButton: true,
+        confirmButtonText: 'Next',
+        showLoaderOnConfirm: true,
+        preConfirm: (cost) => {
+            if (!cost) {
+                Swal.showValidationMessage('Please enter the cost');
+            }
+            return cost;
+        }
+    }).then((result) => {
+        if (result.isConfirmed) {
+            var cost = result.value;
+
+            // Proceed to close confirmation
+            Swal.fire({
+                title: 'Close Confirmation',
+                html: `Are you finished with order <br> No. <strong>${order_number}</strong><br>With cost: <strong>${cost} Bath?</strong>`,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes! I finished'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Create FormData to send data to the server
+                    var formData = new FormData();
+                    formData.append("reason", reason);
+                    formData.append("cost", cost);
+                    formData.append("priority", priority);
+                    formData.append("issueType", issueType);
+
+                    // Send request to the server to close the ticket
+                    fetch("/close_mt/" + orderId, {
+                        method: "POST",
+                        body: formData
+                    })
+                    .then(function(response) {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.json();
+                    })
+                    .then(function(data) {
+                        // Show SweetAlert for success
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Success',
+                            text: `Order No. ${order_number} has been closed successfully.`
+                        }).then(() => {
+                            // Reload the page or handle further actions after success
+                            window.location.reload();
+                        });
+                    })
+                    .catch(function(error) {
+                        console.error('Error:', error);
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: 'An error occurred while closing the ticket.'
+                        });
+                    });
+                }
+            });
+        }
+    });
+}
+
+
+    </script>
+    <script>
+        function changeLanguage(lang) {
+            // ส่งค่าภาษาไปยังหน้าเว็บที่ต้องการ
+            window.location.href = `/${lang}/ticket_detial`; // เปลี่ยน URL ตามที่ต้องการ
+        }
+    </script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+
+    <script type="text/javascript">
+        function googleTranslateElementInit() {
+            new google.translate.TranslateElement({
+                pageLanguage: 'en,th',
+                includedLanguages: 'en,th'
+            }, 'google_translate_element');
+        }
+    </script>
+    <script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        
+        function submitForm() {
+            document.getElementById("status-form").submit();
+        }
+        function handleImageUpload(event, orderId) {
+            const file = event.target.files[0];
+            if (file && file.type.startsWith('image/')) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+
+                    const previewImage = document.getElementById(`previewImage_${orderId}`);
+                    // Display the image preview
+                    
+                    previewImage.src = e.target.result;
+                    previewImage.style.display = 'block';
+                    showSuccessModal();
+                    
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+        function saveSolution(workOrderId) {
+        var reasonInput = document.getElementById("reason_" + workOrderId);
+        var reason = reasonInput.value.trim();
+
+        // Validate reason input
+        if (reason === '') {
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Please enter a solution before saving.'
+            });
+            return;
+        }
+
+        // Submit the form via AJAX
+        var formData = new FormData();
+        formData.append("reason", reason);
+
+        fetch("/status_mt/" + workOrderId + "/submit", {
+            method: "POST",
+            body: formData
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            // Show success message
+            Swal.fire({
+                icon: 'success',
+                title: 'Success!',
+                text: 'Solution saved successfully.',
+                timer:1500,
+                timerProgressBar:true
+            }).then(() => {
+                // Optionally reload the page or handle further actions
+                window.location.reload();
+            });
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'An error occurred while saving the solution.'
+            });
+        });
+    }
+        function resizeImage(base64Str, maxWidth, maxHeight, callback) {
+            const img = new Image();
+            img.onload = function() {
+                let width = img.width;
+                let height = img.height;
+
+                if (width > height) {
+                    if (width > maxWidth) {
+                        height = Math.round(height * (maxWidth / width));
+                        width = maxWidth;
+                    }
+                } else {
+                    if (height > maxHeight) {
+                        width = Math.round(width * (maxHeight / height));
+                        height = maxHeight;
+                    }
+                }
+
+                const canvas = document.createElement('canvas');
+                canvas.width = width;
+                canvas.height = height;
+
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(img, 0, 0, width, height);
+
+                const resizedDataUrl = canvas.toDataURL('image/jpeg');
+                callback(resizedDataUrl);
+            };
+            img.src = base64Str;
+        }
+
+
+        document.addEventListener('paste', function(event) {
+            const clipboardItems = event.clipboardData.items;
+            for (const item of clipboardItems) {
+                if (item.type.indexOf('image') !== -1) {
+                    const file = item.getAsFile();
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        resizeImage(e.target.result, 800, 800, function(resizedImage) {
+                            // Append the image to the chat input
+                            const chatInput = document.querySelector('textarea.form-control');
+                            chatInput.value += `<img src="${resizedImage}" class="chat-image-thumbnail" onclick="viewFullImage('${resizedImage}')"/>`;
+                        });
+                    };
+                    reader.readAsDataURL(file);
+                }
+            }
+        });
+
+        function updateChatLog(orderId) {
+            fetch(`/chat_mt/${orderId}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.success) {
+                        window.location.reload();
+                        const chatLogElement = document.getElementById(`chat_log_${orderId}`);
+                        if (chatLogElement) {
+                            chatLogElement.innerHTML = data.updatedChatLog;
+                        } else {
+                            console.error(`Element chat_log_${orderId} not found`);
+                        }
+                    } else {
+                        console.error('Failed to update chat log');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error updating chat log:', error);
+                });
+        }
+
+        function deleteMessage(messageId) {
+    Swal.fire({
+        title: 'Delete Confirmation',
+        text: 'Are you sure you want to delete this message?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            fetch(`/delete_message_mt/${messageId}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }).then(response => {
+                if (response.ok) {
+                    document.getElementById(`message_${messageId}`).remove();
+                    Swal.fire(
+                        'Deleted!',
+                        'The message has been deleted.',
+                        'success'
+                    ).then(() => {
+                        window.location.reload();
+                    });
+                } else {
+                    response.json().then(data => {
+                        Swal.fire(
+                            'Error!',
+                            'Failed to delete message: ' + data.error,
+                            'error'
+                        );
+                    });
+                }
+            }).catch(error => {
+                console.error("Error deleting message:", error);
+                Swal.fire(
+                    'Error!',
+                    'An error occurred while deleting the message.',
+                    'error'
+                );
+            });
+        }
+    });
+}
+
+function deleteImage(event, imagePath) {
+    event.preventDefault(); // Prevent page reload
+
+    Swal.fire({
+        title: 'Delete Confirmation',
+        text: 'Are you sure you want to delete this image?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            fetch('/delete_image_mt', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ image_path: imagePath })
+            }).then(response => {
+                if (response.ok) {
+                    // Remove image element and delete button
+                    var imageElement = event.target.previousElementSibling;
+                    imageElement.parentNode.removeChild(imageElement);
+                    event.target.parentNode.removeChild(event.target);
+                    Swal.fire(
+                        'Deleted!',
+                        'The image has been deleted.',
+                        'success'
+                    ).then(() => {
+                        window.location.reload();
+                    });
+                } else {
+                    Swal.fire(
+                        'Error!',
+                        'Failed to delete image.',
+                        'error'
+                    );
+                }
+            }).catch(error => {
+                console.error('Error deleting image:', error);
+                Swal.fire(
+                    'Error!',
+                    'An error occurred while deleting the image.',
+                    'error'
+                );
+            });
+        }
+    });
+}
+
+
+    </script>
+<script>
+function updateWorkOrder(orderId, field, value) {
+    const data = {
+        field: field,
+        value: value
+    };
+
+    fetch(`/update_work_order/${orderId}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok ' + response.statusText);
+        }
+        return response.json();
+    })
+    .then(data => {
+        if (data.success) {
+            Swal.fire({
+                icon: 'success',
+                title: 'Update Successful',
+                text: 'Work order updated successfully.',
+                timer: 2000, // Auto close after 2 seconds
+                showConfirmButton: false,
+                timerProgressBar: true
+            }).then(() => {
+                window.location.reload();
+            });
+        } else {
+            Swal.fire({
+                icon: 'error',
+                title: 'Update Failed',
+                text: 'Failed to update work order.'
+            });
+        }
+    })
+    .catch(error => {
+        console.error('There was a problem with the fetch operation:', error);
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'An error occurred while updating the work order.'
+        });
+    });
+}
+
+</script>
+<script>
+    // Polyfill for crypto.randomUUID
+    if (!crypto.randomUUID) {
+        crypto.randomUUID = function() {
+            return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+                const r = (crypto.getRandomValues(new Uint8Array(1))[0] & 0x0f) >> 0;
+                const v = c === 'x' ? r : (r & 0x3) | 0x8;
+                return v.toString(16);
+            });
+        };
+    }
+
+    function handlePaste(event, orderId) {
+        const items = (event.clipboardData || event.originalEvent.clipboardData).items;
+        for (const item of items) {
+            if (item.kind === 'file' && item.type.startsWith('image/')) {
+                const file = item.getAsFile();
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    const imageData = event.target.result;
+                    uploadImageFromData(imageData, orderId);
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+    }
+
+    function handleImageUpload(event, orderId) {
+        const files = event.target.files; // Get the FileList object
+        if (files.length > 0) {
+            // Process each file
+            Array.from(files).forEach(file => {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    const imageData = event.target.result;
+                    uploadImageFromData(imageData, orderId);
+                };
+                reader.readAsDataURL(file);
+            });
+        }
+    }
+
+    // Function to upload image data
+    function uploadImageFromData(imageData, orderId) {
+        fetch('/upload_image_mt', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ imageData: imageData, orderId: orderId })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                displayImageInChat(data.imageUrl, orderId);
+            } else {
+                console.error('Failed to upload image:', data.error);
+            }
+        })
+        .catch(error => {
+            console.error('Error uploading image:', error);
+        });
+    }
+
+
+    function displayImageInChat(imageUrl, orderId) {
+        const chatDiv = document.querySelector('.chat');
+        const p = document.createElement('p');
+        p.classList.add('white-bg', 'mt-1', 'mb-1', 'message-container');
+
+        const img = document.createElement('img');
+        img.src = imageUrl;
+        img.classList.add('chat-image-thumbnail');
+        img.onclick = () => viewFullImage(imageUrl);
+
+        p.appendChild(img);
+        chatDiv.appendChild(p);
+    }
+
+
+    function edit(event, orderId) {
+            event.preventDefault(); // Prevent form submission
+            alert("Coming soon. this function not available now");
+    }
+    $(document).ready(function() {
+        function showLoading() {
+            $('#loading').show();
+
+            // Set a timeout to hide the loading spinner after 2 seconds
+            return setTimeout(function() {
+                $('#loading').hide();
+            }, 2000);
+        }
+
+            function hideLoading() {
+                $('#loading').hide();
+            }
+
+            // Show loading screen on link click
+            $('a').on('click', function(e) {
+                if (!$(this).hasClass('no-loading')) {
+                    showLoading();
+                }
+            });
+
+            // Show loading screen on form submit
+            $('form').on('submit', function() {
+                showLoading();
+            });
+
+            // Hide loading screen on page load
+            $(window).on('load', function() {
+                hideLoading();
+            });
+
+            // You can also manually show the loading screen if needed
+            window.showLoading = showLoading;
+            window.hideLoading = hideLoading;
+        });
+
+
+
+</script> 
+<script>
+async function openResponsibleSelector(orderId) {
+    try {
+        const response = await fetch('/get_responsibles');
+        const users = await response.json();
+    
+        if (!Array.isArray(users)) {
+            throw new Error('Unexpected response format');
+        }
+
+        // Define larger styles for checkboxes and labels
+        const style = `
+            <style>
+                .checkbox-container {
+                    display: flex;
+                    align-items: center;
+                    padding: 8px;
+                }
+                .checkbox-container input[type=checkbox] {
+                    width: 25px;
+                    height: 25px;
+                    margin-right: 10px;
+                }
+                .checkbox-container label {
+                    font-size: 16px;
+                    cursor: pointer;
+                }
+                table {
+                    width: 100%;
+                    border-collapse: collapse;
+                }
+                th, td {
+                    padding: 12px;
+                    text-align: left;
+                    border-bottom: 1px solid #ddd;
+                }
+                tr {
+                    cursor: pointer;
+                }
+                tr:hover {
+                    background-color: #f5f5f5;
+                }
+                .selected {
+                    background-color: #d9edf7; /* Light blue background for selected rows */
+                }
+            </style>
+        `;
+
+        let userOptions = '<table>';
+        userOptions += '<thead><tr><th style="text-align: left;">Select</th></tr></thead>';
+        userOptions += '<tbody>';
+
+        users.forEach(user => {
+            userOptions += `
+                <tr id="row_${user.id}">
+                    <td>
+                        <div class="checkbox-container">
+                            <input type="checkbox" id="user_${user.id}" value="${user.id}">
+                            <label for="user_${user.id}">${user.name}</label>
+                        </div>
+                    </td>
+                </tr>
+            `;
+        });
+
+        userOptions += '</tbody></table>';
+
+        Swal.fire({
+            title: 'Select Responsible',
+            html: `${style}<div>${userOptions}</div>`,
+            showCancelButton: true,
+            confirmButtonText: 'Save',
+            didOpen: () => {
+                // Add event listeners to table rows for checkbox toggling
+                document.querySelectorAll('tr').forEach(row => {
+                    row.addEventListener('click', () => {
+                        const checkbox = row.querySelector('input[type=checkbox]');
+                        if (checkbox) {
+                            checkbox.checked = !checkbox.checked;
+                            row.classList.toggle('selected', checkbox.checked); // Toggle row background color
+                        }
+                    });
+                });
+
+                // Pre-select checkboxes based on the current selection
+                document.querySelectorAll('input[type=checkbox]').forEach(checkbox => {
+                    const isChecked = checkbox.checked;
+                    checkbox.closest('tr').classList.toggle('selected', isChecked);
+                });
+            },
+            preConfirm: () => {
+                const selected = Array.from(document.querySelectorAll('input[type=checkbox]:checked')).map(checkbox => checkbox.value);
+                return selected;
+            }
+        }).then(result => {
+            if (result.isConfirmed) {
+                saveResponsible(orderId, result.value);
+            }
+        });
+    } catch (error) {
+        console.error('Error fetching responsibles:', error);
+        Swal.fire('Error', 'Failed to load responsible users.', 'error');
+    }
+}
+
+function toggleCheckbox(userId) {
+    const checkbox = document.getElementById(`user_${userId}`);
+    if (checkbox) {
+        checkbox.checked = !checkbox.checked;
+        const row = document.getElementById(`row_${userId}`);
+        if (row) {
+            row.classList.toggle('selected', checkbox.checked); // Toggle row background color
+        }
+    }
+}
+
+
+
+    
+function saveResponsible(orderId, selectedResponsible) {
+    fetch('/update_responsible/' + orderId, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ responsible: selectedResponsible })
+    }).then(response => response.json())
+      .then(data => {
+          if (data.success) {
+              Swal.fire('Success', 'Responsible updated successfully!', 'success').then(() => {
+                  location.reload();  // Reload the page after the user clicks OK
+              });
+          } else {
+              Swal.fire('Error', 'Error updating responsible.', 'error');
+          }
+      }).catch(error => console.log('Error:', error));
+}
+
+    </script>
+    <script>
+
+function showUploadModal() {
+    const modal = document.getElementById('uploadModal');
+    if (modal) {
+        modal.style.display = 'block';
+    }
+}
+
+function closeUploadModal() {
+    const modal = document.getElementById('uploadModal');
+    if (modal) {
+        modal.style.display = 'none';
+    }
+}
+
+
+// Handle single image upload (if needed)
+// Handle single image upload
+function handleSingleImageUpload(event, orderId) {
+    const input = event.target;
+    if (input.files && input.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const previewImage = document.getElementById(`previewImage_${orderId}`);
+            if (previewImage) {
+                previewImage.src = e.target.result;
+                previewImage.style.display = 'block';
+            }
+
+            // Send image data to the server via fetch
+            const imageData = {
+                orderId: orderId,
+                imageData: e.target.result
+            };
+
+            fetch('/upload_image_mt', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                    // No CSRF token required
+                },
+                body: JSON.stringify(imageData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    console.log('Image uploaded successfully:', data.imageUrl);
+                    // Optionally update the chat UI with the new image
+                } else {
+                    console.error('Image upload failed:', data.error);
+                }
+            })
+            .catch(error => {
+                console.error('Error uploading image:', error);
+            });
+        };
+        reader.readAsDataURL(input.files[0]);
+    }
+}
+
+async function handleMultipleImageUpload(event, orderId) {
+    const input = event.target;
+    const previewContainer = document.getElementById(`previewContainer_${orderId}`);
+    
+    if (previewContainer) {
+        previewContainer.innerHTML = ''; // Clear previous previews
+
+        if (input.files) {
+            showUploadModal(); // Show upload modal
+
+            // Create an array to store image data
+            const imageDataArray = [];
+
+            // Function to process a file
+            const processFile = (file) => {
+                return new Promise((resolve, reject) => {
+                    const reader = new FileReader();
+
+                    reader.onload = function(e) {
+                        const img = document.createElement('img');
+                        img.src = e.target.result;
+                        img.style.maxWidth = '100px';
+                        img.style.margin = '5px';
+                        previewContainer.appendChild(img);
+
+                        // Prepare image data
+                        const imageData = {
+                            orderId: orderId,
+                            imageData: e.target.result
+                        };
+
+                        imageDataArray.push(imageData);
+
+                        resolve();
+                    };
+
+                    reader.onerror = (error) => reject(error);
+                    reader.readAsDataURL(file);
+                });
+            };
+
+            // Create an array of promises for each file
+            const filePromises = Array.from(input.files).map(file => processFile(file));
+
+            // Process all files concurrently
+            try {
+                await Promise.all(filePromises);
+
+                // Send all images to the server
+                const response = await fetch('/upload_image_mt', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ images: imageDataArray })
+                });
+
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+
+                const data = await response.json();
+
+                if (data.success) {
+                    console.log('Images uploaded successfully:', data.messages);
+                } else {
+                    console.error('Image upload failed:', data.error);
+                }
+            } catch (error) {
+                console.error('Error uploading images:', error);
+            }
+
+            // Close the upload modal after all images are uploaded
+            closeUploadModal();
+        }
+    }
+}
+
+
+
+var currentImageIndex = 0;
+var images = []; // เก็บรายชื่อภาพ
+
+function viewFullImage(src) {
+    var modal = document.getElementById("imageModal");
+    var modalImg = document.getElementById("modalImage");
+    var captionText = document.getElementById("caption");
+
+    // เพิ่มภาพใน array และตั้งค่า index
+    images = []; // ล้าง array ก่อน
+    document.querySelectorAll('.chat-image-thumbnail').forEach(img => {
+        images.push(img.src);
+    });
+
+    currentImageIndex = images.indexOf(src);
+
+    modal.style.display = "flex"; // ใช้ flexbox เพื่อให้ modal อยู่กลางจอ
+    modalImg.src = src;
+    captionText.innerHTML = ""; // ใส่คำบรรยายถ้าต้องการ
+}
+
+function closeModal() {
+    var modal = document.getElementById("imageModal");
+    modal.style.display = "none";
+}
+
+function zoomIn() {
+    var modalImg = document.getElementById("modalImage");
+    scale += 0.1;
+    modalImg.style.transform = "scale(" + scale + ")";
+}
+
+function zoomOut() {
+    var modalImg = document.getElementById("modalImage");
+    scale = Math.max(scale - 0.1, 1); // จำกัดไม่ให้ scale น้อยกว่า 1
+    modalImg.style.transform = "scale(" + scale + ")";
+}
+
+function changeImage(step) {
+    var modalImg = document.getElementById("modalImage");
+    currentImageIndex = (currentImageIndex + step + images.length) % images.length;
+    modalImg.src = images[currentImageIndex];
+}
+
+// ปิด modal เมื่อคลิกนอก modal
+window.onclick = function(event) {
+    var modal = document.getElementById("imageModal");
+    if (event.target == modal) {
+        modal.style.display = "none";
+    }
+}
+
+
+
+
+// Example function to display chat messages including images
+function displayChatMessages(messages) {
+    const chatContainer = document.getElementById('chatContainer');
+    if (!chatContainer) return;
+    chatMessages.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
+    chatContainer.innerHTML = ''; // Clear existing chat messages
+
+    messages.forEach(message => {
+        const messageElement = document.createElement('div');
+        messageElement.classList.add('chat-message');
+
+        const senderElement = document.createElement('strong');
+        senderElement.textContent = message.sender;
+        messageElement.appendChild(senderElement);
+
+        if (message.image_path) {
+            const img = document.createElement('img');
+            img.src = message.image_path;
+            img.style.maxWidth = '200px';
+            img.style.maxHeight = '200px';
+            messageElement.appendChild(img);
+        }
+
+        const timestampElement = document.createElement('span');
+        timestampElement.textContent = message.timestamp;
+        messageElement.appendChild(timestampElement);
+
+        chatContainer.appendChild(messageElement);
+    });
+}
+
+// Example function to handle incoming chat messages
+socket.on('receive_chat', function(chatMessages) {
+    displayChatMessages(chatMessages); // Ensure that this function processes and displays messages in the correct order
+});
+
+    </script>
+    
+</body>
+</html>
+

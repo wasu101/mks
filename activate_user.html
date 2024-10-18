@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Activation</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body>
+    <div class="container">
+        <h2 class="mt-5">Activate Users</h2>
+
+        <table class="table mt-3">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Username</th>
+                    <th>Department</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user in users %}
+                    <tr>
+                        <td>{{ user.id }}</td>
+                        <td>{{ user.username }}</td>
+                        <td>{{ user.department }}</td>
+                        <td>{{ user.status }}</td>
+                        <td>
+                            {% if user.status != 'Activated' %}
+                                <form method="POST" style="display:inline;" class="activate-form">
+                                    <input type="hidden" name="username" value="{{ user.username }}">
+                                    <button type="submit" class="btn btn-primary">Activate</button>
+                                </form>
+                            {% else %}
+                                <span class="text-success">Activated</span>
+                            {% endif %}
+                            <form method="POST" action="{{ url_for('delete_user') }}" style="display:inline;" class="delete-form">
+                                <input type="hidden" name="user_id" value="{{ user.id }}">
+                                <button type="button" class="btn btn-danger delete-button">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        // Check for flashed messages and show SweetAlert notifications
+        {% with messages = get_flashed_messages(with_categories=True) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    Swal.fire({
+                        icon: category === 'error' ? 'error' : 'success',
+                        title: message,
+                        showConfirmButton: true
+                    });
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        // SweetAlert confirmation before activating a user
+        document.querySelectorAll('.activate-form').forEach(form => {
+            form.addEventListener('submit', function(e) {
+                e.preventDefault(); // Prevent the form from submitting immediately
+                const username = this.username.value;
+
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: `Do you want to activate user ${username}?`,
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, activate it!'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        this.submit(); // Submit the form if confirmed
+                    }
+                });
+            });
+        });
+
+        // SweetAlert confirmation before deleting a user
+        document.querySelectorAll('.delete-button').forEach(button => {
+            button.addEventListener('click', function(e) {
+                const form = this.closest('form'); // Get the parent form
+                const userId = form.querySelector('input[name="user_id"]').value;
+
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: `Do you want to delete user with ID ${userId}?`,
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#3085d6',
+                    confirmButtonText: 'Yes, delete it!'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        form.submit(); // Submit the form if confirmed
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

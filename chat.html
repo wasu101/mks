@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Car Booking System</title>
+    <link href='https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.min.css' rel='stylesheet' />
+    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.min.js'></script>
+    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/locales-all.min.js'></script>
+    <script src='https://code.jquery.com/jquery-3.6.0.min.js'></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        #calendar {
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 0 10px;
+        }
+        .modal-content {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            padding: 20px;
+            border-radius: 10px;
+            background-color: #f8f9fa;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+        .modal-content h1 {
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .modal-content .close {
+            font-size: 1.5rem;
+            font-weight: bold;
+            cursor: pointer;
+            color: #000;
+        }
+        .form-group {
+            display: grid;
+            grid-template-columns: auto 1fr;
+            gap: 10px;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .form-group label {
+            font-weight: bold;
+            color: #343a40;
+        }
+        .form-group input, .form-group select, .form-group textarea {
+            border: 1px solid #ced4da;
+            border-radius: 5px;
+            padding: 10px;
+            font-size: 1rem;
+            color: #495057;
+            background-color: #fff;
+            background-clip: padding-box;
+            transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+            width: 100%;
+        }
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+            border-color: #80bdff;
+            outline: 0;
+            box-shadow: 0 0 5px rgba(0, 123, 255, .25);
+        }
+        .form-group .grid {
+            display: grid;
+            grid-template-columns: auto auto auto;
+            gap: 10px;
+        }
+        .time-group {
+            display: grid;
+            grid-template-columns: auto 1fr auto 1fr;
+            gap: 10px;
+            align-items: center;
+        }
+        .time-group label {
+            text-align: center;
+        }
+        button[type="submit"] {
+            background-color: #007bff;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color .3s;
+        }
+        button[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+        #booking-date {
+            font-size: 1rem;
+            font-weight: normal;
+            color: #6c757d;
+        }
+    </style>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Display current date
+            var bookingDateElement = document.getElementById('booking-date');
+            var currentDate = new Date();
+            var options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            var formattedDate = currentDate.toLocaleDateString('en-US', options);
+            bookingDateElement.textContent = formattedDate;
+
+            // Initialize FullCalendar
+            var calendarEl = document.getElementById('calendar');
+            var calendar = new FullCalendar.Calendar(calendarEl, {
+                initialView: 'dayGridMonth',
+                selectable: true,
+                locale: 'en',
+                headerToolbar: {
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'dayGridMonth,timeGridWeek,timeGridDay'
+                },
+                events: '/api/bookings', // Endpoint to fetch events
+                eventClick: function(info) {
+                    openModal(info.event);
+                }
+            });
+            calendar.render();
+
+            // Modal functionality
+            var modal = document.querySelector('.modal-content');
+            var modalClose = modal.querySelector('.close');
+
+            modalClose.addEventListener('click', closeModal);
+
+            function openModal(event) {
+                var modalTitle = modal.querySelector('h1');
+                modalTitle.textContent = 'Car Booking ' + event.start.toLocaleDateString('en-US', options);
+                modal.style.display = 'block';
+                document.getElementById('booking-date-input').value = event.start.toISOString().slice(0, 10);
+            }
+
+            function closeModal() {
+                modal.style.display = 'none';
+            }
+        });
+
+        function toggleTextInput() {
+            var pickup = document.getElementById('pickup');
+            var pickupText = document.getElementById('pickupText');
+            if (pickup.value === 'other') {
+                pickupText.style.display = 'block';
+            } else {
+                pickupText.style.display = 'none';
+            }
+        }
+    </script>
+</head>
+<body>
+
+<div id="calendar"></div>
+
+<div class="modal-content">
+    <span class="close">&times;</span>
+    <h1>Car Booking <span id="booking-date"></span></h1>
+    <form id="booking-form" method="POST" action="/booking">
+        <div class="form-group">
+            <label for="name"><i class="fas fa-user"></i> Name:</label>
+            <input type="text" id="name" name="name" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="email"><i class="fas fa-envelope"></i> Email:</label>
+            <input type="email" id="email" name="email" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="description"><i class="fas fa-comment"></i> Description:</label>
+            <textarea id="description" name="description" rows="4"></textarea>
+        </div>
+        
+        <div class="form-group">
+            <label for="department"><i class="fas fa-building"></i> Department:</label>
+            <select id="department" name="department" required>
+                <option value="">--select--</option>
+                <option value="IT">IT</option>
+                <option value="DESIGN/CAD/MODEL">DESIGN/CAD/MODEL</option>
+                <option value="HR">HR</option>
+                <option value="GOLD STOCK">GOLD STOCK</option>
+                <option value="CASTING">CASTING</option>
+                <option value="REFINERY">REFINERY</option>
+                <option value="WAXING">WAXING</option>
+                <option value="WAX-SET">WAX-SET</option>
+                <option value="CNC">CNC</option>
+                <option value="VOLUME">VOLUME</option>
+                <option value="COMMERCIAL">COMMERCIAL</option>
+                <option value="AUTO">AUTO</option>
+                <option value="BRANDED">BRANDED</option>
+                <option value="SETTING-EXPRESS">SETTING-EXPRESS</option>
+                <option value="PT-US">PT-US</option>
+                <option value="PT-JP">PT-JP</option>
+                <option value="EXPRESS">EXPRESS</option>
+                <option value="PREMIUM">PREMIUM</option>
+                <option value="SETTING-SUPPORT">SETTING-SUPPORT</option>
+                <option value="SEB-CON">SEB-CON</option>
+                <option value="PLATING">PLATING</option>
+                <option value="QC">QC</option>
+                <option value="DIAMOND/STONE/GEMS">DIAMOND/STONE/GEMS</option>
+                <option value="BI(NAVISION)">BI(NAVISION)</option>
+                <option value="PACKING">PACKING</option>
+                <option value="EXPORT-IMPORT">EXPORT-IMPORT</option>
+                <option value="OPC">OPC</option>
+                <option value="MAINTENANCE">MAINTENANCE</option>
+                <option value="PURCHASE">PURCHASE</option>
+                <option value="STORE">STORE</option>
+                <option value="SECURITY">SECURITY</option>
+                <option value="SALES">SALES</option>
+                <option value="ACCOUNTING">ACCOUNTING</option>
+                <option value="SENIOR MANAGER">SENIOR MANAGER</option>
+                <!-- Add more options here -->
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="car_type"><i class="fas fa-car"></i> Car Type:</label>
+            <select id="car_type" name="car_type" required>
+                <option value="">--select--</option>
+                <option value="Car 1">Car 1</option>
+            </select>
+        </div>
+        
+        <div class="form-group">
+            <label for="pickup"><i class="fas fa-map-marker-alt"></i> Pick-up point:</label>
+            <select id="pickup" name="pickup" required onchange="toggleTextInput()">
+                <option value="">--select--</option>
+                <option value="MKS Jewelry">MKS Jewelry</option>
+                <option value="other">other</option>
+            </select>
+            <input type="text" id="pickupText" name="pickupText" style="display: none;" placeholder="Specify other location">
+        </div>
+        <div class="form-group">
+            <label for="destination"><i class="fas fa-map-marker-alt"></i> Destination:</label>
+            <input type="text" id="destination" name="destination" required>
+        </div>
+        <div class="form-group">
+            <label><i class="far fa-clock time-group"></i> Time:</label>
+            <div class="time-group">
+                <input type="time" id="start" name="start" required>
+                <label for="end"> - </label>
+                <input type="time" id="end" name="end" required>
+            </div>
+        </div>
+        <input type="hidden" id="booking-date-input" name="booking-date-input">
+        
+        <button type="submit">Book</button>
+    </form>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

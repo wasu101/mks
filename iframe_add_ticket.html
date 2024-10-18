@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IT Helpdesk Center</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<style>
+    .chat-window {
+        position: -webkit-sticky;
+        position: sticky;
+        top: 0;
+        right: 0;
+        width: 300px;
+        height: 50vh; /* ให้ความสูงเท่ากับ 50% ของหน้าจอ */
+        padding: 20px;
+        z-index: 300;
+        background-color: #606060;
+        color: #ffffff;
+        overflow-y: auto; /* เพิ่ม scroll bar ในกรณีที่เนื้อหาเกินขอบเขตของ chat window */
+    }
+
+    /* เพิ่มการปรับแต่งเนื้อหาภายใน chat window */
+    .chat-window h2 {
+        font-size: 1.5em;
+        margin-bottom: 10px;
+    }
+
+    .chat-window p {
+        font-size: 1em;
+        line-height: 1.5;
+        margin-bottom: 10px;
+    }
+
+    .chat-window li {
+        list-style-type: none;
+        margin-bottom: 5px;
+    }
+
+    .chat-window a {
+        color: #ffffff;
+        text-decoration: none;
+    }
+
+    /* ปรับ margin ของ main content เพื่อไม่ให้ซ้อนทับกับ chat window */
+    main {
+        margin-right: 320px; /* ระบุ margin ทางขวาเท่ากับความกว้างของ chat window เพิ่มเติม */
+        padding: 20px;
+        background-color: #f0f0f0;
+        min-height: 100vh; /* ให้ main มีความสูงเท่ากับ 100% ของหน้าจอ */
+        height: 100%;
+    }
+    body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    background-color: #f8f8f8;
+    }
+
+    header {
+            position: -webkit-sticky;
+            position: sticky;
+            top: 0;
+            background-color: #333;
+            color: #fff;
+            padding: 10px 0;
+            text-align: center;
+            z-index: 1000; /* ให้ Header อยู่ด้านหน้าสุด */
+        }
+        nav {
+            background-color: #555;
+            padding: 8px 0;
+            text-align: center;
+            position: -webkit-sticky;
+            position: sticky;
+            top: 40px; /* ให้ Navigation Bar อยู่ที่ด้านล่างของ Header */
+            z-index: 100; /* ให้ Navigation Bar อยู่หลัง Header */
+        }
+    nav ul li {
+        display: inline;
+        margin-right: 20px;
+    }
+
+
+    .user-section {
+        width: 30%;/* แบ่งส่วน user ออกเป็น 20% */
+        padding: 30px;
+        background-color: #f0f0f0;
+    }
+
+    .content-section {
+        flex: 1; /* แบ่งส่วน content ออกเป็น 80% */
+        padding: 20px;
+        background-color: #ffffff;
+        border-left: 1px solid #ccc; /* เพิ่มเส้นขอบด้านซ้าย */
+    }
+    main {
+        max-width: 1200px;
+        margin: 20px auto;
+        padding: 20px;
+        background-color: #fff;
+        border-radius: 5px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        height: 100%;
+    }
+
+    #hero  {
+        text-align: center;
+        padding: 40px 0;
+    }
+    #services  {
+        padding: 40px 0;
+    }
+    .cta-button {
+        display: inline-block;
+        padding: 10px 20px;
+        background-color: #007bff;
+        color: #fff;
+        text-decoration: none;
+        border-radius: 5px;
+        transition: background-color 0.3s ease;
+    }
+
+    .cta-button:hover {
+        background-color: #0056b3;
+    }
+
+    footer {
+        text-align: center;
+        padding: 20px 0;
+        background-color: #333;
+        color: #fff;
+    }
+
+</style>
+<body>
+    <header>
+        <h1 ><a href="{{ url_for('main') }}" >Ticket</a></h1>
+        <nav>
+            <ul>
+                <li><a href="{{ url_for('all_tickets') }}">Tickets</a></li>
+                <li><a href="error404.html">FAQ</a></li>
+                <li><a href="error404.html">Contact Us</a></li>
+                <li><a href="{{ url_for('dashboard') }}">Dashboard</a></li>
+
+            </ul>
+        </nav>
+        <!-- Login Section -->
+     <!-- User Profile Section -->
+
+
+
+    </header>
+    <main style="max-width: 1200px;  margin: 20px auto; padding: 20px; background-color: #fff; border-radius: 5px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
+        <div style="width: 100%; height: 100%;">
+            <iframe src="{{ url_for('add_new_ticket') }}" height="550" style="width: 100%; border: none; overflow: hidden;"></iframe>
+        </div>
+    </main>
+    
+
+    <footer>
+        <p>&copy; 2024 IT Helpdesk Center. All rights reserved.</p>
+    </footer>
+</body>
+</html>

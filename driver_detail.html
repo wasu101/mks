@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Driver Detail</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-5">
+        <h2>Driver Detail</h2>
+        <div class="row">
+            <div class="col-md-4">
+                <h5 class="card-title">Name Driver: {{ driver.name }}</h5>
+                <p class="card-text">Driver ID: {{ driver.id }}</p>
+                <img src="/path/to/driver/image.jpg" class="img-fluid rounded" alt="Driver Image">
+            </div>
+            <div class="col-md-8">
+                <h4 id="driverName"></h4>
+                <p>Driver's License: {{ driver.license }}</p>
+                
+                <p>Phone Number:  {{ driver.phone }}</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Fetch driver details and populate the page
+            fetch('/api/drivers/{{ driver_id }}')
+                .then(response => response.json())
+                .then(driver => {
+                    document.getElementById('driverName').textContent = driver.name;
+                    document.getElementById('driverPhone').textContent = driver.phone_number; // Assuming 'phone_number' is the field name
+                    // Update image sources here if available
+                })
+                .catch(error => console.error('Error fetching driver details:', error));
+        });
+    </script>
+</body>
+</html>

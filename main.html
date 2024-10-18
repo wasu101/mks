@@ -1,0 +1,1223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MKS Support Center</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="icon" href="{{ url_for('static', filename='images/logo1.ico') }}" type="image/x-icon">
+    <link href="{{ url_for('static', filename='fontawesomefree/css/fontawesome.css') }}" rel="stylesheet" type="text/css">
+    <link href="{{ url_for('static', filename='fontawesomefree/css/brands.css') }}" rel="stylesheet" type="text/css">
+    <link href="{{ url_for('static', filename='fontawesomefree/css/solid.css') }}" rel="stylesheet" type="text/css">
+    
+</head>
+<style>
+            .sidebar {
+            height: 100%;
+            width: 250px;
+            position: fixed;
+            z-index: 1;
+            top: 0;
+            left: 0;
+            background-color: #f8f9fa;
+            overflow-x: hidden;
+            transition: 0.5s;
+            padding-top: 60px;
+        }
+
+        .sidebar .collapse {
+            display: block;
+        }
+
+        .sidebar a {
+            padding: 10px 15px;
+            text-decoration: none;
+            font-size: 18px;
+            color: #333;
+            display: block;
+            transition: 0.3s;
+        }
+
+        .sidebar a:hover {
+            color: #007bff;
+        }
+
+        .sidebar .closebtn {
+            position: absolute;
+            top: 0;
+            right: 25px;
+            font-size: 36px;
+            margin-left: 50px;
+        }
+    .chat-window {
+        position: -webkit-sticky;
+        position: sticky;
+        top: 0;
+        right: 0;
+        width: 300px;
+        height: 50vh; /* ให้ความสูงเท่ากับ 50% ของหน้าจอ */
+        padding: 20px;
+        z-index: 300;
+        background-color: #606060;
+        color: #ffffff;
+        overflow-y: auto; /* เพิ่ม scroll bar ในกรณีที่เนื้อหาเกินขอบเขตของ chat window */
+    }
+
+    /* เพิ่มการปรับแต่งเนื้อหาภายใน chat window */
+    .chat-window h2 {
+        font-size: 1.5em;
+        margin-bottom: 10px;
+    }
+
+    .chat-window p {
+        font-size: 1em;
+        line-height: 1.5;
+        margin-bottom: 10px;
+    }
+
+    .chat-window li {
+        list-style-type: none;
+        margin-bottom: 5px;
+    }
+
+    .chat-window a {
+        color: #ffffff;
+        text-decoration: none;
+    }
+
+    /* ปรับ margin ของ main content เพื่อไม่ให้ซ้อนทับกับ chat window */
+    main {
+        margin-right: 320px; /* ระบุ margin ทางขวาเท่ากับความกว้างของ chat window เพิ่มเติม */
+        padding: 20px;
+        background-color: #f0f0f0;
+        min-height: 100vh; /* ให้ main มีความสูงเท่ากับ 100% ของหน้าจอ */
+    }
+    body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    background-color: #f8f8f8;
+    }
+
+    header {
+            top: 0;
+            background: #ff7300;
+            color: #fff;
+            padding: 5px 0;
+            text-align: center;
+            z-index: 1000; /* ให้ Header อยู่ด้านหน้าสุด */
+        }
+    
+    .main-container {
+    display: flex;
+    }
+
+    .user-section {
+        width: 25%;
+        max-width: 100%;/* แบ่งส่วน user ออกเป็น 20% */
+        margin-right: 100;
+
+    }
+    .white-cell  {
+            font-family: 'Thonburi', sans-serif; /* ใช้ฟอนต์ Thonburi สำหรับเว็บไซต์ */
+            background-color: rgb(255, 255, 255);
+        }
+    .content-section {
+        margin: auto;
+
+        max-width: 100%;
+        background-color: #ffffff;
+        /*border-left: 2px solid #ccc; /* เพิ่มเส้นขอบด้านซ้าย */
+    }
+    main {
+        max-width: 100%;
+        margin: 20px auto;
+        background-color: #fff;
+        border-radius: 5px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    .blue-text{
+        color: #007bff;
+    }
+    .cta-button {
+        display: inline-block;
+        padding: 10px 20px;
+        background-color: #007bff;
+        color: #fff;
+        text-decoration: none;
+        border-radius: 5px;
+        transition: background-color 0.3s ease;
+    }
+    .blue-cell{
+            font-family: 'Thonburi', sans-serif; /* ใช้ฟอนต์ Thonburi สำหรับเว็บไซต์ */
+            background-color: rgb(70, 70, 70);
+            text-align: center;
+            color: #ffffff;
+        }
+    .cta-button:hover {
+        background-color: #0056b3;
+    }
+
+    footer {
+        text-align: center;
+        padding: 20px 0;
+        background-color: #333;
+        color: #fff;
+    }
+    .container {
+  position: relative;
+  width: 100%;
+}
+
+.image {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.overlay {
+  position: absolute;
+  bottom: 100%;
+  left: 0;
+  right: 0;
+  background-color: #ffffff7e;
+  overflow: hidden;
+  width: 100%;
+  height:0;
+  transition: .5s ease;
+}
+
+.container:hover .overlay {
+  bottom: 0;
+  height: 100%;
+}
+
+.text {
+  color: rgb(0, 0, 0);
+  font-size: 20px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+  text-align: center;
+}
+.btn {
+  border: none; /* Remove borders */
+  color: white; /* White text */
+  padding: 12px 16px; /* Some padding */
+  font-size: 16px; /* Set a font size */
+  cursor: pointer; /* Mouse pointer on hover */
+}
+body {
+
+            margin: 0;
+            padding: 0;
+            transition: margin-left .5s;
+        }
+        .sidenav {
+            color: #ffffff;
+            height: 100%;
+            width: 0%;
+            position: fixed;
+            z-index: 1000;
+            top: 0;
+            left: 0;
+            background-color: #0c0c0cef;
+            overflow-x: hidden;
+            transition: 0.5s;
+            padding-top: 60px;
+        }
+        .sidenav a {
+            padding: 8px 8px 8px 32px;
+            text-decoration: none;
+            font-size: 25px;
+            color: #999999;
+            display: block;
+            transition: 0.3s;
+        }
+        .sidenav a:hover {
+            color: #f1f1f1;
+        }
+        .sidenav .closebtn {
+            position: absolute;
+            top: 20px;
+            right: 25px;
+            font-size: 36px;
+            margin-left: 50px;
+        }
+        .main-content {
+            margin-left: 0;
+            transition: margin-left .5s;
+        }
+        .dropdown-btn {
+            padding: 6px 8px 6px 32px;
+            text-decoration: none;
+            font-size: 20px;
+            color: #ffffff;
+            display: block;
+            background: none;
+            border: none;
+            text-align: left;
+            cursor: pointer;
+            outline: none;
+        }
+        .dropdown-container {
+            display: none;
+            background-color: #262626;
+            text-align: left;
+        }
+        .dropdown-container a {
+            font-size: 18px;
+            text-align: left;
+        }
+        .notification {
+
+            text-decoration: none;
+            position: relative;
+            display: inline-block;
+        }
+
+
+
+        .notification .badge {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            padding: 5px 8px;
+            border-radius: 50%;
+            background: red;
+            color: white;
+        }
+        .header {
+  padding: 20px;
+  text-align: center;
+  background: #ff7300;
+  color: white;
+}
+        .loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+.loading-spinner {
+    border: 16px solid #f3f3f3;
+    border-top: 16px solid #3498db;
+    border-radius: 50%;
+    width: 120px;
+    height: 120px;
+    animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+#loading p {
+    margin-top: 20px;
+    font-size: 18px;
+    color: #000;
+}
+.profile {
+    max-width: 150px; /* ปรับขนาดตามต้องการ */
+    max-height: 150px;
+    object-fit: cover;
+}
+.profile-image {
+    width: 100%; /* ปรับขนาดตามต้องการ */
+    height: 100%;
+    object-fit: cover;
+}
+@media (max-width: 400px) {
+    .main-container {
+    flex-direction: column;
+    width: 100%;
+    }
+    .profile {
+    max-width: 100%; /* ปรับขนาดตามต้องการ */
+    max-height: 100%;
+
+}
+.profile-image {
+    max-width: 50%; /* ปรับขนาดตามต้องการ */
+    max-height: 50%;
+
+}
+    header {
+            top: 0;
+            background: #ff7300;
+            color: #fff;
+            padding: 5px 0;
+            text-align: center;
+            z-index: 1000; /* ให้ Header อยู่ด้านหน้าสุด */
+        }
+    .user-section {
+        width: 100%;/* แบ่งส่วน user ออกเป็น 20% */
+
+    }
+    .content-section {
+        margin-left: 20px;
+        margin-right: 20px;
+        max-width: 150%;
+        background-color: #ffffff;
+        /*border-left: 2px solid #ccc; /* เพิ่มเส้นขอบด้านซ้าย */
+    }
+    .main{
+        max-width: 100%;
+    }
+    .btn{
+        width: 100%;
+    }
+    .container {
+         width: 100%;
+}
+}
+@media (max-width: 900px) {
+    .main-container {
+    flex-direction: column;
+    width: 100%;
+    }
+    .profile {
+    max-width: 100%; /* ปรับขนาดตามต้องการ */
+    max-height: 100%;
+
+}
+.profile-image {
+    max-width: 50%; /* ปรับขนาดตามต้องการ */
+    max-height: 50%;
+
+}
+    header {
+            top: 0;
+            background: #ff7300;
+            color: #fff;
+            padding: 5px 0;
+            text-align: center;
+            z-index: 1000; /* ให้ Header อยู่ด้านหน้าสุด */
+        }
+    .user-section {
+        width: 100%;/* แบ่งส่วน user ออกเป็น 20% */
+
+    }
+    .content-section {
+        margin-left: 20px;
+        margin-right: 20px;
+        max-width: 150%;
+        background-color: #ffffff;
+        /*border-left: 2px solid #ccc; /* เพิ่มเส้นขอบด้านซ้าย */
+    }
+    .main{
+        max-width: 100%;
+    }
+    .btn{
+        width: 100%;
+    }
+    .container {
+         width: 100%;
+}
+#notifications-list {
+        display: none; /* Initially hidden */
+        position: absolute;
+        background-color: #ffffffea;
+        border: 1px solid #ddd;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        max-height: 300px;
+        overflow-y: auto;
+        z-index: 1000;
+        /* Optional: Position the list below the notification icon */
+        top: 50%; /* Adjust as needed */
+        left: 0;
+        width: 100%;
+        margin: auto;
+    }
+
+    /* Optional: Style list items */
+    #notifications-list li {
+        padding: 8px 12px;
+        height: 50px;
+    }
+
+    #notifications-list li a {
+        text-decoration: none;
+        color: #333;
+        height: 50px;
+    }
+
+    #notifications-list li a:hover {
+        background-color: #f0f0f0;
+        height: 50px;
+    }
+    #notification-icon {
+        cursor: pointer; /* Mouse pointer on hover */
+        font-size: 18px;
+        color: rgb(0, 0, 0);
+    }
+}
+#notification-icon {
+    cursor: pointer; /* Mouse pointer on hover */
+    font-size: 18px;
+    color: rgb(0, 0, 0);
+}
+
+#notifications-container {
+    position: relative; /* Required for positioning the arrow */
+}
+
+#notifications-list {
+    margin: auto;
+    position: absolute; /* Position it relative to its closest positioned ancestor */
+    top: 60%; /* Place it right below the notification icon */
+    left: auto; /* Align with the left edge of the notification icon */
+    width: 360%; /* Set a fixed width or adjust as needed */
+    max-height: 400px; /* Set a maximum height */
+    overflow-y: auto; /* Add scroll if the content exceeds max height */
+    background: #d8d8d8; /* Background color for better visibility */
+    border: 1px solid #ddd; /* Border around the list */
+    border-radius: 5px; /* Rounded corners */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Shadow for depth */
+    z-index: 2; /* Ensure it appears above other elements */
+    display: none; /* Hidden by default, shown on click */
+}
+
+#notifications-list::before {
+    content: "";
+    position: absolute;
+    top: -10px; /* Adjust this value to position the arrow correctly */
+    left: 20px; /* Align the arrow with the notification icon */
+    border-width: 10px;
+    border-style: solid;
+    border-color: transparent transparent #4e4e4e transparent; /* Arrow pointing down */
+}
+
+.notification-list {
+    list-style-type: none; /* Remove default list styling */
+    padding: 0;
+    margin: 0;
+}
+
+.notification-item {
+    padding: 10px;
+    border-bottom: 1px solid #ddd; /* Separator line between items */
+    background-color: #dadada; /* Background color for better visibility */
+}
+
+.notification-item:last-child {
+    border-bottom: none; /* No border for the last item */
+}
+
+.notification-item:hover {
+    background-color: #f5f5f5; /* Background color on hover */
+    cursor: pointer;
+}
+
+.close-btn {
+    background: none;
+    border: none;
+    font-size: 16px;
+    float: right;
+    cursor: pointer;
+}
+
+.close-btn:hover {
+    color: red;
+}
+
+    #navigate{
+        height:300px;
+  display: grid;
+  gap: 10px;
+  background-color: #585858;
+  padding: 10px;
+  grid-template-columns: auto auto auto auto;
+  height: 50px;
+  margin: auto;
+text-align: center;
+    }
+    .tooltip-button {
+    position: relative;
+    display: inline-block;
+}
+
+.tooltip-text {
+    visibility: hidden;
+    width: 120px;
+    background-color: rgb(0, 0, 0);
+    color: #ffffff;
+    text-align: center;
+    border-radius: 5px;
+    padding: 5px;
+    position: absolute;
+    z-index: 1;
+    bottom: 125%; /* Position the tooltip above the button */
+    left: 50%;
+    margin-left: -60px;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.tooltip-button:hover .tooltip-text {
+    visibility: visible;
+    opacity: 1;
+}
+</style>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+<body id="main">
+
+    <header>
+        <div class="header">
+            <h1>MEISTERHAND KRAFT STUDIO</h1>
+            <h3>Support Center</h3>
+        </div>
+  
+    </header>
+    <main class="main-container" >
+        <div class="user-section mr-4 mb-4">
+            <section id="user-profile">
+                <div class="blue-cell container">
+                    <h2 class=""><strong><i class="fa-solid fa-vcard mt-3" style="height:60px; font-size:48px; color:rgb(255, 255, 255)"></i> Profile</strong></h2>
+                </div>
+                <div class="container text-center">
+                    <img src="{{ url_for('static', filename='uploads/' + (current_user.image_path.split('/')[-1] if current_user.image_path else 'img_avatar.png')) }}" 
+                    alt="{{ current_user.username }}" 
+                    class="profile-image mb-4">
+                
+                    <div class="overlay">
+                        {% if current_user %}
+                            <a href="{{ url_for('user_profile', user_id=current_user.id) }}" class="text">View your Profile</a>
+                        {% else %}
+                            <p class="text" style="color: #000;">Please log in to view your profile.</p>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                {% if current_user %}
+                    <div class="container">
+                        <p class="ml-2 mb-1"><i class="fa-solid fa-user"></i> Name : <strong>{{ current_user.displayname }}</strong></p>
+                        <p class="ml-2 mb-1"><i class="fa-solid fa-user-secret"></i> Username : <strong>{{ current_user.username }}</strong></p>
+                        <p class="ml-2 mb-1"><i class="fa-solid fa-key"></i> Password : <strong>********</strong></p>
+                        <p class="ml-2 mb-1"><i class="fa-solid fa-building-user"></i> Department : <strong>{{ current_user.department }}</strong></p>
+
+                        <br>
+                        <div id="navigate">
+                            <!-- New My Tasks Button -->
+                            <div> 
+                                <a href="{{ url_for('my_tasks') }}" class="ml-2 mb-4 notification tooltip-button">
+                                    <i class="fa-solid fa-tasks" style="font-size:28px; color:rgb(255, 255, 255);"></i>
+                                    <span class="badge" id="tasksBadge"></span>
+                                    <span class="tooltip-text">My Tasks</span>
+                                </a>
+                            </div>                                                        <!-- New My Tasks Button -->
+                            <div id="notifications-container">
+                                <p href="#" class="ml-2 mb-4 notification tooltip-button" id="notification-icon"
+                                    data-type="{{ notification_type }}" 
+                                    data-id="{{ notification_id }}">
+                                    <i class="fa-solid fa-earth-americas" style="font-size:28px; color:rgb(255, 255, 255);"></i>
+                                    <span class="badge" id="openNotificationsCount"></span>
+                                    <span class="tooltip-text">Notification</span>
+                                </p>
+                                
+                                <div id="notifications-list">
+                                    <!-- Notifications will be dynamically populated here -->
+                                </div>
+                            </div>
+                            
+                            <div> 
+                                <a href="{{ url_for('user_profile', user_id=current_user.id) }}" class="ml-2 mb-4 notification tooltip-button">
+                                    <i class="fa-solid fa-circle-user" style="font-size:28px; color:rgb(255, 255, 255);"></i>
+                                    <span class="badge"></span>
+                                    <span class="tooltip-text">Your Profile</span>
+                                </a>
+                            </div>
+                            
+                            <div> 
+                                <a href="{{ url_for('logout') }}" class="ml-2 mb-4 notification tooltip-button">
+                                    <i class="fa fa-sign-out" style="font-size:28px; color:rgb(255, 255, 255);"></i>
+                                    <span class="badge"></span>
+                                    <span class="tooltip-text">Logout</span>
+                                </a>
+                            </div>
+                        
+
+                        </div>
+                        <br>
+                        
+                    </div>
+                {% else %}
+                    <p class="ml-2">You Need to Login First.</p>
+                    <div id="navigate" style="text-align: center;">
+                        <a href="{{ url_for('login') }}" class="ml-2 mb-4 notification tooltip-button">
+                            <i class="fa fa-sign-in" style="font-size:28px; color:rgb(255, 255, 255);"></i>
+                            <span class="badge" ></span>
+                            <span class="tooltip-text">Login</span>
+                            
+                        </a>
+                    </div>
+                {% endif %}
+            </section>
+        </div>
+        
+        <div id="loading" style="display:none;">
+            <div class="loading-overlay">
+                <div class="loading-spinner"></div>
+                <p></p>
+            </div>
+        </div>
+        <div class="content-section">
+            <section id="hero" class="border" style="background-color: #d6d6d6;">
+                <h2 class="blue-cell " style="height:100px; font-size: 50px; margin: auto;">Our Services</h2>
+                <p class="ml-2">Choose your choice below, for we know how to help you.</p>
+                <div class="content">
+                    <div  style="background-color: #f0f0f0;">
+                        <h4 class="blue-cell" style="height:60px; font-size: 30px;">IT Helpdesk Center</h4>
+                                <strong class="mt-1" style="font-size: 25px;">IT Tickets System</strong>
+                                <p class="small  mb-4 mr-4 ml-4">
+                                    A Tickets System is an application or program used to manage and track tickets or tasks, particularly in the context of customer support or service management. This system enables system administrators or teams to monitor, record, and respond to incoming tasks in a systematic and efficient manner.
+                                </p>
+                                  <div style="margin: auto;" class="text-center">
+                                        <a href="{{ url_for('add_ticket') }}" class="btn btn-success mr-4 mb-2 notification" style="font-size:15px;">
+                                            <i class="fa-solid fa-plus" style="font-size:15px;"></i> Create IT Tickets
+                                        </a>
+                                    {% if current_user and ('adminit' in current_user.roles or 'all' in current_user.roles) %}
+                                        <a href="{{ url_for('all_tickets') }}" class="btn btn-primary mr-4 mb-2 notification" style="font-size:15px;">
+                                            <i class="fa-solid fa-bars" style="font-size:15px;"></i> All Tickets
+                                            <span class="badge" id="openTicketsCount">0</span>
+                                        </a>
+                                        <a href="{{ url_for('dashboard') }}" class="btn btn-info mr-4 mb-2 notification" style="font-size:15px;">
+                                            <i class="fa-solid fa-chart-simple" style="font-size:15px;"></i> Dashboard
+                                        </a>
+                                        
+                                        <a href="{{ url_for('wall_to_wall') }}" class="btn btn-info  mr-4 mb-2 notification" style="font-size:15px;">
+                                            <i class="fa-solid fa-computer" style="font-size:15px;"></i> Wall To Wall Report
+                                        </a>
+                                        <a href="{{ url_for('activate_user') }}" class="btn btn-info   mb-2 notification" style="font-size:15px;">
+                                            <i class="fa-solid fa-computer" style="font-size:15px;"></i> Manage User
+                                        </a>
+                                    {% endif %}
+                                    </div>
+                                <br>
+                                <br>
+
+
+                                    <p><strong>Contact Information</strong></p>
+                                    <p ><strong>Email:</strong> ITHelpDesk@mksjewelry.com</p>
+                                    <p ><strong>Phone:</strong> 918-919</p>
+                    </div>
+                </div>
+                <div class=" content " style="background-color: #f0f0f0;">
+                    <h4 class="blue-cell" style="height:60px; font-size: 30px;">Maintenance Service Center</h4>
+                            <strong class="mt-1" style="font-size: 25px;">Repair Requisition System</strong>
+                            <p class="small mb-4 mr-4 ml-4">
+                                The Repair Requisition System for Maintenance is designed to efficiently manage the process of requesting repairs and maintenance for various equipment or facilities. It enables tracking of the repair status from request submission to completion, as well as reporting on repair outcomes and cost analysis for maintenance.
+                            </p>
+                            <div style="margin: auto;" class="text-center">
+                                    <a href="{{ url_for('create_work_order') }}" class="btn btn-success mr-4  mb-2 notification" style="font-size:15px;">
+                                        <i class="fa-solid fa-plus" style="font-size:15px;"></i> Create Tickets Repair Requisition
+                                    </a>
+                                    {% if current_user and ('adminmt' in current_user.roles or 'all' in current_user.roles) %}
+                                    <a href="{{ url_for('view_work_orders') }}" class="btn btn-primary  mr-4 mb-2 notification" style="font-size:15px;">
+                                        <i class="fa-solid fa-bars" style="font-size:15px;"></i> All Repair Requisition
+                                        <span class="badge" id="openOrdersCount">0</span>
+                                    </a>
+                                    <a href="{{ url_for('soon') }}" class="btn btn-info mr-4  mb-2 notification" style="font-size:15px;">
+                                        <i class="fa-solid fa-chart-simple" style="font-size:15px;"></i> Dashboard
+                                    </a>
+                                    {% endif %}
+                                
+
+                                </div>
+                                <br>
+                                <br>
+                                <p><strong class="mt-1">Contact Information</strong></p>
+
+
+                                    <p><strong>Email:</strong> ---[%{nodata}%]---</p>
+
+                                    <p><strong>Phone:</strong> ---[%{nodata}%]---</p>
+
+                </div>
+                
+                <div class=" content " style="background-color: #f0f0f0;">
+                    <h4 class="blue-cell" style="height:60px; font-size: 30px;">BI Navision Helpdesk Center</h4>
+                            <strong class="mt-1" style="font-size: 25px;">Tickets BI Navision System</strong>
+                            <p class="small mb-4 mr-4 ml-4 ">
+                                Navision System (Microsoft Dynamics NAV) is a comprehensive ERP solution that supports various business functions and processes, making it a versatile tool for managing and optimizing business operations. Its integration with the Microsoft ecosystem and scalability make it a preferred choice for many SMBs and larger enterprises looking for an efficient ERP system.
+                            </p>
+                            <div style="margin: auto;" class="text-center">
+                                    <a href="{{ url_for('create_error_order') }}" class="btn btn-success mr-4  mb-2 notification" style="font-size:15px;">
+                                        <i class="fa-solid fa-plus" style="font-size:15px;"></i> Add Tickets BI Navision
+                                    </a>
+                                    
+                                    <a href="{{ url_for('view_errors') }}" class="btn btn-primary mr-4  mb-2 notification" style="font-size:15px;">
+                                        <i class="fa-solid fa-bars" style="font-size:15px;"></i> All Error Navision In your Department
+                                        <span class="badge" id="openErrorsCount">0</span>
+                                    </a>
+                                    {% if current_user and ('adminbi' in current_user.roles or 'all' in current_user.roles) %}
+                                    <a href="{{ url_for('bi_dashboard') }}" class="btn btn-info mr-4 mb-2 notification" style="font-size:15px;">
+                                        <i class="fa-solid fa-chart-simple" style="font-size:15px;"></i> Dashboard
+                                    </a>
+                                    {% endif %}
+                                </div>
+                                <br>
+                                <br>
+                                    <p><strong class="mt-1">Contact Information</strong></p>
+                                    <p><strong>Email:</strong> ---[%{nodata}%]---</p>
+ 
+                                    <p><strong>Phone:</strong> ---[%{nodata}%]---</p>
+      
+                        
+                </div>
+
+                <div class=" content  " style="background-color: #f0f0f0; margin: auto;">
+                    <h4 class="blue-cell" style="height:60px; font-size: 30px;">Car Booking System</h4>
+                        <strong class="mt-1" style="font-size: 25px;">Bookings</strong>
+                        <p class="small mb-4 mr-4 ml-4 ">
+                            Car booking processes leverage technology to efficiently manage and schedule car rentals, catering to both general consumers and businesses seeking reliable transportation solutions.
+                        </p>            
+                        <div style="margin: auto;" class="text-center">   
+                            {% if current_user and ('adminhr' in current_user.roles or 'all' in current_user.roles) %}                        
+                                <a href="{{ url_for('overall') }}" class=" btn btn-success mr-4  mb-2 notification"style="font-size:15px "><i class="fa-solid fa-calendar-plus"style="font-size:15px"></i> Car Booking Calendar </a>
+                                <a href="{{ url_for('calendar_page') }}" class="btn btn-success mr-4 mb-2 notification" style="font-size:15px ">
+                                    <i class="fa-solid fa-calendar-alt" style="font-size:15px"></i> Messenger Booking Calendar
+                                </a>
+                                
+                                <a href="{{ url_for('cars_page') }}" class=" btn btn-info mr-4  mb-2 notification"style="font-size:15px "><i class="fa-solid fa-car"style="font-size:15px"></i>  Car Information</a>
+                                <!-- uses solid style -->
+                                <a href="{{ url_for('show_driver_form') }}" class=" btn btn-info  mr-4 mb-2 notification"style="font-size:15px "><i class="fa-solid fa-user"style="font-size:15px"></i>  Driver Information</a>
+
+                                {% else %} 
+                                <p>System Up comming</p>  
+                                {% endif %}   
+                            
+                            </div>
+                            <br>
+                            <br>
+                                <p><strong class="mt-1">Contact Information</strong></p>
+   
+                                    <p class=""><strong>Email:</strong> ---[%{nodata}%]---</p>
+                   
+                                    <p class=""><strong>Phone:</strong> ---[%{nodata}%]---</p>
+         
+                </div>
+                <div class=" content  " style="background-color: #f0f0f0; margin: auto;">
+                    <h4 class="blue-cell" style="height:60px; font-size: 30px;">Health Record System</h4>
+                        <strong class="mt-1" style="font-size: 25px;">Health Record</strong>
+                        <p class="small mb-4 mr-4 ml-4 ">
+                            Health Record System is a system used to manage and store individual health data, which can help to track and manage health data efficiently.
+                        </p>            
+                        <div style="margin: auto;" class="text-center"> 
+                            {% if current_user and ('adminhr' in current_user.roles or 'all' in current_user.roles) %}                      
+                                <a href="{{ url_for('health') }}" class=" btn btn-success mr-4  mb-2 notification"style="font-size:15px "><i class="fa-solid fa-user-nurse"style="font-size:15px"></i> Health Record </a>
+                                {% else %} 
+                                <p>System Up comming</p>  
+                                {% endif %}                           
+                            </div>
+                            <br>
+                            <br>
+                                <p><strong class="mt-1">Contact Information</strong></p>
+   
+                                    <p class=""><strong>Email:</strong> ---[%{nodata}%]---</p>
+                   
+                                    <p class=""><strong>Phone:</strong> ---[%{nodata}%]---</p>
+         
+                </div>
+            </section>
+
+           <!-- <section id="services" class=" ml-4 mt-4 border 1">
+                <h2 class="blue-cell">Our Services</h2>
+                <ul class="small">
+                    <li>Helpdesk Support</li>
+                    <li>Hardware and Software Troubleshooting</li>
+                    <li>Network Configuration</li>
+                    <li>Data Security Solutions</li>
+                    <li>Training IT Center</li>
+                </ul>
+            </section> -->
+
+        </div>
+    </main>
+
+    <footer>
+
+                
+                <p style="display: inline;">&copy; 2024 MEISTERHAND KRAFT STUDIO. All rights reserved.</p>
+                <p style="display: inline; margin-left: 10px;"><a href="{{ url_for('admin_login') }}">For admin</a>
+
+
+        
+    </footer>
+</body>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+<script>
+    function openNav() {
+        document.getElementById("mySidenav").style.width = "350px";
+        document.getElementById("main").style.marginLeft = "350px";
+        document.addEventListener('click', closeNavOnOutsideClick);
+    }
+
+    function closeNav() {
+        document.getElementById("mySidenav").style.width = "0";
+        document.getElementById("main").style.marginLeft= "0";
+        document.removeEventListener('click', closeNavOnOutsideClick);
+        window.hideLoading = hideLoading;
+        
+    }
+
+    function closeNavOnOutsideClick(event) {
+        if (!document.getElementById("mySidenav").contains(event.target) &&
+            !document.querySelector('.sidenav span').contains(event.target)) {
+            closeNav();
+        }
+    }
+
+
+    var dropdown = document.getElementsByClassName("dropdown-btn");
+    var i;
+
+    for (i = 0; i < dropdown.length; i++) {
+        dropdown[i].addEventListener("click", function() {
+            this.classList.toggle("active");
+            var dropdownContent = this.nextElementSibling;
+            if (dropdownContent.style.display === "block") {
+                dropdownContent.style.display = "none";
+            } else {
+                dropdownContent.style.display = "block";
+            }
+        });
+    }
+</script>
+<script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    const current_user = {
+        user_id: "{{ current_user.id }}"
+    };
+</script>
+
+
+
+
+<script type="text/javascript">
+    function googleTranslateElementInit() {
+        new google.translate.TranslateElement({
+            pageLanguage: 'en',
+            includedLanguages: 'th,en'
+        }, 'google_translate_element');
+    }
+    $(document).ready(function() {
+    function showLoading() {
+        $('#loading').show();
+
+        // ซ่อน loading screen หลังจาก 2 วินาที
+        setTimeout(function() {
+            $('#loading').hide();
+        }, 500); // 2000 มิลลิวินาที = 2 วินาที
+    }
+
+    function hideLoading() {
+        $('#loading').hide();
+    }
+
+    // Show loading screen on link click
+    $('a').on('click', function(e) {
+        if (!$(this).hasClass('no-loading')) {
+            showLoading();
+        }
+    });
+
+    // Show loading screen on form submit
+    $('form').on('submit', function() {
+        showLoading();
+    });
+
+    // Hide loading screen on page load
+    $(window).on('load', function() {
+        hideLoading();
+    });
+
+    // You can also manually show the loading screen if needed
+    window.showLoading = showLoading;
+    window.hideLoading = hideLoading;
+});
+
+
+    </script>
+
+</script>
+<script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.3.2/socket.io.min.js"></script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    // Request notification permission
+    if (Notification.permission !== 'granted') {
+    Notification.requestPermission().then(permission => {
+        if (permission !== 'granted') {
+            console.warn('Notification permission denied');
+        }
+    });
+}
+
+    
+    // Initialize current user
+    const current_user = {
+        user_id: "{{ current_user.id }}"
+    };
+    console.log('Current user ID:', current_user.user_id);
+    
+
+    // Connect to Socket.IO
+    var protocol = window.location.protocol === 'https:' ? 'https:' : 'http:';
+    var socket = io.connect(protocol + '//' + document.domain + ':' + location.port);
+
+    socket.on('connect', function() {
+        console.log('Connected to server');
+        // Request the list of rooms for the current user
+        socket.emit('request_rooms', { user_id: current_user.user_id });
+    });
+
+    socket.on('connect_error', function(error) {
+        console.error('Connection Error:', error);
+    });
+
+    socket.on('rooms_list', function(data) {
+        console.log('User is connected to rooms:', data.rooms);
+    });
+
+    // Handle real-time updates
+    socket.on('countticket', function(data) {
+        console.log('Ticket count:', data);
+        updateCount('openTicketsCount', data.count);
+    });
+
+    socket.on('countorder', function(data) {
+        console.log('Order count:', data);
+        updateCount('openOrdersCount', data.count);
+    });
+
+    socket.on('counterror', function(data) {
+        console.log('Error count:', data);
+        updateCount('openErrorsCount', data.count);
+    });
+
+    socket.on('count_noti', function(data) {
+        console.log('Notification count:', data);
+        updateCount('openNotificationsCount', data.count);
+    });
+
+    socket.on('notify', function(data) {
+        console.log('Notification received:', data);
+        if (Notification.permission === 'granted') {
+            new Notification(data.title, {
+                body: data.message,
+            });
+        } else {
+            alert(data.message); // Fallback if notifications are not allowed
+        }
+    });
+
+
+
+
+    // Function to update count elements
+    function updateCount(elementId, count) {
+        const countElement = document.getElementById(elementId);
+        if (countElement) {
+            if (count > 0) {
+                countElement.textContent = count;
+                countElement.style.display = 'block';
+            } else {
+                countElement.style.display = 'none';
+            }
+        } else {
+            console.error('Element with ID "' + elementId + '" not found.');
+        }
+    }
+
+    // Fetch and update counts initially
+    function fetchOpenTicketsCount() {
+        fetch('/api/open_tickets_count')
+            .then(response => response.json())
+            .then(data => updateCount('openTicketsCount', data.count))
+            .catch(error => console.error('Error fetching open tickets count:', error));
+    }
+
+    function fetchOpenWorkOrdersCount() {
+        fetch('/api/open_orders_count')
+            .then(response => response.json())
+            .then(data => updateCount('openOrdersCount', data.count))
+            .catch(error => console.error('Error fetching open work orders count:', error));
+    }
+
+    function fetchOpenErrorsCount() {
+        fetch('/api/open_errors_count')
+            .then(response => response.json())
+            .then(data => updateCount('openErrorsCount', data.count))
+            .catch(error => console.error('Error fetching open errors count:', error));
+    }
+
+    function fetchOpenNotifyCount() {
+        fetch(`/api/open_notifications_count/${current_user.user_id}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data && data.count !== undefined) {
+                    updateCount('openNotificationsCount', data.count);
+                } else {
+                    console.error('Unexpected data format:', data);
+                }
+            })
+            .catch(error => console.error('Error fetching open notifications count:', error));
+    }
+
+    // Initial fetch to display counts on page load
+    fetchOpenTicketsCount();
+    fetchOpenWorkOrdersCount();
+    fetchOpenErrorsCount();
+    fetchOpenNotifyCount();
+
+    // Handle notification click event
+    $(document).ready(function() {
+    $('#notification-icon').on('click', function(event) {
+        event.preventDefault();
+        
+        $.ajax({
+            url: `/notifications/${current_user.user_id}`, // Ensure this URL endpoint matches your backend
+            method: 'GET',
+            success: function(response) {
+                console.log('Notifications fetched:', response);
+
+                // Empty the notification list
+                $('#notifications-list').empty();
+
+                // Create an unordered list for notifications
+                const notificationsList = $('<ul></ul>').addClass('notification-list');
+
+                // Check if the response is an array and has elements
+                if (Array.isArray(response) && response.length > 0) {
+                    response.forEach(function(notification) {
+                        notificationsList.append(
+                            `<li class="notification-item" data-id="${notification.id}" data-type="${notification.notification_type}" data-notification-id="${notification.notification_id}">
+                            ${notification.message} Number: ${notification.noti_number}
+                            <button class="close-btn">&times;</button>
+                            </li>`
+                        );
+                    });
+                } else {
+                    notificationsList.append('<li>No Notification.</li>');
+                }
+
+                // Append the list to the notifications container
+                $('#notifications-list').append(notificationsList);
+
+                // Toggle visibility of the notifications list
+                $('#notifications-list').toggle();
+            },
+            error: function() {
+                
+            }
+        });
+    });
+    $(document).on('click', '.close-btn', function() {
+        $(this).closest('.notification-item').remove();
+    });
+
+});
+
+
+
+    // Handle notification item click event
+    $(document).on('click', '.notification-item', function(event) {
+        event.preventDefault();
+
+        var id = $(this).data('id');
+        var type = $(this).data('type');
+        var notificationId = $(this).data('notification-id');
+        var url = `/${type}/${notificationId}`; // URL to view details, if needed
+
+        if (!id) {
+            
+            return;
+        }
+
+        // Send a request to delete the notification
+        $.ajax({
+            url: `/api/notifications/${id}`, // Adjust URL as needed
+            method: 'DELETE',
+            success: function() {
+                // Remove the notification from the UI
+                $(`.notification-item[data-id="${id}"]`).remove();
+                // Redirect to the notification details page if necessary
+                window.location.href = url;
+            },
+            error: function() {
+                
+            }
+        });
+    });
+});
+</script>
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+            {% if pending_tickets %}
+        Swal.fire({
+            title: 'มีคำสั่งงานที่ค้างอยู่',
+            html: 'คำสั่งงานที่ค้างอยู่ในสถานะ Pending เกิน 4 ชั่วโมง<br> อยู่  {{ pending_tickets|length }} รายการ โปรดตรวจสอบที่ <a href="{{ url_for("my_tasks") }}">งานของฉัน</a>',
+            icon: 'warning',
+            confirmButtonText: 'ตกลง'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = "{{ url_for('my_tasks') }}";
+            }
+        });
+    {% endif %}
+
+    {% if pending_work_orders %}
+        Swal.fire({
+            title: 'มีคำสั่งงานที่ค้างอยู่',
+            html: 'คำสั่งงานที่ค้างอยู่ในสถานะ Pending เกิน 4 ชั่วโมง<br> อยู่  {{ pending_work_orders|length }} รายการ โปรดตรวจสอบที่ <a href="{{ url_for("my_tasks") }}">งานของฉัน</a>',
+            icon: 'warning',
+            confirmButtonText: 'ตกลง'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = "{{ url_for('my_tasks') }}";
+            }
+        });
+    {% endif %}
+
+    {% if pending_navs %}
+        Swal.fire({
+            title: 'มี navs ที่ค้างอยู่',
+            html: 'คำสั่งงานที่ค้างอยู่ในสถานะ Pending เกิน 4 ชั่วโมง<br> อยู่  {{ pending_navs|length }} รายการ โปรดตรวจสอบที่ <a href="{{ url_for("my_tasks") }}">งานของฉัน</a>',
+            icon: 'warning',
+            confirmButtonText: 'ตกลง'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = "{{ url_for('my_tasks') }}";
+            }
+        });
+    {% endif %}
+
+    });
+</script>
+
+</html>

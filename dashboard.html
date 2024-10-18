@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <style>
+/* General Styles */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f9;
+}
+
+header {
+    background-color: #333;
+    color: #fff;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+header h1 {
+    margin: 0;
+    font-size: 1.5em;
+}
+
+header a {
+    color: #fff;
+    text-decoration: none;
+    padding: 8px 15px;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+header a.btn-success {
+    background-color: #28a745;
+}
+
+header a.btn-primary {
+    background-color: #007bff;
+}
+
+header a:hover {
+    opacity: 0.8;
+}
+
+.popup {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    justify-content: center;
+    align-items: center;
+}
+
+.popup-content {
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    max-width: 600px;
+    width: 100%;
+    position: relative;
+}
+
+.popup-content h2 {
+    margin-top: 0;
+}
+
+.popup-content .close {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 1.5em;
+    cursor: pointer;
+}
+
+.checkbox-container {
+    display: flex;
+    align-items: center;
+}
+
+.checkbox-container input[type="checkbox"] {
+    margin-right: 8px;
+}
+
+form {
+    margin: 0;
+}
+
+button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    color: #fff;
+    background-color: #007bff;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+/* Table Styles */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+}
+
+table th,
+table td {
+    padding: 10px;
+    text-align: center;
+    border: 1px solid #ddd;
+}
+
+table th {
+    background-color: #f8f9fa;
+    color: #333;
+}
+
+table tfoot th {
+    background-color: #e9ecef;
+    font-weight: bold;
+}
+
+table tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+table tr:hover {
+    background-color: #e9ecef;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+    .popup-content {
+        width: 90%;
+    }
+
+    table {
+        font-size: 0.9em;
+    }
+
+    header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    header a {
+        margin-bottom: 10px;
+    }
+}
+
+    .clickable-month {
+        cursor: pointer;
+    }
+</style>
+
+    </style>
+
+    <header>
+        <h1>Dashboard</h1>
+        <a href="{{ url_for('main') }}" class="btn btn-success"> Go to Home</a>
+        <a class="btn btn-primary" id="selectMonthBtn" onclick="openMonthSelection()">Select Months</a>
+    </header>
+
+
+    <div class="main-content">
+        <!-- Display Monthly Ticket Statistics -->
+        <h2>Monthly Ticket Statistics</h2>
+        <table class="border 1">
+            <thead>
+                <tr>
+                    <th>Month</th>
+                    <th>Total Tickets</th>
+                    <th>Finished Tickets</th>
+                    <th>Finished Percentage (%)</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for month_data in monthly_data %}
+                <tr onclick="submitMonths('{{ month_data.month }}')" class="clickable-month" data-toggle="tooltip" data-placement="top" title="View details for {{ month_data.month }}">
+                    <!-- เพิ่ม class "clickable-month" และใช้ title เป็น tooltip -->
+                    <td >
+                        {{ month_data.month }}
+                    </td>
+                    <td>{{ month_data.total_tickets }}</td>
+                    <td>{{ month_data.finished_tickets }}</td>
+                    <td>{{ month_data.finished_percentage }}%</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+            <tfoot>
+                <tr>
+                    <th>Total</th>
+                    <th id="monthlyTotalTickets"></th>
+                    <th id="monthlyFinishedTickets"></th>
+                    <th id="monthlyFinishedPercentage"></th>
+                </tr>
+            </tfoot>
+        </table>
+
+        <!-- Display Monthly Average Closing Time -->
+        <h2>Monthly Average Closing Time</h2>
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>Month</th>
+                    <th>Average Closing Time (Minutes)</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for monthly_open_close_time in monthly_open_close_times %}
+                    <tr>
+                        <td>{{ monthly_open_close_time.month }}</td>
+                        <td>{{ monthly_open_close_time.avg_close_time_minutes }} </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <!-- Display Top Departments by Total Tickets and Finished Percentage -->
+        <h2>Top 3 Departments with Most Tickets</h2>
+        {% if result_departments %}
+            <table border="1">
+                <thead>
+                    <tr>
+                        <th>Department</th>
+                        <th>Total Tickets</th>
+                        <th>Finished Percentage (%)</th>
+                        <th>Unfinished Percentage (%)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for department in result_departments %}
+                        <tr>
+                            <td>{{ department[0] }}</td>
+                            <td>{{ department[1] }}</td>
+                            <td>{{ department[2] }}%</td>
+                            <td>{{ 100 - department[2] }}%</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p>No data available for departments with most tickets.</p>
+        {% endif %}
+
+        <!-- Display Department Statistics -->
+        <h2>Department Statistics</h2>
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>Department</th>
+                    <th>Total Tickets</th>
+                    <th>Finished Tickets</th>
+                    <th>Unfinished Tickets</th>
+                    <th>Finished Percentage (%)</th>
+                    <th>Unfinished Percentage (%)</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for department in department_tickets %}
+                    <tr>
+                        <td>{{ department.department }}</td>
+                        <td>{{ department.total_tickets }}</td>
+                        <td>{{ department.finished_tickets }}</td>
+                        <td>{{ department.unfinished_tickets }}</td>
+                        <td>{{ department.finished_percentage }}%</td>
+                        <td>{{ department.unfinished_percentage }}%</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+            <tfoot>
+                <tr>
+                    <th><strong>Total</strong></th>
+                    <th id="departmentTotalTickets"></th>
+                    <th id="departmentFinishedTickets"></th>
+                    <th id="departmentUnfinishedTickets"></th>
+                    <th id="departmentFinishedPercentage"></th>
+                    <th id="departmentUnfinishedPercentage"></th>
+                </tr>
+            </tfoot>
+        </table>
+
+        <!-- Display Ticket Type Statistics -->
+        <h2>Ticket Type Statistics</h2>
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>Type</th>
+                    <th>Total Tickets</th>
+                    <th>Percentage (%)</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for type_data in type_data %}
+                    <tr>
+                        <td>{{ type_data.type }}</td>
+                        <td>{{ type_data.total_cases }}</td>
+                        <td>{{ type_data.percentage }}%</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+            <tfoot>
+                <tr>
+                    <th><strong>Total</strong></th>
+                    <th id="totalTypeCases"></th>
+                    <th>100%</th>
+                </tr>
+            </tfoot>
+        </table>
+        <h2>Issue Type Distribution</h2>
+        <table>
+            <tr>
+                <th>Issue Type</th>
+                <th>Total Tickets</th>
+                <th>Percentage</th>
+            </tr>
+            {% for issuetype_info in issuetype_data %}
+            <tr>
+                <td>{{ issuetype_info['issuetype'] }}</td>
+                <td>{{ issuetype_info['total_cases'] }}</td>
+                <td>{{ issuetype_info['percentage'] }}%</td>
+            </tr>
+            {% endfor %}
+            <tr>
+                <th>Total</th>
+                <th id="totalIssueTypeCases"></th>
+                <th>100%</th>
+            </tr>
+        </table>
+    </div>
+
+    
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Calculate and display sum for Department-wise Ticket Statistics table
+            let departmentTotalTickets = 0;
+            let departmentFinishedTickets = 0;
+            let departmentUnfinishedTickets = 0;
+            let departmentFinishedPercentage = 0;
+            let departmentUnfinishedPercentage = 0;
+
+            {% for department in department_tickets %}
+                departmentTotalTickets += {{ department.total_tickets }};
+                departmentFinishedTickets += {{ department.finished_tickets }};
+                departmentUnfinishedTickets += {{ department.unfinished_tickets }};
+            {% endfor %}
+
+            if (departmentTotalTickets > 0) {
+                departmentFinishedPercentage = (departmentFinishedTickets / departmentTotalTickets) * 100;
+                departmentUnfinishedPercentage = 100 - departmentFinishedPercentage;
+            }
+
+            // Update DOM to display Department-wise Ticket Statistics sum
+            document.getElementById("departmentTotalTickets").textContent = departmentTotalTickets;
+            document.getElementById("departmentFinishedTickets").textContent = departmentFinishedTickets;
+            document.getElementById("departmentUnfinishedTickets").textContent = departmentUnfinishedTickets;
+            document.getElementById("departmentFinishedPercentage").textContent = departmentFinishedPercentage.toFixed(2) + "%";
+            document.getElementById("departmentUnfinishedPercentage").textContent = departmentUnfinishedPercentage.toFixed(2) + "%";
+
+            // Calculate and display sum for Monthly Ticket Statistics table
+            let monthlyTotalTickets = 0;
+            let monthlyFinishedTickets = 0;
+            let monthlyFinishedPercentage = 0;
+
+            {% for month_data in monthly_data %}
+                monthlyTotalTickets += {{ month_data.total_tickets }};
+                monthlyFinishedTickets += {{ month_data.finished_tickets }};
+            {% endfor %}
+
+            if (monthlyTotalTickets > 0) {
+                monthlyFinishedPercentage = (monthlyFinishedTickets / monthlyTotalTickets) * 100;
+            }
+
+            // Update DOM to display Monthly Ticket Statistics sum
+            document.getElementById("monthlyTotalTickets").textContent = monthlyTotalTickets;
+            document.getElementById("monthlyFinishedTickets").textContent = monthlyFinishedTickets;
+            document.getElementById("monthlyFinishedPercentage").textContent = monthlyFinishedPercentage.toFixed(2) + "%";
+        });
+
+        // JavaScript function to open month selection popup
+        function openMonthSelection() {
+            const popup = document.getElementById('monthSelectionPopup');
+            popup.style.display = 'block';
+        }
+
+        // JavaScript function to close month selection popup
+        function closeMonthSelection() {
+            const popup = document.getElementById('monthSelectionPopup');
+            popup.style.display = 'none';
+        }
+
+        // JavaScript function to submit selected months to dashboard
+        function submitMonths(month) {
+        const queryParams = new URLSearchParams();
+        queryParams.set('selected_month', month);
+        const dashboardUrl = '/dashboard/month?' + queryParams.toString();
+        window.location.href = dashboardUrl;
+    }
+    </script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // ค้นหาข้อมูลของ total_cases ทั้งหมดจากฟังก์ชัน type_data ที่เก็บไว้ในตัวแปร type_data
+            var typeData = {{ type_data | tojson }};
+            
+            // คำนวณผลรวมของ total_cases ทั้งหมด
+            var totalCases = typeData.reduce(function(acc, current) {
+                return acc + current.total_cases;
+            }, 0);
+            
+            // เข้าถึง element ที่มี id เป็น "totalTypeCases" และแสดงผลรวมที่คำนวณได้
+            var totalCasesElement = document.getElementById("totalTypeCases");
+            totalCasesElement.textContent = totalCases;
+        });
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const issuetypeData = {{ issuetype_data | tojson }};
+            const totalIssueTypeCasesElement = document.getElementById('totalIssueTypeCases');
+            
+            let totalIssueTypeCases = 0;
+            for (const typeInfo of issuetypeData) {
+                totalIssueTypeCases += typeInfo.total_cases;
+            }
+            
+            // เช็คว่า totalIssueTypeCases เป็น NaN หรือไม่ ถ้าเป็น NaN ให้กำหนดค่าเป็น 0
+            if (isNaN(totalIssueTypeCases)) {
+                totalIssueTypeCases = 0;
+            }
+            
+            totalIssueTypeCasesElement.textContent = totalIssueTypeCases;
+        });
+
+    </script>  
+    <!-- Bootstrap CSS -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<!-- jQuery (ถ้ายังไม่ได้เพิ่ม) -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"></script>
+  
+    <script>
+        $(document).ready(function(){
+            $('[data-toggle="tooltip"]').tooltip(); // เปิด tooltip
+        });
+    </script>
+    <footer>
+        <p>&copy; 2024 IT Support MKS. All rights reserved.</p>
+    </footer>
+</body>
+
+</html>

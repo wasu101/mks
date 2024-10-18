@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Car Booking Calendar</title>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <link href='https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/css/bootstrap.css' rel='stylesheet'>
+    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.14/index.global.min.js'></script>
+    <link href='https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.13.1/css/all.css' rel='stylesheet'>
+    <link href='https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css' rel='stylesheet'>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="icon" href="{{ url_for('static', filename='images/logo1.ico') }}" type="image/x-icon">
+    <!-- Custom CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <!-- Popper.js -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+    <!-- Bootstrap JS -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <!-- Socket.IO -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.3.2/socket.io.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link href="{{ url_for('static', filename='fontawesomefree/css/fontawesome.css') }}" rel="stylesheet" type="text/css">
+    <link href="{{ url_for('static', filename='fontawesomefree/css/brands.css') }}" rel="stylesheet" type="text/css">
+    <link href="{{ url_for('static', filename='fontawesomefree/css/solid.css') }}" rel="stylesheet" type="text/css">
+    <style>
+/* General Body Styles */
+/* General Body Styles */
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f6f9;
+    margin: 0;
+    padding: 20px;
+    height: 100vh; /* Set full height for the body */
+}
+
+/* Main Container */
+.main-container {
+    display: flex;
+    justify-content: space-between; /* Align items side by side */
+    height: calc(100% - 60px); /* Full height minus header/footer */
+    margin-top: 30px;
+}
+   /* Car Status Display */
+   .car-status {
+        font-size: 1rem;
+        background-color: #f8f9fa;
+        padding: 12px;
+        border-radius: 5px;
+        margin-bottom: 15px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .car-status strong {
+        font-weight: 600;
+        color: #333;
+    }
+
+    .status-available {
+        color: #28a745;
+    }
+
+    .status-in-use {
+        color: #dc3545;
+    }
+
+    /* Next Available Time Text */
+    .car-status p {
+        margin-top: 10px;
+        font-size: 0.9rem;
+        color: #666;
+    }
+/* Calendar Container */
+.calendar-container {
+    flex: 0 0 70%; /* 70% width */
+    margin-right: 20px; /* Space between calendar and car status */
+    padding: 20px;
+    background-color: #ffffff; /* Background for the calendar */
+    border-radius: 8px; /* Rounded corners */
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    height: 100%; /* Full height */
+}
+
+/* Car Status Container */
+.car-status-container {
+    flex: 0 0 30%; /* 30% width */
+    background-color: #ffffff;
+    border: 1px solid #dddddd;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    height: 100%; /* Full height */
+}
+
+/* Headings and Titles */
+h1 {
+    font-size: 1.5rem; /* Adjust size */
+    color: #4A90E2; /* Main theme color */
+    text-align: left; /* Align left for section headings */
+    margin-bottom: 15px;
+}
+
+/* User Info */
+.small {
+    font-size: 0.85rem;
+    color: #777;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+/* Home Button */
+.custom-tooltip-button {
+    position: relative;
+    background-color: #ff6f61; /* Button color */
+    border: none;
+    border-radius: 50%;
+    width: 48px;
+    height: 48px;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.3s ease, transform 0.2s ease; /* Add transition effects */
+}
+
+.custom-tooltip-button:hover {
+    background-color: #e66450; /* Darker on hover */
+    transform: scale(1.1); /* Slightly enlarge on hover */
+}
+
+/* Loading Message */
+#loading-message {
+    text-align: center;
+    font-size: 1rem;
+    color: #999;
+    margin-top: 20px;
+}
+
+/* Car Status Display */
+#car-status-container {
+    margin-top: 10px;
+}
+
+/* Media Queries for Responsive Design */
+@media (max-width: 768px) {
+    .main-container {
+        flex-direction: column; /* Stack items vertically on small screens */
+        height: auto; /* Allow height to adjust */
+    }
+
+    .calendar-container {
+        margin-right: 0; /* Remove margin on small screens */
+        width: 100%; /* Full width */
+        height: auto; /* Allow height to adjust */
+    }
+
+    .car-status-container {
+        margin-top: 20px; /* Add margin for spacing */
+        height: auto; /* Allow height to adjust */
+    }
+
+    .custom-tooltip-button {
+        width: 40px;
+        height: 40px; /* Adjust button size */
+    }
+}
+
+    </style>
+    
+    
+    
+</head>
+<body>
+    
+    <p class="small mb-1">You are logged in as <strong>{{ current_user.displayname }}</strong> from <strong>{{ current_user.department }}</strong>.</p>
+    <h1 class="text-center" style="margin: auto; margin-bottom: 20px;">Car Booking Calendar</h1>
+    <div class="chat-window chat-window d-flex justify-content-end mt-4">
+        <form action="{{ url_for('main') }}">
+            <button type="submit" class="btn btn-secondary custom-tooltip-button" data-tooltip="Go to Home">
+                <i class="fa fa-home mt-1" style="font-size:28px;color:rgb(255, 255, 255)"></i>
+            </button>
+        </form>
+    </div>
+    <div class="main-container">
+        <div class="calendar-container" id="calendar"></div>
+        <div class="car-status-container">
+            <h1>All Car Status</h1>
+            <p id="loading-message">Loading...</p>
+            <div id="car-status-container"></div>
+        </div>
+    </div>
+    
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    var calendarEl = document.getElementById('calendar');
+    var currentUserRoles = '{{ current_user.roles }}'.split(','); // Assuming you pass the current user's roles as a comma-separated string
+
+    var calendar = new FullCalendar.Calendar(calendarEl, {
+        initialView: 'dayGridMonth',
+        selectable: true,
+        themeSystem: 'bootstrap5',
+        events: function(fetchInfo, successCallback, failureCallback) {
+            fetch('/api/bookings')
+                .then(response => response.json())
+                .then(events => {
+                    // Modify events with colors if needed
+                    events = events.map(event => {
+                        // Set custom colors based on event properties or conditions
+                        event.backgroundColor = event.color || '#3788d8'; // Default color or custom color from event data
+                        event.borderColor = event.color || '#3788d8';
+                        event.textColor = '#ffffff'; // Example text color
+                        return event;
+                    });
+                    successCallback(events);
+                })
+                .catch(error => failureCallback(error));
+        },
+        timeZone: 'Asia/Bangkok',
+
+        dateClick: function(info) {
+            var currentView = calendar.view.type;
+            var clickedDate = info.dateStr;
+            var now = new Date().toISOString().slice(0, 10);
+
+            if (currentView === 'dayGridMonth') {
+                if (!currentUserRoles.includes('admincbk') && !currentUserRoles.includes('all') && clickedDate < now) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'You cannot book a date in the past.',
+                        allowOutsideClick: false,
+                        allowEscapeKey: false
+                    });
+                    return;
+                }
+                window.location.href = '/booking?start=' + clickedDate;
+            } else {
+                return;
+            }
+        },
+        select: function(info) {
+            var currentView = calendar.view.type;
+            var startDate = info.startStr;
+            var endDate = info.endStr;
+            var now = new Date().toISOString().slice(0, 10);
+
+            if (currentView === 'dayGridMonth') {
+                if (!currentUserRoles.includes('admincbk') && !currentUserRoles.includes('all') && startDate < now) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'You cannot book a date in the past.',
+                        allowOutsideClick: false,
+                        allowEscapeKey: false
+                    });
+                    return;
+                }
+                window.location.href = '/booking?start=' + startDate + '&end=' + endDate;
+            } else {
+                return;
+            }
+        },
+        eventClick: function(info) {
+            var event = info.event.extendedProps;
+
+            Swal.fire({
+                title: 'Booking Details',
+                html: `
+                    <p><strong>Name:</strong> ${event.name}</p>
+                    <p><strong>Email:</strong> ${event.email}</p>
+                    <p><strong>Department:</strong> ${event.department}</p>
+                    <p><strong>Car Type:</strong> ${event.car_type}</p>
+                    <p><strong>Driver By:</strong> ${event.rider_name}</p>
+                    <p><strong>Time:</strong> ${event.display1}</p>
+                    <p><strong>Duration:</strong> ${event.duration2}</p>
+                    <p><strong>Description:</strong> ${event.description}</p>
+                    <p><strong>Status:</strong> ${event.status}</p>
+                    <p><strong>Destination:</strong> ${event.destination}</p>
+                    ${event.status === 'Completed' ? `<p><strong>Real time end:</strong> ${event.driver_endtime}</p>` : ''}
+                `,
+                icon: 'info',
+                confirmButtonText: 'OK'
+            });
+        }
+    });
+    calendar.render();
+
+    var currentDate = new Date().toISOString().slice(0, 10);
+fetch('/api/bookings?date=' + currentDate)
+    .then(response => response.json())
+    .then(bookings => {
+        fetch('/api/cars')
+            .then(response => response.json())
+            .then(cars => {
+                var carStatusContainer = document.getElementById('car-status-container');
+                var loadingMessage = document.getElementById('loading-message');
+                if (loadingMessage) {
+                    loadingMessage.remove();
+                }
+                carStatusContainer.innerHTML = '';
+
+                cars.cars.forEach(car => {
+                    // Set default car status based on availability
+                    var carStatus = car.is_available ? 'Available' : 'Not Available';
+                    var nextAvailableTime = null;
+                    var inUseBy = '';
+
+                    bookings.forEach(booking => {
+                        if (booking.car_type === car.car_name && booking.status !== 'Completed') {
+                            var now = new Date();
+                            var startDateTime = new Date(booking.start);
+                            var endDateTime = new Date(booking.end);
+
+                            // Check if current time is within the booking period
+                            if (now >= startDateTime && now < endDateTime) {
+                                carStatus = 'In Use';
+                                inUseBy = booking.name;
+                                if (nextAvailableTime === null || endDateTime > nextAvailableTime) {
+                                    nextAvailableTime = endDateTime;
+                                }
+                            } else if (now < startDateTime && (nextAvailableTime === null || startDateTime < nextAvailableTime)) {
+                                nextAvailableTime = startDateTime;
+                            }
+                        }
+                    });
+
+                    var statusClass = carStatus === 'Available' ? 'status-available' : 'status-in-use';
+
+                    var carStatusHTML = `
+                        <div class="car-status">
+                            <strong>Status ${car.car_name}:</strong> 
+                            <span id="status-${car.car_name.replace(/\s+/g, '-')}" class="${statusClass}" style="font-weight: bold;">${carStatus}</span>
+                            ${carStatus === 'In Use' ? ` (${inUseBy} Using)` : ''}
+                            <p id="next-available-time-${car.car_name.replace(/\s+/g, '-')}"></p>
+                        </div>
+                    `;
+
+                    carStatusContainer.innerHTML += carStatusHTML;
+
+                    // Update next available time if applicable
+                    var nextAvailableTimeElement = document.getElementById(`next-available-time-${car.car_name.replace(/\s+/g, '-')}`);
+                        if (nextAvailableTime !== null && nextAvailableTimeElement) {
+                            var diffMs = nextAvailableTime.getTime() - new Date().getTime();
+                            var diffHours = Math.floor(diffMs / (1000 * 60 * 60));
+                            var diffMins = Math.round(((diffMs % 86400000) % 3600000) / 60000);
+                            var displayText = carStatus === 'Available'
+                                ? `Next que in: ${formatTime(nextAvailableTime)} (${diffHours} hours ${diffMins} minutes)`
+                                : `Next available at: ${formatTime(nextAvailableTime)} (${diffHours} hours ${diffMins} minutes)`;
+                            nextAvailableTimeElement.textContent = displayText;
+                        } else if (carStatus === 'Not Available' && nextAvailableTimeElement) {
+                            // If the car is "Not Available" and no next available time is provided
+                            nextAvailableTimeElement.textContent = 'All day';
+                        } else if (nextAvailableTimeElement) {
+                            // Default case when the car is available but no future bookings
+                            nextAvailableTimeElement.textContent = 'Currently available';
+                        }
+
+                });
+            })
+            .catch(error => {
+                console.error('Error fetching car data:', error);
+            });
+    })
+    .catch(error => {
+        console.error('Error fetching bookings:', error);
+    });
+
+// Helper function to format time
+function formatTime(date) {
+    var hours = date.getHours();
+    var minutes = date.getMinutes();
+    var ampm = hours >= 12 ? 'PM' : 'AM';
+    hours = hours % 12;
+    hours = hours ? hours : 12;
+    minutes = minutes < 10 ? '0' + minutes : minutes;
+    var strTime = hours + ':' + minutes + ' ' + ampm;
+    return date.getMonth() + 1 + "/" + date.getDate() + "/" + date.getFullYear() + " " + strTime;
+}
+
+});
+
+</script>
+
+</html>

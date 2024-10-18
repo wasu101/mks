@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Tickets TH</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        table {
+            font-family: 'Thonburi', sans-serif; /* ใช้ฟอนต์ Thonburi สำหรับเว็บไซต์ */
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .blue-cell{
+            font-family: 'Thonburi', sans-serif; /* ใช้ฟอนต์ Thonburi สำหรับเว็บไซต์ */
+            background-color: rgb(0, 123, 255);
+        }
+        .white-cell  {
+            font-family: 'Thonburi', sans-serif; /* ใช้ฟอนต์ Thonburi สำหรับเว็บไซต์ */
+            background-color: rgb(255, 255, 255);
+        }
+        th{
+            font-family: 'Thonburi', sans-serif; /* ใช้ฟอนต์ Thonburi สำหรับเว็บไซต์ */
+            text-align: center;
+        }
+        td {
+            font-family: 'Thonburi', sans-serif; /* ใช้ฟอนต์ Thonburi สำหรับเว็บไซต์ */
+            padding: 8px;
+            text-align: center;
+        }            
+        .chat-window {
+            font-family: 'Thonburi', sans-serif; /* ใช้ฟอนต์ Thonburi สำหรับเว็บไซต์ */
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 150px;
+            height: 50%;
+            background-color: #0080ff00;
+            overflow-y: auto;
+            padding: 10px;
+        }
+        textarea {
+            font-family: 'Thonburi', sans-serif; /* ใช้ฟอนต์ Thonburi สำหรับเว็บไซต์ */
+            border: 2px solid #969696;
+        }
+
+        .ticket {
+            font-family: 'Thonburi', sans-serif; /* ใช้ฟอนต์ Thonburi สำหรับเว็บไซต์ */
+            font-weight: bold;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* เพิ่มเงาของขอบ */
+            padding: 10px; /* ระยะห่างภายในขอบ */
+            border-radius: 5px; /* ทำให้มุมเป็นมุมโค้ง 10px */
+        }
+        body {
+            font-family: 'Thonburi', sans-serif; /* ใช้ฟอนต์ Thonburi สำหรับเว็บไซต์ */
+        }
+        html,
+        body {
+            height: 100%;
+            width: 100%;
+            margin: 0;
+            background-color: #f0f0f0;
+            
+        }
+        .black-text {
+            font-family: 'Thonburi', sans-serif; /* ใช้ฟอนต์ Thonburi สำหรับเว็บไซต์ */
+            color: rgb(255, 255, 255);
+            font-weight: bold;
+            font-size: 32px;
+        }
+        .green-text {
+            font-family: 'Thonburi', sans-serif; /* ใช้ฟอนต์ Thonburi สำหรับเว็บไซต์ */
+            color: green;
+            font-weight: bold;
+            font-size: 16px;
+        }
+        .red-text {
+            font-family: 'Thonburi', sans-serif; /* ใช้ฟอนต์ Thonburi สำหรับเว็บไซต์ */
+            color: red;
+            font-weight: bold;
+            font-size: 16px;
+        }
+        .banner {
+            font-family: 'Thonburi', sans-serif; /* ใช้ฟอนต์ Thonburi สำหรับเว็บไซต์ */
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 22%;
+            z-index: 9999;
+            background-color: #ffffff;
+            padding: 10px;
+        }
+        .container {
+            font-family: 'Thonburi', sans-serif; /* ใช้ฟอนต์ Thonburi สำหรับเว็บไซต์ */
+            margin-top: 150px;
+        }
+    </style>
+</head>
+
+<body>
+    <table>
+        <tr>
+            <th>
+                <!-- Banner -->
+                <div class="banner d-flex justify-content-end">
+                    <table>
+                        <tr>
+                            <th>
+                                <h1 class="text-center"><a href="{{ url_for('th_all_tickets') }}" style="font-size: 52px;">===========Tickets ทั้งหมด===========</a></h1>
+
+
+                                <div class="chat-window d-flex justify-content-end ">
+                                    
+                                    
+                                            <form action="/th_all_tickets" method="get" class="mt-2 ml-2">
+                                                <button type="submit" class="btn btn-link" onclick="changeLanguage('th')">TH</button>
+                                            </form>
+                                            <form action="/all_tickets" method="get" class="mt-2 ml-2">
+                                                <button type="submit" class="btn btn-link" onclick="changeLanguage('en')">EN</button>
+                                            </form>
+                                </div>
+                                <div class="d-flex justify-content-end">
+                                    <!-- Search form -->
+                                    <form action="/search" method="get" class="mt-2 ml-2">
+                                        <label for="search_date" class="mr-2">ค้นหาโดยวันที่:</label>
+                                        <input type="date" id="search_date" name="search_date" class="mr-2">
+                                        <button type="submit" class="btn btn-primary">ค้นหา</button>
+                                    </form>
+                                    <!-- Add Ticket button -->
+                                    <form action="/home" class=" ml-2 mt-2">
+                                        <button type="submit" class="btn btn-success">เพิ่ม Tickets</button>
+                                    </form>
+                                  
+                                </div>
+                            </th>
+                        </tr>
+                    </table>
+                </div>
+            </th>
+        </tr>
+        <tr>
+            <td>
+                <div class="container">
+                    <div class="row">
+                        {% for ticket in tickets %}
+                        <div class="col-md-6">
+                            <div class="ticket p-1 blue-cell">
+                                <h2 class="black-text">หมายเลข Ticket {{ ticket.ticket_number }}</h2>
+                            </div>
+                            <div class="ticket  p-1 mb-3 white-cell">
+                                <div class="dropdown mt-1">
+                                    <div class="styled-dropdown ">
+                                        <label for="urgencyType_{{ ticket.id }}">ประเภทความสำคัญ: </label>
+                                        <select id="urgencyType_{{ ticket.id }}" name="urgencyType" onchange="setUrgency({{ ticket.id }}, this.value)">
+                                            <option value="" {% if ticket.type == '' %} selected {% endif %}>--เลือกประเภท--</option>
+                                            <option value="low" {% if ticket.type == 'low' %} selected {% endif %}>ต่ำ</option>
+                                            <option value="middle" {% if ticket.type == 'middle' %} selected {% endif %}>ปานกลาง</option>
+                                            <option value="high" {% if ticket.type == 'high' %} selected {% endif %}>สูง</option>
+                                        </select> 
+                                    </div>  
+                                </div> 
+                                <h5 class="text-primary">ชื่อผู้ร้องขอ : {{ ticket.title }} </h5>
+                                <p class=" small mb-1 {% if ticket.status == 'open' %}red-text{% else %}green-text{% endif %}">สถานะ: {{ ticket.status }}</p>
+                                <p class="small mb-1">ปัญหาที่เจอ : {{ ticket.description }}</p>
+                                <p class=" small mb-1">สร้างเมื่อ : {{ ticket.created_at }}</p>
+                                {% if ticket.status != 'open' %}
+                                <p class="small text-muted mt-2">ปิดงานแล้วเมื่อ : {{ ticket.close_at }}</p>
+                                {% endif %}
+                                <!-- Add link to ticket detail page -->
+                                <a href="/ticket/{{ ticket.id }}" class="btn btn-primary mt-2">ดูรายละเอียด</a>
+                                <p></p>
+
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </td>
+        </tr>
+    </table>
+
+    <!-- JavaScript for refreshing page after form submission -->
+    <script>
+        function sendChat(ticketId) {
+            var messageInput = document.getElementById("chat_" + ticketId);
+            var message = messageInput.value.trim();
+
+            if (message !== '') {
+                var data = {
+                    "ticket_id": ticketId,
+                    "message": message
+                };
+                console.log("Sending chat message:", data);
+
+                fetch("/save_chat", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(data)
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.success) {
+                        // Clear input field after sending
+                        messageInput.value = '';
+                        // Handle success (if needed)
+                    } else {
+                        throw new Error('Failed to send message');
+                    }
+                })
+                .catch(error => {
+                    console.error("Error:", error);
+                    alert("An error occurred while sending the message.");
+                });
+            } else {
+                alert("Please enter a message.");
+            }
+
+            // Prevent the form from submitting and refreshing the page
+            event.preventDefault();
+        }
+
+        function closeTicket(ticketId) {
+            var now = new Date();
+            var reason = document.getElementById("reason_" + ticketId).value;
+            var formData = new FormData();
+            formData.append("reason", reason);
+            formData.append("close_at", now.toISOString()); // Convert to ISO string format
+
+            fetch("/status/" + ticketId + "/submit", {
+                method: "POST",
+                body: formData
+            }).then(function(response) {
+                // Handle response
+                // May involve page reloading or other data updates as needed
+
+                // Hide the form and save button
+                var formElement = document.getElementById("closeForm_" + ticketId);
+                formElement.style.display = "none";
+            }).catch(function(error) {
+                console.error("Error:", error);
+            });
+
+            // Prevent the form from submitting and refreshing the page
+            event.preventDefault();
+        }
+
+        function updateChatLog(ticketId) {
+            fetch('/update_chat/' + ticketId)
+                .then(response => response.json())
+                .then(data => {
+                    // Use the data received from the request
+                    if (data.success) {
+                        // Update chat log with received data
+                        document.getElementById('chat_log_' + ticketId).innerHTML = data.updatedChatLog;
+                    } else {
+                        console.error('Failed to update chat log');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error updating chat log:', error);
+                });
+        }
+    </script>
+    <script>
+        function changeLanguage(lang) {
+            // ส่งค่าภาษาไปยังหน้าเว็บที่ต้องการ
+            window.location.href = `/${lang}/all_tickets`; // เปลี่ยน URL ตามที่ต้องการ
+        }
+    </script>
+
+    <script src="//cdnjs.cloudflare.com/ajax/libs/socket.io/4.3.2/socket.io.js"></script>
+    <script type="text/javascript">
+        var socket = io.connect('http://' + document.domain + ':' + location.port);
+
+        socket.on('connect', function() {
+            console.log('Connected to server');
+        });
+
+        socket.on('disconnect', function() {
+            console.log('Disconnected from server');
+        });
+
+        socket.on('update_chat_log', function(data) {
+            var ticketId = data.ticket_id;
+            var updatedChatLog = data.updatedChatLog;
+
+            // Update chat log section for the specific ticket
+            var chatLogDiv = document.getElementById('chat_log_' + ticketId);
+            if (chatLogDiv) {
+                chatLogDiv.innerHTML = updatedChatLog;
+            }
+        });
+        socket.on('ticket_added', function(data) {
+            console.log('New ticket added:', data);
+            // ปรับปรุงหน้าเว็บเพื่อแสดงข้อมูล ticket ใหม่ที่ถูกเพิ่ม
+        });
+
+        socket.on('ticket_deleted', function(data) {
+            console.log('Ticket deleted:', data);
+            // ปรับปรุงหน้าเว็บเพื่อลบข้อมูล ticket ที่ถูกลบ
+        });
+        function changeLanguage(lang) {
+        // ส่งค่าภาษาไปยังหน้าเว็บที่ต้องการ
+            window.location.href = `/${lang}/all_tickets`; // เปลี่ยน URL ตามที่ต้องการ
+         }
+    </script>
+    <script>
+        $(document).ready(function() {
+            // เมื่อได้รับการตอบกลับจากการเพิ่ม ticket สำเร็จ
+            socket.on('new_ticket', function(data) {
+                if (data.success) {
+                    // รีเฟรชหน้าเว็บหลังจากเพิ่ม ticket เสร็จสิ้น
+                    location.reload();
+                }
+            });
+        });
+    </script>
+    <script>
+        function setUrgency(ticketId, urgencyType) {
+            const data = {
+                ticket_id: ticketId,
+                type: urgencyType
+            };
+    
+            fetch(`/set_urgency/${ticketId}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(result => {
+                console.log(result);  // Log the result for debugging
+                alert('Urgency updated successfully');
+    
+                // Update the displayed urgency type (if needed)
+                const updatedUrgencyElement = document.getElementById(`updatedUrgency${ticketId}`);
+                if (updatedUrgencyElement) {
+                    updatedUrgencyElement.textContent = urgencyType;  // Update the displayed urgency type
+                }
+            })
+            .catch(error => {
+                console.error('Error updating urgency:', error);
+                alert('Failed to update urgency');
+            });
+        }
+        function refreshPage() {
+            location.reload(); // รีเฟรชหน้าเว็บ
+        }
+
+        // รีเฟรชหน้าเว็บทุก ๆ 3 นาที
+        setInterval(refreshPage, 300000); // 180000 มิลลิวินาที = 3 นาที
+    </script>
+    
+</body>
+
+</html>

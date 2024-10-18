@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Send Line Notification</title>
+</head>
+<body>
+    <h1>Send Line Notification</h1>
+    <form id="sendLineForm">
+        <label for="job_details">Job Details:</label>
+        <textarea id="job_details" name="job_details"></textarea><br><br>
+        <button type="button" onclick="sendNotification()">Send Notification</button>
+    </form>
+
+    <script>
+        function sendNotification() {
+            const job_details = document.getElementById('job_details').value;
+
+            fetch('/send_job_notification', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    job_details: job_details
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Success:', data);
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+        }
+    </script>
+</body>
+</html>

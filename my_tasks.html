@@ -1,0 +1,966 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Tickets</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='mytask_css.css') }}">
+    <head>
+        <!-- Font Awesome CDN -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    </head>
+    
+    <style>
+        section {
+            display: none; /* Hide sections by default */
+            margin: 20px 0;
+        }
+        .active {
+            font-weight: bold; /* Highlight the active tab */
+        }
+        .toggle-button {
+            margin: 5px;
+            padding: 10px;
+            background-color: #007bff; /* Example color */
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        .toggle-button:hover {
+            background-color: #0056b3; /* Darker shade on hover */
+        }
+
+        .ticket-section {
+            margin-top: 20px;
+            border: 1px solid #ccc;
+            padding: 10px;
+            display: none; /* Start hidden */
+        }
+
+    </style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Event delegation for table row clicks
+        document.querySelectorAll('table tbody').forEach(function (tbody) {
+            tbody.addEventListener('click', function (event) {
+                var row = event.target.closest('tr');
+                if (!row) return; // Ensure a row was clicked
+
+                var rowType = row.getAttribute('data-type');
+                var rowId = row.getAttribute('data-id');
+                var url = '';
+
+                // Determine URL based on row type
+                if (rowType === 'ticket') {
+                    url = '/ticket/' + rowId;
+                } else if (rowType === 'work_order') {
+                    url = '/work_order_detail/' + rowId;
+                } else if (rowType === 'nav') {
+                    url = '/error_detail/' + rowId;
+                }
+
+                if (url) {
+                    window.location.href = url;
+                }
+            });
+        });
+
+        // Toggle section visibility
+        document.querySelectorAll('.toggle-button').forEach(function (button) {
+            button.addEventListener('click', function () {
+                var sectionId = this.getAttribute('data-section');
+                var section = document.getElementById(sectionId);
+
+                // Toggle visibility of the clicked section
+                var isVisible = section.style.display === "block";
+                section.style.display = isVisible ? "none" : "block";
+                this.innerHTML = isVisible ? "&#9660; " + this.textContent.slice(2) : "&#9650; " + this.textContent.slice(2);
+
+                // Hide other sections
+                document.querySelectorAll('.ticket-section').forEach(function (sec) {
+                    if (sec !== section) {
+                        sec.style.display = "none";
+                        var btn = document.querySelector(`.toggle-button[data-section="${sec.id}"]`);
+                        if (btn) {
+                            btn.innerHTML = "&#9660; " + btn.textContent.slice(2);
+                        }
+                    }
+                });
+
+                // Activate the "All" tab for the respective section
+                if (sectionId === 'tickets') {
+                    toggleTab('it-all');
+                } else if (sectionId === 'nav-errors') {
+                    toggleTab('nav-all');
+                } else if (sectionId === 'work-orders') {
+                    toggleTab('work-all');
+                }
+            });
+        });
+
+        // Function to toggle tabs
+        window.toggleTab = function (tabId) {
+            // Hide all tab contents
+            document.querySelectorAll('.tab-content').forEach(function (tabContent) {
+                tabContent.style.display = 'none';
+            });
+
+            // Remove active class from all tab links
+            document.querySelectorAll('.tab-links a').forEach(function (tabLink) {
+                tabLink.classList.remove('active');
+            });
+
+            // Show the selected tab and add active class
+            var selectedTab = document.getElementById(tabId);
+            if (selectedTab) {
+                selectedTab.style.display = 'block';
+                document.querySelector(`.tab-links a[data-tab="${tabId}"]`).classList.add('active');
+            }
+        };
+    });
+</script>
+
+</head>
+<body>
+    <header>
+        <h1>My Tickets</h1>
+        <p>Hi {{ user_display_name }}</p>
+        <button onclick="window.location.href='{{ url_for('main') }}'">Back to Main</button>
+    </header>
+
+    <main>
+        <h1>This is All your Ticket in MKS Support Center just click to see detail of  <strong> {{ user_display_name }} </strong></h1>
+        <!-- Tickets Section -->
+         <h4 class="small"> นี่คืองานทั้งหมดของคุณในระบบ MKS Support Center คลิ๊กที่ปุ่มด่านล่างเพื่อดูรายละเอียดของคุณ <strong> {{ user_display_name }} </strong></h4>
+        <button class="toggle-button" data-section="tickets">
+            <i class="fas fa-ticket-alt"></i>  your Tickets of IT Helpdesk Center
+        </button>
+        <button class="toggle-button" data-section="nav-errors">
+            <i class="fas fa-life-ring"></i> your Tickets of BI Navision Helpdesk Center
+        </button>
+        <button class="toggle-button" data-section="work-orders">
+            <i class="fas fa-tools"></i> your Tickets of Maintenance Service Center
+        </button>
+
+        {% if user_role == 'adminmt' %}
+        
+        {% if work_orders|selectattr('status', 'equalto', 'Pending')|list|length > 0 %}
+        <h2>Pending Status of Repair Requisition</h2>
+        <table>
+                <thead>
+                    <tr>
+                        <th>Document ID</th>
+                        <th>Description</th>
+                        <th>Solution</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for work_order in work_orders if work_order['status'] == 'Pending' %}
+                        <tr data-type="work_order" data-id="{{ work_order['id'] }}">
+                            <td>{{ work_order['order_number'] }}</td>
+                            <td>{{ work_order['description'] }}</td>
+                            <td>{{ work_order['reason'] }}</td>
+                            <td>{{ work_order['status'] }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% endif %}
+        
+        
+        {% if work_orders|selectattr('responsible', 'equalto', user_display_name)|selectattr('status', 'in', ['Wait for Requester', 'Wait for Admin', 'In Progress'])|list|length > 0 %}
+        <h2>Assigned Active Ticket Repair Requisition</h2>
+        <table>
+                <thead>
+                    <tr>
+                        <th>Document ID</th>
+                        <th>Description</th>
+                        <th>Solution</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for work_order in work_orders if work_order['responsible'] == user_display_name and work_order['status'] in ['Wait for Requester', 'Wait for Admin', 'In Progress'] %}
+                        <tr data-type="work_order" data-id="{{ work_order['id'] }}">
+                            <td>{{ work_order['order_number'] }}</td>
+                            <td>{{ work_order['description'] }}</td>
+                            <td>{{ work_order['reason'] }}</td>
+                            <td>{{ work_order['status'] }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% endif %}
+        
+       
+        {% if work_orders|selectattr('responsible', 'equalto', user_display_name)|selectattr('status', 'ne', 'Finish')|list|length > 0 %}
+        <h2>Assigned Repair Requisition</h2>
+        <table>
+                <thead>
+                    <tr>
+                        <th>Document ID</th>
+                        <th>Description</th>
+                        <th>Solution</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for work_order in work_orders if work_order['responsible'] == user_display_name and work_order['status'] != 'Finish' %}
+                        <tr data-type="work_order" data-id="{{ work_order['id'] }}">
+                            <td>{{ work_order['order_number'] }}</td>
+                            <td>{{ work_order['description'] }}</td>
+                            <td>{{ work_order['reason'] }}</td>
+                            <td>{{ work_order['status'] }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% endif %}
+    {% endif %}
+    
+    {% if user_role == 'adminbi' %}
+        
+        {% if navs|selectattr('status', 'equalto', 'Pending')|list|length > 0 %}
+        <h2>Pending BI Tickets</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Document ID</th>
+                        <th>Description</th>
+                        <th>Solution</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for nav in navs if nav['status'] == 'Pending' %}
+                        <tr data-type="nav" data-id="{{ nav['id'] }}">
+                            <td>{{ nav['error_number'] }}</td>
+                            <td>{{ nav['description'] }}</td>
+                            <td>{{ nav['reason'] }}</td>
+                            <td>{{ nav['status'] }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% endif %}
+    
+        
+        {% if navs|selectattr('job_by', 'equalto', user_display_name)|selectattr('status', 'in', ['Wait for Requester', 'Wait for Admin', 'In Progress'])|list|length > 0 %}
+        <h2>Assigned Active BI Tickets</h2>
+        <table>
+                <thead>
+                    <tr>
+                        <th>Document ID</th>
+                        <th>Description</th>
+                        <th>Solution</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for nav in navs if nav['job_by'] == user_display_name and nav['status'] in ['Wait for Requester', 'Wait for Admin', 'In Progress'] %}
+                        <tr data-type="nav" data-id="{{ nav['id'] }}">
+                            <td>{{ nav['error_number'] }}</td>
+                            <td>{{ nav['description'] }}</td>
+                            <td>{{ nav['reason'] }}</td>
+                            <td>{{ nav['status'] }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% endif %}            
+    
+        
+        {% if navs|selectattr('job_by', 'equalto', user_display_name)|selectattr('status', 'ne', 'Finish')|list|length > 0 %}
+        <h2>Assigned BI Tickets</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Document ID</th>
+                        <th>Description</th>
+                        <th>Solution</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for nav in navs if nav['job_by'] == user_display_name and nav['status'] != 'Finish' %}
+                        <tr data-type="nav" data-id="{{ nav['id'] }}">
+                            <td>{{ nav['error_number'] }}</td>
+                            <td>{{ nav['description'] }}</td>
+                            <td>{{ nav['reason'] }}</td>
+                            <td>{{ nav['status'] }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% endif %}
+    {% endif %}
+    
+    {% if user_role == 'adminit' or user_role == 'all' %}
+        
+        {% set pending_tickets = tickets | selectattr('status', 'equalto', 'open') | list %}
+        
+        {% if pending_tickets | length > 0 %}
+            <h2>Pending Tickets</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Document ID</th>
+                        <th>Description</th>
+                        <th>Solution</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for ticket in pending_tickets %}
+                        <tr data-type="ticket" data-id="{{ ticket['id'] }}">
+                            <td>{{ ticket['ticket_number'] }}</td>
+                            <td>{{ ticket['description'] }}</td>
+                            <td>{{ ticket['reason'] }}</td>
+                            <td>{{ ticket['status'] }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% endif %}
+    {% endif %}
+
+    
+
+    <div id="tickets" class="ticket-section" style="display: none;">
+        <h2>IT Helpdesk Center</h2>
+        <a href="{{ url_for('add_ticket') }}" style="font-size:15px;">Create IT Tickets</a>
+    
+        <!-- Tab links -->
+        <div class="tab-links">
+            <a href="javascript:void(0);" data-tab="it-all" class="active" onclick="toggleTab('it-all')">All</a>
+            <a href="javascript:void(0);" data-tab="it-pending" onclick="toggleTab('it-pending')">Pending</a>
+            <a href="javascript:void(0);" data-tab="it-in-progress" onclick="toggleTab('it-in-progress')">In Progress</a>
+            <a href="javascript:void(0);" data-tab="it-finish" onclick="toggleTab('it-finish')">Finish</a>
+        </div>
+    
+        <!-- All Tickets Tab -->
+        <div id="it-all" class="tab-content">
+            <form id="filter-form-it-all">
+                <div>
+                    <label for="month-select-all">Select Month:</label>
+                    <select id="month-select-all" name="month">
+                        <option value="all">All</option>
+                        {% for month in months %}
+                            <option value="{{ month }}">{{ month_name[month|int - 1] }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div>
+                    <label for="year-select-all">Select Year:</label>
+                    <select id="year-select-all" name="year">
+                        {% for year in years %}
+                            <option value="{{ year }}">{{ year }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                
+                
+            </form>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Ticket Number</th>
+                        <th>Name Requester</th>
+                        <th>Department</th>
+                        <th>Description</th>
+                        <th>Solution</th>
+                        <th>Create On</th>
+                        <th>Finish On</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody id="all-tickets">
+                    {% if created_tickets %}
+                    {% for ticket in created_tickets %}
+                        {% if ticket.status == 'Finish' %}
+                            <tr  data-created="{{ ticket['created_at'] }}">
+                        {% else %}
+                            <tr data-type="ticket" data-id="{{ ticket['id'] }}" data-created="{{ ticket['created_at'] }}">
+                        {% endif %}        
+                            <td>{{ ticket['ticket_number'] }}</td>
+                            <td>{{ ticket['title'] }}</td>
+                            <td>{{ ticket['department'] }}</td>
+                            <td>{{ ticket['description'] }}</td>
+                            <td>{{ ticket['reason'] }}</td>
+                            <td>{{ ticket['created_at'] }}</td>
+                            <td>{{ ticket['close_at'] if ticket['close_at'] is not none else 'N/A' }}</td>
+                            <td>{{ ticket['status'] }}</td>
+                        </tr>
+                    {% endfor %}
+                    {% else %}
+                    <tr><td colspan="6">No data available</td></tr>
+                {% endif %}
+                </tbody>
+                
+            </table>
+        </div>
+    
+        <!-- Pending Tickets Tab -->
+        <div id="it-pending" class="tab-content" style="display: none;">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Ticket Number</th>
+                        <th>Description</th>
+                        <th>Create On</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody id="pending-tickets">
+                    {% if created_tickets %}
+                    {% for ticket in created_tickets %}
+                        {% if ticket['status'] == 'open' %}
+                            <tr data-type="ticket" data-id="{{ ticket['id'] }}" data-created="{{ ticket['created_at'] }}">
+                                <td>{{ ticket['ticket_number'] }}</td>
+                                <td>{{ ticket['description'] }}</td>
+                                <td>{{ ticket['created_at'] }}</td>
+                                <td>{{ ticket['status'] }}</td>
+                            </tr>
+                        {% endif %}
+                    {% endfor %}
+                    {% else %}
+                    <tr><td colspan="6">No data available</td></tr>
+                {% endif %}
+                </tbody>
+            </table>
+        </div>
+    
+        <!-- In Progress Tickets Tab -->
+        <div id="it-in-progress" class="tab-content" style="display: none;">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Ticket Number</th>
+                        <th>Description</th>
+                        <th>Create On</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody id="in-progress-tickets">
+                    {% if created_tickets %}
+                    {% for ticket in created_tickets %}
+                        {% if ticket['status'] == 'in_progress' %}
+                            <tr data-type="ticket" data-id="{{ ticket['id'] }}" data-created="{{ ticket['created_at'] }}">
+                                <td>{{ ticket['ticket_number'] }}</td>
+                                <td>{{ ticket['description'] }}</td>
+                                <td>{{ ticket['created_at'] }}</td>
+                                <td>{{ ticket['status'] }}</td>
+                            </tr>
+                        {% endif %}
+                    {% endfor %}
+                    {% else %}
+                    <tr><td colspan="6">No data available</td></tr>
+                {% endif %}
+                </tbody>
+            </table>
+        </div>
+    
+        <!-- Finish Tickets Tab -->
+        <div id="it-finish" class="tab-content" style="display: none;">
+            <form id="filter-form-it-finish">
+                <div>
+                    <label for="month-select-finish">Select Month:</label>
+                    <select id="month-select-finish" name="month">
+                        <option value="all">All</option>
+                        {% for month in months %}
+                            <option value="{{ month }}">{{ month_name[month|int - 1] }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div>
+                    <label for="year-select-finish">Select Year:</label>
+                    <select id="year-select-finish" name="year">
+                        {% for year in years %}
+                            <option value="{{ year }}">{{ year }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </form>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Ticket Number</th>
+                        <th>Description</th>
+                        <th>Solution</th>
+                        <th>Create On</th>
+                        <th>Finish On</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if created_tickets %}
+                    {% for ticket in created_tickets %}
+                        {% if ticket['status'] == 'Finish' %}
+                            <tr data-created="{{ ticket['created_at'] }}">
+                                <td>{{ ticket['ticket_number'] }}</td>
+                                <td>{{ ticket['description'] }}</td>
+                                <td>{{ ticket['reason'] }}</td>
+                                <td>{{ ticket['created_at'] }}</td>
+                                <td>{{ ticket['close_at'] if ticket['close_at'] is not none else 'N/A' }}</td>
+                                <td>{{ ticket['status'] }}</td>
+                            </tr>
+                        {% endif %}
+                    {% endfor %}
+                    {% else %}
+                    <tr><td colspan="6">No data available</td></tr>
+                {% endif %}
+                </tbody>
+                
+            </table>
+        </div>
+    </div>
+    
+    
+    <!-- Work Orders Section -->
+    <div id="work-orders" class="ticket-section" style="display: none;">
+        <h2>Maintenance Service Center</h2>
+        <a href="{{ url_for('create_work_order') }}"  style="font-size:15px;">
+            Create Tickets Repair Requisition
+        </a>
+        <div class="tab-links">
+            <a href="javascript:void(0);" data-tab="work-all" class="active" onclick="toggleTab('work-all')">All</a>
+            <a href="javascript:void(0);" data-tab="work-pending" onclick="toggleTab('work-pending')">Pending</a>
+            <a href="javascript:void(0);" data-tab="work-in-progress" onclick="toggleTab('work-in-progress')">In Progress</a>
+            <a href="javascript:void(0);" data-tab="work-finish" onclick="toggleTab('work-finish')">Finish</a>
+        </div>
+    
+        <div id="work-all" class="tab-content">
+            <form id="filter-form-work-all">
+                <div>
+                    <label for="month-select-work-all">Select Month:</label>
+                    <select id="month-select-work-all" name="month">
+                        <option value="all">All</option>
+                        {% for month in months %}
+                            <option value="{{ month }}">{{ month_name[month|int - 1] }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div>
+                    <label for="year-select-work-all">Select Year:</label>
+                    <select id="year-select-work-all" name="year">
+                        {% for year in years %}
+                            <option value="{{ year }}">{{ year }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </form>
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Description</th>
+                        <th>Solution</th>
+                        <th>Create On</th>
+                        <th>Finish On</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody id="work-orders-table-body">
+                    {% if created_work_orders %}
+                    {% for work_order in created_work_orders %}
+                    {% if work_order.status == 'Finish' %}
+                        <tr data-created="{{ work_order['created_at'] }}">
+                    {% else %}
+                        <tr data-type="work_order" data-id="{{ work_order['id'] }}" data-created="{{ work_order['created_at'] }}">
+                    {% endif %}  
+                            <td>{{ work_order['order_number'] }}</td>
+                            <td>{{ work_order['description'] }}</td>
+                            <td>{{ work_order['solution'] }}</td>
+                            <td>{{ work_order['created_at'] }}</td>
+                            <td>{{ work_order['completed_at'] if work_order['completed_at'] is not none else 'N/A' }}</td>
+                            <td>{{ work_order['status'] }}</td>
+                        </tr>
+                    {% endfor %}
+                    {% else %}
+                    <tr><td colspan="6">No data available</td></tr>
+                {% endif %}
+                </tbody>
+            </table>
+        </div>
+    
+        <div id="work-pending" class="tab-content" style="display: none;">
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Description</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if created_work_orders %}
+                    {% for work_order in created_work_orders %}
+                        {% if work_order['status'] == 'Pending' %}
+                            <tr data-type="work_order" data-id="{{ work_order['id'] }}">
+                                <td>{{ work_order['order_number'] }}</td>
+                                <td>{{ work_order['description'] }}</td>
+                                <td>{{ work_order['status'] }}</td>
+                            </tr>
+                        {% endif %}
+                        {% endfor %}
+                    {% else %}
+                        <tr><td colspan="6">No data available</td></tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+    
+        <div id="work-in-progress" class="tab-content" style="display: none;">
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Description</th>
+                        <th>Responsible</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if created_work_orders %}
+                    {% for work_order in created_work_orders %}
+                        {% if work_order['status'] == 'In Progress' %}
+                            <tr data-type="work_order" data-id="{{ work_order['id'] }}">
+                                <td>{{ work_order['order_number'] }}</td>
+                                <td>{{ work_order['description'] }}</td>
+                                <td>{{ work_order['responsible'] }}</td>
+                                <td>{{ work_order['status'] }}</td>
+                            </tr>
+                        {% endif %}
+                        {% endfor %}
+                    {% else %}
+                        <tr><td colspan="6">No data available</td></tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+    
+        <div id="work-finish" class="tab-content" style="display: none;">
+            <form id="filter-form-work-finish">
+                <div>
+                    <label for="month-select-work-finish">Select Month:</label>
+                    <select id="month-select-work-finish" name="month">
+                        <option value="all">All</option>
+                        {% for month in months %}
+                            <option value="{{ month }}">{{ month_name[month|int - 1] }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div>
+                    <label for="year-select-work-finish">Select Year:</label>
+                    <select id="year-select-work-finish" name="year">
+                        {% for year in years %}
+                            <option value="{{ year }}">{{ year }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </form>
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Description</th>
+                        <th>Solution</th>
+                        <th>Create On</th>
+                        <th>Finish On</th>
+                        <th>Responsible</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody id="work-finish-table-body">
+                    {% if created_work_orders %}
+                    {% for work_order in created_work_orders %}
+                        {% if work_order['status'] == 'Finish' %}
+                            <tr data-created="{{ work_order['created_at'] }}">
+                                <td>{{ work_order['order_number'] }}</td>
+                                <td>{{ work_order['description'] }}</td>
+                                <td>{{ work_order['solution'] }}</td>
+                                <td>{{ work_order['created_at'] }}</td>
+                                <td>{{ work_order['completed_at'] if work_order['completed_at'] is not none else 'N/A' }}</td>
+                                <td>{{ work_order['responsible'] }}</td>
+                                <td>{{ work_order['status'] }}</td>
+                            </tr>
+                        {% endif %}
+                        {% endfor %}
+                    {% else %}
+                        <tr><td colspan="6">No data available</td></tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+    <!-- NAV Errors Section -->
+    <div id="nav-errors" class="ticket-section" style="display: none;">
+        <h2>BI Navision Helpdesk Center</h2>
+        <a href="{{ url_for('create_error_order') }}"  style="font-size:15px;">
+            Add Tickets BI Navision
+       </a>
+        <div class="tab-links">
+            <a href="javascript:void(0);" data-tab="nav-all" class="active" onclick="toggleTab('nav-all')">All</a>
+            <a href="javascript:void(0);" data-tab="nav-pending" onclick="toggleTab('nav-pending')">Pending</a>
+            <a href="javascript:void(0);" data-tab="nav-in-progress" onclick="toggleTab('nav-in-progress')">In Progress</a>
+            <a href="javascript:void(0);" data-tab="nav-finish" onclick="toggleTab('nav-finish')">Finish</a>
+        </div>
+    
+        <div id="nav-all" class="tab-content">
+            <form id="filter-form-nav-all">
+                <div>
+                    <label for="month-select-nav-all">Select Month:</label>
+                    <select id="month-select-nav-all" name="month">
+                        <option value="all">All</option>
+                        {% for month in months %}
+                            <option value="{{ month }}">{{ month_name[month|int - 1] }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div>
+                    <label for="year-select-nav-all">Select Year:</label>
+                    <select id="year-select-nav-all" name="year">
+                        {% for year in years %}
+                            <option value="{{ year }}">{{ year }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </form>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Ticket ID</th>
+                        <th>Description</th>
+                        <th>Solution</th>
+                        <th>Create On</th>
+                        <th>Finish On</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody id="nav-all-table-body">
+                    {% if created_navs %}
+                        {% for nav_error in created_navs %}
+                            <tr data-id="{{ nav_error['id'] }}" onclick="window.location='{{ url_for('error_detail', error_id=nav_error['id']) }}'">
+                                <td>{{ nav_error['error_number'] }}</td>
+                                <td>{{ nav_error['description'] }}</td>
+                                <td>{{ nav_error['reason'] if nav_error['reason'] is not none else 'N/A' }}</td>
+                                <td>{{ nav_error['created_at'] }}</td>
+                                <td>{{ nav_error['close_at'] if nav_error['close_at'] is not none else 'N/A' }}</td>
+                                <td>{{ nav_error['status'] }}</td>
+                            </tr>
+                        {% endfor %}
+                    {% else %}
+                        <tr><td colspan="6">No data available</td></tr>
+                    {% endif %}
+                </tbody>
+                
+                
+            </table>
+        </div>
+    
+        <div id="nav-pending" class="tab-content" style="display: none;">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Ticket ID</th>
+                        <th>Description</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if created_navs %}
+                    {% for nav_error in created_navs %}
+                        {% if nav_error['status'] == 'Pending' %}
+                            <tr data-type="nav_error" data-id="{{ nav_error['id'] }}">
+                                <td>{{ nav_error['error_number'] }}</td>
+                                <td>{{ nav_error['description'] }}</td>
+                                <td>{{ nav_error['status'] }}</td>
+                            </tr>
+                        {% endif %}
+                        {% endfor %}
+                    {% else %}
+                        <tr><td colspan="6">No data available</td></tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+    
+        <div id="nav-in-progress" class="tab-content" style="display: none;">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Ticket ID</th>
+                        <th>Description</th>
+                        <th>Responsible</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if created_navs %}
+                    {% for nav_error in created_navs %}
+                        {% if nav_error['status'] == 'In Progress' %}
+                            <tr data-type="nav_error" data-id="{{ nav_error['id'] }}">
+                                <td>{{ nav_error['error_number'] }}</td>
+                                <td>{{ nav_error['description'] }}</td>
+                                <td>{{ nav_error['job_by'] }}</td>
+                                <td>{{ nav_error['status'] }}</td>
+                            </tr>
+                        {% endif %}
+                        {% endfor %}
+                    {% else %}
+                        <tr><td colspan="6">No data available</td></tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+    
+        <div id="nav-finish" class="tab-content" style="display: none;">
+            <form id="filter-form-nav-finish">
+                <div>
+                    <label for="month-select-nav-finish">Select Month:</label>
+                    <select id="month-select-nav-finish" name="month">
+                        <option value="all">All</option>
+                        {% for month in months %}
+                            <option value="{{ month }}">{{ month_name[month|int - 1] }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div>
+                    <label for="year-select-nav-finish">Select Year:</label>
+                    <select id="year-select-nav-finish" name="year">
+                        {% for year in years %}
+                            <option value="{{ year }}">{{ year }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </form>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Ticket ID</th>
+                        <th>Description</th>
+                        <th>Solution</th>
+                        <th>Responsible</th>
+                        <th>Create On</th>
+                        <th>Finish On</th>
+                        <th>Finish By</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody id="nav-finish-table-body">
+                    {% if created_navs %}
+                    {% for nav_error in created_navs %}
+                        {% if nav_error['status'] == 'Finish' %}
+                            <tr data-created="{{ nav_error['created_at'] }}" data-close="{{ nav_error['close_at'] }}">
+                                <td>{{ nav_error['error_number'] }}</td>
+                                <td>{{ nav_error['description'] }}</td>
+                                <td>{{ nav_error['reason'] }}</td>
+                                <td>{{ nav_error['job_by'] }}</td>
+                                <td>{{ nav_error['created_at'] }}</td>
+                                <td>{{ nav_error['close_at'] if nav_error['close_at'] is not none else 'N/A' }}</td>
+                                <td>{{ nav_error['finish_by'] if nav_error['finish_by'] is not none else 'N/A' }}</td>
+                                <td>{{ nav_error['status'] }}</td>
+                            </tr>
+                        {% endif %}
+                        {% endfor %}
+                    {% else %}
+                        <tr><td colspan="6">No data available</td></tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+        
+
+    </main>
+</body>
+
+
+<script>
+    function toggleTab(tabId) {
+        // Hide all tab content
+        const tabContents = document.querySelectorAll('.tab-content');
+        tabContents.forEach(content => {
+            content.style.display = 'none';
+        });
+
+        // Show the selected tab content
+        document.getElementById(tabId).style.display = 'block';
+
+        // Update active link styling
+        const tabLinks = document.querySelectorAll('.tab-links a');
+        tabLinks.forEach(link => {
+            link.classList.remove('active');
+        });
+        document.querySelector(`.tab-links a[data-tab="${tabId}"]`).classList.add('active');
+    }
+
+    function filterTickets(tabContent) {
+        const monthSelect = tabContent.querySelector('select[name="month"]');
+        const yearSelect = tabContent.querySelector('select[name="year"]');
+
+        if (!monthSelect || !yearSelect) return;
+
+        const selectedMonth = monthSelect.value;
+        const selectedYear = yearSelect.value;
+        const tickets = tabContent.querySelectorAll('tbody tr');
+        let hasVisibleTickets = false;
+
+        tickets.forEach(ticket => {
+            const createdDate = new Date(ticket.getAttribute('data-created'));
+            const ticketMonth = createdDate.getMonth() + 1; // getMonth() returns 0-11
+            const ticketYear = createdDate.getFullYear();
+
+            const monthMatch = (selectedMonth === "all" || ticketMonth === parseInt(selectedMonth));
+            const yearMatch = (selectedYear === "all" || ticketYear === parseInt(selectedYear));
+
+            ticket.style.display = (monthMatch && yearMatch) ? '' : 'none'; // Show or hide the ticket
+
+            if (ticket.style.display !== 'none') {
+                hasVisibleTickets = true;
+            }
+        });
+
+        const noDataRow = tabContent.querySelector('.no-data-row');
+        if (!hasVisibleTickets) {
+            if (!noDataRow) {
+                const newRow = document.createElement('tr');
+                newRow.className = 'no-data-row';
+                newRow.innerHTML = '<td colspan="6" style="text-align:center;">No Data</td>'; // Adjust column count
+                tabContent.querySelector('tbody').appendChild(newRow);
+            }
+        } else if (noDataRow) {
+            noDataRow.remove();
+        }
+    }
+
+    function addFilterListeners(selectors) {
+        selectors.forEach(selector => {
+            document.querySelectorAll(selector).forEach(select => {
+                select.addEventListener('change', () => {
+                    const tabContent = select.closest('.tab-content');
+                    filterTickets(tabContent);
+                });
+            });
+        });
+    }
+
+    // เรียกใช้ฟังก์ชันเพิ่มลิสต์เซเล็กเตอร์
+    addFilterListeners([
+        '#month-select-all, #year-select-all',
+        '#month-select-finish, #year-select-finish',
+        '#month-select-work-all, #year-select-work-all', 
+        '#month-select-work-finish, #year-select-work-finish', 
+        '#month-select-nav-all, #year-select-nav-all', 
+        '#month-select-nav-finish, #year-select-nav-finish'
+    ]);
+</script>
+
+
+
+</html>

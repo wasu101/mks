@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Show and Edit Excel Data</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            background-color: #f0f0f0;
+            padding: 20px;
+        }
+        h1, h2 {
+            text-align: center;
+            color: #333;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        form {
+            margin-bottom: 20px;
+        }
+        input[type="submit"] {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+        .filter-form {
+            margin-bottom: 10px;
+        }
+        .filter-form input {
+            padding: 5px;
+            margin-right: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+        .reset-filter {
+            background-color: #f44336;
+        }
+        .reset-filter:hover {
+            background-color: #da190b;
+        }
+    </style>
+</head>
+<body>
+    <h1>Excel Data: {{ filename }}</h1>
+    <p>Number of sheets: {{ tables|length }}</p>
+    
+    {% for sheet_name, df_html in tables.items() %}
+        <h2>{{ sheet_name }}</h2>
+        <form id="data-form-{{ sheet_name }}" method="post">
+            <div class="filter-form">
+                <input type="text" name="filter-value" placeholder="Enter Value to Filter">
+                <input type="button" value="Filter" onclick="filterTable('{{ sheet_name }}')">
+                <input type="button" value="Reset Filter" class="reset-filter" onclick="resetFilter('{{ sheet_name }}')">
+            </div>
+            <table id="table-{{ sheet_name }}">
+                {{ df_html|safe }}
+            </table>
+            <input type="hidden" name="sheet_name" value="{{ sheet_name }}">
+            <input type="hidden" name="updated_data" id="updated_data-{{ sheet_name }}">
+            <input type="submit" value="Save Changes">
+        </form>
+    {% endfor %}
+
+    <script>
+        // ฟังก์ชันสำหรับการกรองข้อมูลในตาราง
+        function filterTable(sheetName) {
+            var filterValue = $('#data-form-' + sheetName + ' input[name="filter-value"]').val().toLowerCase();
+
+            $('#table-' + sheetName + ' tr').each(function() {
+                var rowVisible = false;
+                $(this).find('td').each(function() {
+                    var cellText = $(this).text().toLowerCase();
+                    if (cellText.indexOf(filterValue) > -1) {
+                        rowVisible = true;
+                    }
+                });
+                if (rowVisible) {
+                    $(this).show();
+                } else {
+                    $(this).hide();
+                }
+            });
+        }
+
+        // ฟังก์ชันสำหรับรีเซ็ตการกรองข้อมูลในตาราง
+        function resetFilter(sheetName) {
+            $('#data-form-' + sheetName + ' input[name="filter-value"]').val('');
+            $('#table-' + sheetName + ' tr').show();
+        }
+
+        $(document).ready(function() {
+            $('table').attr('contenteditable', 'true');
+
+            // ให้แถวที่ไม่มีค่าว่างไม่แสดงผล
+            $('table tr').each(function() {
+                $(this).find('td').each(function() {
+                    if ($(this).text().trim() === '') {
+                        $(this).parent('tr').hide();
+                        return false; // หยุดการวน loop
+                    }
+                });
+            });
+
+            // ทำให้สามารถลากและวางตารางได้
+            $('tr').attr('draggable', 'true');
+
+            // ส่งข้อมูลที่แก้ไขกลับไปยังเซิร์ฟเวอร์เมื่อ submit form
+            $('form').submit(function(event) {
+                var sheetName = $(this).find('input[name="sheet_name"]').val();
+                var updatedData = [];
+
+                $('#data-form-' + sheetName + ' table tr').each(function() {
+                    var row = [];
+                    $(this).find('td').each(function() {
+                        row.push($(this).text());
+                    });
+                    if (row.length > 0) {
+                        updatedData.push(row);
+                    }
+                });
+
+                var json = JSON.stringify(updatedData);
+                $('#updated_data-' + sheetName).val(json);
+            });
+        });
+    </script>
+</body>
+</html>

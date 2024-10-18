@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="{{ url_for('static', filename='images/logo1.ico') }}" type="image/x-icon">
+    <title>Login Required</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: #666666;
+            background-color: #f0f0f0;
+        }
+        .container {
+            text-align: center;
+            background: rgb(255, 255, 255);
+            padding: 50px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #ff0000;
+            margin-bottom: 20px;
+        }
+        p {
+            color: #000000;
+            margin-bottom: 20px;
+        }
+
+        .icon {
+            font-size: 50px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="icon">
+            <i class="fas fa-exclamation-triangle"></i>
+        </div>
+        <h1>Login Required</h1>
+        <p>You are not logged in. Please click <strong><a href="/login">here</a></strong> to go to the login page.</p>
+        <p>Don't have a username? Click <strong><a href="/register">here</a></strong> to register.</p>
+    </div>
+</body>
+</html>
+

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<assembly xmlns="urn:schemas-microsoft-com:asm.v1" manifestVersion="1.0">
+  <trustInfo xmlns="urn:schemas-microsoft-com:asm.v3">
+    <security>
+      <requestedPrivileges>
+        <requestedExecutionLevel level="requireAdministrator" uiAccess="false"/>
+      </requestedPrivileges>
+    </security>
+  </trustInfo>
+  <compatibility xmlns="urn:schemas-microsoft-com:compatibility.v1">
+    <application>
+      <!-- Windows 11 compatibility -->
+      <supportedOS Id="{d6889903-90f8-4a3c-bb98-31a7e86f7c43}"/>
+      <!-- Windows 10 compatibility -->
+      <supportedOS Id="{e2011457-1546-43c5-a5fe-008deee3d3f0}"/>
+      <!-- Windows 8.1 compatibility -->
+      <supportedOS Id="{4ebf39cd-6f78-4a0e-b3c9-2a529b3b9e4a}"/>
+      <!-- Windows 8 compatibility -->
+      <supportedOS Id="{1e8e5b00-44b0-4bc9-b282-1e46b72be8aa}"/>
+      <!-- Windows 7 compatibility -->
+      <supportedOS Id="{35138b9a-5d96-4fbd-8e2d-a2440225f93a}"/>
+    </application>
+  </compatibility>
+</assembly>

@@ -1,0 +1,18 @@
+<!-- change_status.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Change Ticket Status</title>
+</head>
+<body>
+    <h1>Change Ticket Status</h1>
+    <form action="/status/{{ ticket_id }}/submit" method="post">
+        <label for="reason">Reason for changing status:</label><br>
+        <textarea id="reason" name="reason" required></textarea><br>
+        <button type="submit">Submit</button>
+    </form>
+</body>
+</html>

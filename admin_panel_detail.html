@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="en">
+<html lang="th">    
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Tickets</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            overflow-x: auto; /* เพิ่มการเลื่อนแนวนอนเมื่อตารางขนาดใหญ่เกิน */
+        }
+
+        th, td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+            padding: 5px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 200px; /* ตั้งค่าความกว้างสูงสุดของเซลล์ */
+        }
+
+        @media screen and (max-width: 600px) {
+            table {
+                border: 0;
+            }
+            table caption {
+                font-size: 1.3em;
+            }
+            table thead {
+                border: none;
+                clip: rect(0 0 0 0);
+                height: 1px;
+                margin: -1px;
+                overflow: hidden;
+                padding: 0;
+                position: absolute;
+                width: 1px;
+            }
+            table tr {
+                border-bottom: 3px solid #ddd;
+                display: block;
+                margin-bottom: .625em; /* 10px */
+            }
+            table td {
+                border-bottom: 1px solid #ddd;
+                display: block;
+                font-size: .8em; /* 80% of the normal size */
+                text-align: right;
+            }
+            table td::before {
+                content: attr(data-label);
+                float: left;
+                font-weight: bold;
+                text-transform: uppercase;
+            }
+            table td:last-child {
+                border-bottom: 0;
+            }
+        }
+
+        .controlbt{
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 250px;
+            height: 100%;
+            background-color: #ffffff00;
+            overflow-y: auto;
+            padding: 10px;
+        }
+
+        .green-text {
+            color: green;
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        .red-text {
+            color: red;
+            font-weight: bold;
+            font-size: 16px;
+        }
+        textarea {
+            border: 2px solid #969696;
+        }
+
+        html,
+        body {
+            font-family: Arial, sans-serif;
+            height: 100%;
+            width: 100%;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+        .modal-content {
+            z-index: 9999;
+        }
+        .banner {
+            position: -webkit-sticky;
+            position: sticky;
+            top: 0;
+            background-color: rgb(255, 255, 255);
+            color: #007bff;
+            padding: 10px 0;
+            text-align: center;
+            z-index: 1000; /* ให้ Header อยู่ด้านหน้าสุด */
+        }
+        footer {
+            text-align: center;
+            padding: 20px 0;
+            background-color: #333;
+            color: #fff;
+        }
+        body {
+            font-family: 'Thonburi', sans-serif; /* ใช้ฟอนต์ Thonburi สำหรับเว็บไซต์ */
+        }
+        .container {
+            background-color: #f0f0f0;
+            margin-top: 10px;
+        }
+
+        .ticket {
+            background-color: #ffffff;
+            padding: 15px;
+            border: 1px solid #ccc;
+            margin-bottom: 20px;
+        }
+        textarea:hover {
+            background-color: lightgray;
+        }
+    /* สไตล์ของส่วน chat */
+        .chat {
+            background-color: #f1f1f1; /* สีพื้นหลัง */
+            border: 1px solid #ccc; /* เส้นขอบ */
+            border-radius: 5px; /* รูปร่างขอบ */
+            padding: 10px; /* การเว้นระยะห่างของเนื้อหาภายใน */
+            margin-bottom: 10px; /* การเว้นระยะห่างด้านล่าง */
+        }
+
+        /* สไตล์ของปุ่มลบ */
+        .delete-message {
+            cursor: pointer; /* เปลี่ยนเคอร์เซอร์เป็นรูปแบบมือ */
+            color: red; /* สีข้อความ */
+            margin-left: 5px; /* การเว้นระยะห่างด้านซ้ายของปุ่ม */
+        }
+        .chat-container {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+        }
+
+        .form-control {
+            flex-grow: 1; /* ขยายให้เต็มพื้นที่เท่าที่จะเป็นไปได้ */
+            height: auto; /* ปรับความสูงให้พอดีกับเนื้อหา */
+            resize: none; /* ป้องกันการเปลี่ยนขนาด */
+            margin-right: 10px; /* ระยะห่างขวาของปุ่ม Send */
+        }
+
+        .btn-primary {
+            height: auto; /* ปรับความสูงของปุ่มให้เท่ากับความสูงของ textarea */
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- Banner -->
+    <div class="banner justify-content-end">
+        <h1 class="mb-4 ml-0 mr-4 text-center">Admin Detail View</h1>
+        <h3 class="mb-4 mt-4 ml-0 mr-4 text-center">Ticket No : {{ ticket.ticket_number }}</h3>
+        <div class="controlbt d-flex justify-content-end">
+            <form action="/manage_all_tickets" method="get" class="d-inline mr-2">
+                <button type="submit" class="btn btn-secondary">Back</button>
+            </form>
+        </div>
+    </div>           
+    <div class="container">
+            <!-- ส่วนของ Tickets (ซ้าย) -->
+        <div>
+                <!-- Iterate through tickets -->
+                <div class="ticket border p-8 mb-4">
+                    <!-- Ticket details -->
+                    <h2 class="text-primary">Ticket No: {{ ticket.ticket_number }}</h2>
+                    <h5 class="text-primary">User: {{ ticket.title }}</h5>
+                    <p class="{% if ticket.status == 'open' %}red-text{% else %}green-text{% endif %}">Status: {{ ticket.status }}</p>    
+                    <p>Department: {{ ticket.department }}</p>
+                    <p>Type: {{ ticket.type }}</p>
+                    <p>Issue Type: {{ ticket.issuetype }}</p>
+                    <p>Issue: {{ ticket.description }}</p>
+                    <p>Solution: {{ ticket.reason }}</p>
+                    <p>Created at: {{ ticket.created_at }}</p>
+                    <p>Close at: {{ ticket.close_at }}</p>
+                    <div class="chat-log ticket border p-4 mb-4">
+                        <h4 class="small">Operation details for Tickets No: {{ ticket.ticket_number }}</h4>
+                        <div class="chat">
+                            {% set messages_found = false %}
+                            {% if chat_messages is not defined or chat_messages|length == 0 %}
+                                <p class="small text-muted mt-2 mb-1">No History Chat</p>
+                            {% else %}
+                                {% for message in chat_messages %}
+                                    {% if message.ticket_id == ticket.id %}
+                                        <p id="message_{{ message.id }}">
+                                            {{ message.sender }} ({{ message.timestamp }}): {{ message.message }}
+                                            <span class="delete-message" onclick="deleteMessage('{{ message.id }}')">❌</span>
+                                        </p>
+                                        {% set messages_found = true %}
+                                    {% endif %}
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                        {% if not messages_found %}
+                        {% endif %}
+                        <div class="chat-container">
+                            <textarea id="chat_{{ ticket.id }}" class="form-control mb-1" style="height: auto; resize: none; " ></textarea>
+                            <button class="btn btn-primary" onclick="sendChat('{{ ticket.id }}')">Send</button>
+                        </div>
+                    </div>
+                    
+                <form id="closeForm_{{ ticket.ticket_number }}" method="post" action="/admin_status/{{ ticket.id }}/submit"
+                    class="mb-2">
+                    <div class="chat-container">
+                        <div class="col">
+                            <label for="reason_{{ ticket.ticket_number }}">Enter Solution Here:</label>
+                            <textarea id="reason_{{ ticket.ticket_number }}" name="reason" class="form-control mb-2"
+                                required></textarea>
+                                <button type="submit" class="btn btn-primary mb-2">Save</button>
+                        </div>
+                        <div class="col-auto">
+                        </div>
+                    </div>
+                </form>
+            </form>
+            <form action="/admin_edit/{{ ticket.id }}" method="get" class="d-inline mr-2">
+                <button type="submit" class="btn btn-warning">Edit Ticket</button>
+            </form>
+            <form action="/admin_delete/{{ ticket.id }}" method="post" class="d-inline mr-2" id="deleteForm">
+                <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteModal">
+                    Delete Ticket
+                </button>
+            </form>                        
+            <form action="/admin_close/{{ ticket.id }}" method="post" class="d-inline" id="closeForm">
+                <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#closeModal">
+                    Close Ticket
+                </button>
+            </form>            
+                <p class="small text-muted mt-2">Last Edit at: {{ ticket.close_at }}</p>
+                </div>
+        </div> 
+<!-- Modal สำหรับการปิดตั๋ว -->
+<div class="modal fade" id="closeModal" tabindex="-1" role="dialog" aria-labelledby="closeModalLabel" aria-hidden="true">
+    <!-- เนื้อหาของ Modal -->
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="closeModalLabel">Close Confirmation</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to close ticket No. {{ ticket.ticket_number }} ?
+            </div>
+            <div class="modal-footer">
+                <!-- ปุ่ม Cancel -->
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                <!-- ปุ่ม 'Close' สำหรับยืนยันและส่งคำร้องขอไปยังเซิร์ฟเวอร์ -->
+                <button type="submit"  class="btn btn-success" onclick="$('#closeForm').submit()">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal สำหรับการลบตั๋ว -->
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <!-- เนื้อหาของ Modal -->
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel">Delete Confirmation</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to delete  ticket No. {{ ticket.ticket_number }}?
+            </div>
+            <div class="modal-footer">
+                <!-- ปุ่ม Cancel -->
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                <!-- ปุ่ม 'Delete' สำหรับยืนยันและส่งคำร้องขอไปยังเซิร์ฟเวอร์ -->
+                <button type="submit" class="btn btn-success" onclick="$('#deleteForm').submit()">Delete</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal สำหรับแจ้งผลการบันทึกข้อมูล -->
+<div class="modal fade" id="successModal" tabindex="-1" role="dialog" aria-labelledby="successModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="successModalLabel">Success</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="successModalBody">
+                Data update successful.
+            </div>
+        </div>
+    </div>
+</div>   
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script>
+    function showSuccessModal() {
+        $('#successModal').modal('show');
+    }
+</script>
+
+<script>
+
+    // JavaScript สำหรับการปิดตั๋ว
+    function confirmClose(ticketId) {
+        $('#closeModal').modal('show');  // เปิด Modal
+
+        // กำหนดให้ปุ่ม 'Close' ใน Modal ส่งคำร้องขอไปยังเซิร์ฟเวอร์
+        
+        // เรียกใช้งานฟังก์ชันเพื่อแสดงโมเดล success หลังจากการโหลดหน้าเว็บใหม่
+        $('#closeForm').submit(function(event) {
+            $('#closeForm').attr('action', '/close/' + ticketId);
+            event.preventDefault(); // ป้องกันการส่งคำร้องขอโดยอัตโนมัติ
+            showSuccessModal(); // แสดงโมดัล 'Success'
+        });
+    }
+
+    function confirmDelete(ticketId) {
+        $('#deleteModal').modal('show');  // เปิด Modal
+
+        // เมื่อกดปุ่ม 'Delete' ให้แสดงโมดัล 'Success'
+        $('#deleteForm').submit(function(event) {
+            showSuccessModal(); // แสดงโมดัล 'Success'
+            $('#deleteForm').attr('action', '/admin_delete/' + ticketId);
+            event.preventDefault(); // ป้องกันการส่งคำร้องขอโดยอัตโนมัติ
+        });
+    }
+
+
+</script>
+<script>
+    function sendChat(ticketId) {
+        var messageInput = document.getElementById("chat_" + ticketId);
+        var message = messageInput.value.trim();
+        var username = "{{ current_user.displayname }}";
+
+        if (message !== '') {
+           
+            var data = {
+                "ticket_id": ticketId,
+                "message": message,
+                "sender": username  // เพิ่ม sender ไปในข้อมูลที่จะส่ง
+            };
+            console.log("Sending chat message:", data);
+
+            fetch("/save_chat", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.success) {
+                    // Clear input field after sending
+                    messageInput.value = '';
+                    // Reload the page after sending message successfully
+                    window.location.reload();
+                } else {
+                    throw new Error('Failed to send message');
+                }
+            })
+            .catch(error => {
+                console.error("Error:", error);
+                alert("An error occurred while sending the message.");
+            });
+        } else {
+            alert("Please enter a message.");
+        }
+
+        // Prevent the form from submitting and refreshing the page
+        event.preventDefault(); // ย้ายบรรทัดนี้ไปด้านบน
+    }
+
+
+
+
+
+    function updateChatLog(ticketId) {
+        // ส่งคำขอ HTTP GET ไปยัง URL /update_chat/<ticketId> เพื่อดึงข้อมูลแชทล่าสุด
+        fetch('/update_chat/' + ticketId)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                // ใช้ข้อมูลที่ได้รับจากการส่งคำขอ
+                if (data.success) {
+                    // อัพเดท chat log ด้วยข้อมูลที่ได้รับ
+                    var chatLogElement = document.getElementById('chat_log_' + ticketId);
+                    if (chatLogElement) {
+                        chatLogElement.innerHTML = data.updatedChatLog;
+                    } else {
+                        console.error('Element chat_log_' + ticketId + ' not found');
+                    }
+                } else {
+                    console.error('Failed to update chat log');
+                }
+            })
+            .catch(error => {
+                console.error('Error updating chat log:', error);
+            });
+    }
+
+
+</script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/socket.io/4.3.2/socket.io.js"></script>
+<script type="text/javascript">
+    var socket = io.connect('http://' + document.domain + ':' + location.port);
+
+    socket.on('connect', function() {
+        console.log('Connected to server');
+    });
+
+    socket.on('disconnect', function() {
+        console.log('Disconnected from server');
+    });
+
+    socket.on('update_chat_log', function(data) {
+        var ticketId = data.ticket_id;
+        var updatedChatLog = data.updatedChatLog;
+
+        // Update chat log section for the specific ticket
+        var chatLogDiv = document.getElementById('chat_log_' + ticketId);
+        if (chatLogDiv) {
+            chatLogDiv.innerHTML = updatedChatLog;
+        }
+    });
+    function deleteMessage(messageId) {
+        // ส่งคำขอไปยังเซิร์ฟเวอร์เพื่อลบข้อความโดยใช้ API หรือเมธอดที่เหมาะสม
+        fetch("/delete_message/" + messageId, {
+            method: "DELETE"
+        })
+        .then(response => {
+            if (response.ok) {
+                // ลบข้อความออกจาก DOM เมื่อลบสำเร็จ
+                var messageElement = document.getElementById("message_" + messageId);
+                if (messageElement) {
+                    messageElement.remove();
+                }
+            } else {
+                throw new Error("Failed to delete message");
+            }
+        })
+        .catch(error => {
+            console.error("Error:", error);
+            console.error("Response:", response); // Log detailed response for debugging
+            alert("Failed to delete message. Please try again.");
+        });
+    }
+    
+</script>
+<script>
+    function changeLanguage(lang) {
+        // ส่งค่าภาษาไปยังหน้าเว็บที่ต้องการ
+        window.location.href = `/${lang}/ticket_detial`; // เปลี่ยน URL ตามที่ต้องการ
+    }
+</script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        var ticketId = '{{ ticket.ticket_id }}'; // อ้างอิงค่า ticket_id จากตัวแปรใน Python โดยใช้ {{ ticket.ticket_id }}
+        var reasonElement = document.getElementById("reason_" + ticketId);
+        if (reasonElement) {
+            var reasonValue = reasonElement.value;
+            console.log("Reason Value:", reasonValue);
+        } else {
+            console.log("Reason element not found");
+        }
+    });
+
+    function submitForm(ticketId) {
+        $('#successModal').modal('show');
+    }
+    
+    function closeTicket(ticketId) {
+        var reasonInput = document.getElementById("reason_" + ticketId);
+        var reason = reasonInput.value.trim(); // นำข้อความที่ผู้ใช้กรอกเข้ามาและลบช่องว่างด้านหน้าและด้านหลัง
+        
+        if (reason === '') {
+            showAlert("Please provide a reason before closing the ticket.");
+            return; // ไม่ปิดงานหากไม่มีเหตุผล
+        }
+        
+        // ในกรณีที่มีเหตุผลแล้ว ทำการปิดงาน
+        var formData = new FormData();
+        formData.append("reason", reason);
+        
+        // ส่งข้อมูลไปยังเซิร์ฟเวอร์เพื่อปิดงาน
+        fetch("/close/" + ticketId, {
+            method: "POST",
+            body: formData
+        })
+        .then(function(response) {
+            // กระทำหลังจากได้รับการตอบสนองจากเซิร์ฟเวอร์
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            // แสดงข้อความตอบกลับหลังจากปิดงานสำเร็จ
+            showAlert("Ticket closed successfully");
+            // รีโหลดหน้าหลังจากปิดงานเสร็จเรียบร้อย
+            window.location.reload();
+        })
+        .catch(function(error) {
+            console.error('Error:', error);
+            showAlert("An error occurred while closing the ticket.");
+        });
+    }
+    
+
+</script>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        var flashMessages = document.querySelectorAll('.alert-container .alert');
+
+        function showFlashMessage(alert) {
+            alert.classList.remove('slide-up');
+            setTimeout(function() {
+                hideFlashMessage(alert);
+            }, 5000); // Show the message for 5 seconds
+        }
+
+        function hideFlashMessage(alert) {
+            alert.classList.add('slide-up');
+            setTimeout(function() {
+                alert.remove();
+            }, 500); // Duration should match CSS transition
+        }
+
+        flashMessages.forEach(function(alert, index) {
+            setTimeout(function() {
+                showFlashMessage(alert);
+            }, index * 500); // Stagger each message's appearance
+        });
+    });
+
+
+
+</script>
+<script>
+    function submitForm() {
+        document.getElementById("status-form").submit();
+    }
+</script>
+</body>
+</html>

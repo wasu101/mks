@@ -1,0 +1,1092 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wall to Wall Computers</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <!-- SweetAlert2 CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10.16.6/dist/sweetalert2.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="icon" href="{{ url_for('static', filename='images/logo1.ico') }}" type="image/x-icon">
+    <link href="{{ url_for('static', filename='fontawesomefree/css/fontawesome.css') }}" rel="stylesheet" type="text/css">
+    <link href="{{ url_for('static', filename='fontawesomefree/css/brands.css') }}" rel="stylesheet" type="text/css">
+    <link href="{{ url_for('static', filename='fontawesomefree/css/solid.css') }}" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
+    <!-- Custom CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    
+    <style>
+        .status-cell {
+    position: relative;
+}
+
+.status-loading {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: none;
+}
+.spinner-border {
+    width: 1.5rem;
+    height: 1.5rem;
+}
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+        }
+
+        .container {
+            max-width: 100%;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            color: #343a40;
+            margin-bottom: 20px;
+        }
+
+        /* Tabs styling */
+        .nav-tabs {
+            border-bottom: 2px solid #007bff;
+            margin-bottom: 20px;
+            display: flex;
+            background-color: #f8f9fa;
+            border-radius: 0.25rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            overflow: hidden;
+        }
+
+        .nav-tabs .nav-link {
+            border: 1px solid transparent;
+            border-radius: 0.25rem;
+            padding: 8px 16px;
+            font-size: 0.875rem;
+            color: #007bff;
+            font-weight: bold;
+            text-align: center;
+            background-color: #ffffff;
+            transition: all 0.3s ease;
+            display: block;
+            text-decoration: none;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+            white-space: nowrap;
+        }
+
+        .nav-tabs .nav-link.active {
+            background-color: #007bff;
+            color: white;
+            border-color: #007bff;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+        }
+
+        .nav-tabs .nav-link:hover {
+            background-color: #e9ecef;
+            color: #0056b3;
+            border-color: #007bff;
+        }
+
+        .nav-tabs .nav-link.disabled {
+            color: #6c757d;
+            background-color: #f8f9fa;
+            border-color: #dee2e6;
+            cursor: not-allowed;
+        }
+
+        /* Button styles */
+        .btn {
+            font-size: 1rem;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-weight: bold;
+            white-space: nowrap;
+        }
+
+        .btn-success {
+            background-color: #28a745;
+            border-color: #28a745;
+        }
+
+        .btn-success:hover {
+            background-color: #218838;
+            border-color: #1e7e34;
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+            border-color: #007bff;
+        }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+            border-color: #004085;
+        }
+
+        .btn-info {
+            background-color: #17a2b8;
+            border-color: #17a2b8;
+        }
+
+        .btn-info:hover {
+            background-color: #117a8b;
+            border-color: #0d6efd;
+        }
+
+        /* Table styles */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: #ffffff;
+            overflow-x: auto;
+        }
+
+        thead {
+            background-color: #007bff;
+            color: white;
+        }
+
+        th,
+        td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #dee2e6;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        tbody tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        tbody tr:hover {
+            background-color: #e9ecef;
+        }
+
+        /* Modal styles */
+        .modal-content {
+            border-radius: 0.5rem;
+            border: none;
+        }
+
+        .modal-header {
+            background-color: #007bff;
+            color: white;
+            border-bottom: 1px solid #007bff;
+        }
+
+        .modal-title {
+            font-size: 1.25rem;
+            margin: 0;
+        }
+
+        .modal-footer {
+            border-top: 1px solid #dee2e6;
+        }
+
+        .modal-footer .btn {
+            font-size: 1rem;
+            padding: 10px;
+        }
+
+        /* Responsive design for smaller screens */
+        @media (max-width: 768px) {
+            .table-responsive {
+                overflow-x: auto;
+            }
+
+            .btn {
+                font-size: 0.75rem;
+                padding: 0.4rem 0.8rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1 class="mt-4"><i class="fas fa-desktop"></i> Wall to Wall Computers</h1>
+
+        <!-- Tabs สำหรับแผนก -->
+        <ul class="nav nav-tabs" id="departmentTabs">
+            <!-- Default tab for showing all departments -->
+            <li class="nav-item">
+                <a class="nav-link active" href="#" data-department="all"><i class="fas fa-building"></i> All Departments</a>
+            </li>
+            <!-- Tabs for each department will be appended here by JavaScript -->
+        </ul>
+
+        <!-- ปุ่มสำหรับเพิ่มคอมพิวเตอร์ -->
+        <button type="button" class="btn btn-success mt-3 mb-3" onclick="addComputer()"><i class="fas fa-plus"></i> เพิ่ม Computer</button>
+        <a href="{{url_for('main')}}" class="btn btn-success"><i class="fas fa-home"></i> Home</a>
+
+        <!-- Table -->
+<!-- Add this button above or below your table -->
+        <button class="btn btn-primary" onclick="updateAllStatuses()">Update All Statuses</button>
+
+
+        <div class="row">
+            <div class="col-md-12">
+                <table id="computerTable" class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th><i class="fas fa-cogs"></i> Action</th>
+                            <th><i class="fas fa-map-marker-alt"></i> Location</th>
+                            <th><i class="fas fa-sitemap"></i> Department</th>
+                            <th><i class="fas fa-envelope"></i> Email</th>
+                            <th><i class="fas fa-desktop"></i> Computer Name</th>
+                            <th><i class="fas fa-user"></i> Actual User</th>
+                            <th><i class="fas fa-sticky-note"></i> Remark</th>
+                            <th><i class="fas fa-signal"></i> Status</th> <!-- New Status Column -->
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for computer in computers %}
+                        <tr data-department="{{ computer['department'] }}">
+                            <td>
+                                <button type="button" class="btn btn-primary" onclick="editComputer('{{ computer['id'] }}')"><i class="fas fa-edit"></i> Edit</button>
+                                <a href="{{ url_for('wall_to_wall_detail', computer_id=computer['id']) }}" class="btn btn-info"><i class="fas fa-info-circle"></i> View Details</a>
+                            </td>
+                            <td>{{ computer['location'] }}</td>
+                            <td>{{ computer['department'] }}</td>
+                            <td>{{ computer['email'] }}</td>
+                            <td><a href="javascript:triggerVNC('{{ computer['computer_name'] }}')"><i class="fas fa-laptop-code"></i> {{ computer['computer_name'] }}</a></td>
+                            <td>{{ computer['actual_user'] }}</td>
+                            <td>{{ computer['remark'] }}</td>
+                            <td id="computer-status-{{ computer['id'] }}" class="status-cell">
+                                <div class="status-info d-flex align-items-center">
+                                <a class="btn btn-primary btn-sm mr-2" style="height: auto; font-size: 15px;" onclick="updateStatus({{ computer['id'] }})">Check Status</a>
+                                <div class="status-loading" style="display: none;">
+                                    <div class="spinner-border" role="status">
+                                        <span class="sr-only">Loading...</span>
+                                    </div>
+                                </div>
+                                
+                                    <div class="status-text mr-3">
+                                        <span class="badge {{ 'badge-success' if computer['status'] == 'Online' else 'badge-danger' }}" onclick="updateStatus({{ computer['id'] }})">
+                                            <i class="fas {{ 'fa-check-circle' if computer['status'] == 'Online' else 'fa-times-circle' }}" onclick="updateStatus({{ computer['id'] }})"></i> {{ computer['status'] }}
+                                        </span>
+                                    </div>
+                                    <div class="ping-time">
+                                        <small>Last Ping: {{ computer['last_ping_time'] }}</small>
+                                    </div>
+                                </div>
+                                
+                            </td>
+                            
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+<!-- Modal for adding a new computer -->
+<div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="addModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addModalLabel">Add New Computer</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <!-- Form for adding a new computer -->
+                <form id="addForm">
+                    <div class="row">
+                        <!-- First Column -->
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="add_location">Location</label>
+                                <select class="form-control" id="add_location" name="add_location">
+                                    <option value="">Select Location</option>
+                                    <option value="Floor 1">Floor 1</option>
+                                    <option value="Floor 2">Floor 2</option>
+                                    <option value="Floor 3">Floor 3</option>
+                                    <option value="Floor 4">Floor 4</option>
+                                    <option value="Floor 5">Floor 5</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="add_department">Department</label>
+                                <select class="form-control" id="add_department" name="add_department">
+                                    <option value="">Select Department</option>
+                                    <!-- Options will be dynamically populated via JavaScript -->
+                                </select>
+                            </div>
+                                                                            
+                            <div class="form-group">
+                                <label for="add_email">Email</label>
+                                <input type="email" class="form-control" id="add_email" name="add_email">
+                            </div>
+                            <div class="form-group">
+                                <label for="add_computer_name">Computer Name</label>
+                                <input type="text" class="form-control" id="add_computer_name" name="add_computer_name">
+                            </div>
+                            <div class="form-group">
+                                <label for="add_actual_user">Actual User</label>
+                                <input type="text" class="form-control" id="add_actual_user" name="add_actual_user">
+                            </div>
+                            <div class="form-group">
+                                <label for="add_user_permission">User Permission</label>
+                                <input type="text" class="form-control" id="add_user_permission" name="add_user_permission">
+                            </div>
+                            <div class="form-group">
+                                <label for="add_brand">Brand</label>
+                                <input type="text" class="form-control" id="add_brand" name="add_brand">
+                            </div>
+                            <div class="form-group">
+                                <label for="add_model">Model</label>
+                                <input type="text" class="form-control" id="add_model" name="add_model">
+                            </div>
+                            <div class="form-group">
+                                <label for="add_type">Type</label>
+                                <select class="form-control" id="add_type" name="add_type">
+                                    <option value="">Select Type</option>
+                                    <option value="Desktop">Desktop</option>
+                                    <option value="Note Book">NoteBook</option>
+                                    <!-- Options will be dynamically populated via JavaScript -->
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="add_cpu">CPU</label>
+                                <input type="text" class="form-control" id="add_cpu" name="add_cpu">
+                            </div>
+                            <div class="form-group">
+                                <label for="add_ram">RAM (GB)</label>
+                                <input type="text" class="form-control" id="add_ram" name="add_ram">
+                            </div>
+                            <div class="form-group">
+                                <label for="add_year">Year</label>
+                                <input type="text" class="form-control" id="add_year" name="add_year">
+                            </div>
+                        </div>
+                        
+                        <!-- Second Column -->
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="add_estimate_value">Estimate Value</label>
+                                <input type="text" class="form-control" id="add_estimate_value" name="add_estimate_value">
+                            </div>
+                            <div class="form-group">
+                                <label for="add_hdd_total_gb">HDD Total (GB)</label>
+                                <input type="text" class="form-control" id="add_hdd_total_gb" name="add_hdd_total_gb">
+                            </div>
+                            <div class="form-group">
+                                <label for="add_drive_c_total_gb">Drive C Total (GB)</label>
+                                <input type="text" class="form-control" id="add_drive_c_total_gb" name="add_drive_c_total_gb">
+                            </div>
+                            <div class="form-group">
+                                <label for="add_drive_c_free_gb">Drive C Free (GB)</label>
+                                <input type="text" class="form-control" id="add_drive_c_free_gb" name="add_drive_c_free_gb">
+                            </div>
+                            <div class="form-group">
+                                <label for="add_drive_c_used_gb">Drive C Used (GB)</label>
+                                <input type="text" class="form-control" id="add_drive_c_used_gb" name="add_drive_c_used_gb" readonly>
+                            </div>
+                            <div class="form-group">
+                                <label for="add_drive_d_total_gb">Drive D Total (GB)</label>
+                                <input type="text" class="form-control" id="add_drive_d_total_gb" name="add_drive_d_total_gb">
+                            </div>
+                            <div class="form-group">
+                                <label for="add_drive_d_free_gb">Drive D Free (GB)</label>
+                                <input type="text" class="form-control" id="add_drive_d_free_gb" name="add_drive_d_free_gb">
+                            </div>
+                            <div class="form-group">
+                                <label for="add_drive_d_used_gb">Drive D Used (GB)</label>
+                                <input type="text" class="form-control" id="add_drive_d_used_gb" name="add_drive_d_used_gb" readonly>
+                            </div>
+                            <div class="form-group">
+                                <label for="add_operating_system">Operating System</label>
+                                <input type="text" class="form-control" id="add_operating_system" name="add_operating_system">
+                            </div>
+                            <div class="form-group">
+                                <label for="add_antivirus">Antivirus</label>
+                                <input type="text" class="form-control" id="add_antivirus" name="add_antivirus">
+                            </div>
+                            <div class="form-group">
+                                <label for="workgroup">Workgroup</label>
+                                <select class="form-control" id="workgroup" name="workgroup">
+                                    <option value="--select--">--select--</option>
+                                    <option value="WORKGROUP">WORKGROUP</option>
+                                    <option value="MKSBKK.th">MKSBKK.th</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="add_status">Status</label>
+                                <input type="text" class="form-control" id="add_status" name="add_status">
+                            </div>
+                            <div class="form-group">
+                                <label for="add_remark">Remark</label>
+                                <input type="text" class="form-control" id="add_remark" name="add_remark">
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" onclick="saveComputer()">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+    <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editModalLabel">Edit Computer Details </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+
+                    
+                </div>
+                <div class="modal-body">
+                    <!-- Form for editing computer details -->
+                    <form id="editForm">
+                        <div class="row">
+                            <!-- First Column -->
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="location">Location</label>
+                                    <input type="text" class="form-control" id="location" name="location">
+                                </div>
+                                <div class="form-group">
+                                    <label for="department">Department</label>
+                                    <input type="text" class="form-control" id="department" name="department">
+                                </div>
+                                <div class="form-group">
+                                    <label for="email">Email</label>
+                                    <input type="email" class="form-control" id="email" name="email">
+                                </div>
+                                <div class="form-group">
+                                    <label for="computer_name">Computer Name</label>
+                                    <input type="text" class="form-control" id="computer_name" name="computer_name">
+                                </div>
+                                <div class="form-group">
+                                    <label for="actual_user">Actual User</label>
+                                    <input type="text" class="form-control" id="actual_user" name="actual_user">
+                                </div>
+                                <div class="form-group">
+                                    <label for="user_permission">User Permission</label>
+                                    <input type="text" class="form-control" id="user_permission" name="user_permission">
+                                </div>
+                                <div class="form-group">
+                                    <label for="brand">Brand</label>
+                                    <input type="text" class="form-control" id="brand" name="brand">
+                                </div>
+                                <div class="form-group">
+                                    <label for="model">Model</label>
+                                    <input type="text" class="form-control" id="model" name="model">
+                                </div>
+                                <div class="form-group">
+                                    <label for="type">Type</label>
+                                    <input type="text" class="form-control" id="type" name="type">
+                                </div>
+                                <div class="form-group">
+                                    <label for="cpu">CPU</label>
+                                    <input type="text" class="form-control" id="cpu" name="cpu">
+                                </div>
+                                <div class="form-group">
+                                    <label for="ram">RAM</label>
+                                    <input type="text" class="form-control" id="ram" name="ram">
+                                </div>
+                                <div class="form-group">
+                                    <label for="year">Year</label>
+                                    <input type="text" class="form-control" id="year" name="year">
+                                </div>
+                            </div>
+                            
+                            <!-- Second Column -->
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="estimate_value">Estimate Value</label>
+                                    <input type="text" class="form-control" id="estimate_value" name="estimate_value">
+                                </div>
+                                <div class="form-group">
+                                    <label for="hdd_total_gb">HDD Total (GB)</label>
+                                    <input type="text" class="form-control" id="hdd_total_gb" name="hdd_total_gb">
+                                </div>
+                                <div class="form-group">
+                                    <label for="drive_c_total_gb">Drive C Total (GB)</label>
+                                    <input type="text" class="form-control" id="drive_c_total_gb" name="drive_c_total_gb">
+                                </div>
+                                <div class="form-group">
+                                    <label for="drive_c_free_gb">Drive C Free (GB)</label>
+                                    <input type="text" class="form-control" id="drive_c_free_gb" name="drive_c_free_gb">
+                                </div>
+                                <div class="form-group">
+                                    <label for="drive_c_used_gb">Drive C Used (GB)</label>
+                                    <input type="text" class="form-control" id="drive_c_used_gb" name="drive_c_used_gb" readonly>
+                                </div>
+                                <div class="form-group">
+                                    <label for="drive_d_total_gb">Drive D Total (GB)</label>
+                                    <input type="text" class="form-control" id="drive_d_total_gb" name="drive_d_total_gb">
+                                </div>
+                                <div class="form-group">
+                                    <label for="drive_d_free_gb">Drive D Free (GB)</label>
+                                    <input type="text" class="form-control" id="drive_d_free_gb" name="drive_d_free_gb">
+                                </div>
+                                <div class="form-group">
+                                    <label for="drive_d_used_gb">Drive D Used (GB)</label>
+                                    <input type="text" class="form-control" id="drive_d_used_gb" name="drive_d_used_gb" readonly>
+                                </div>
+                                <div class="form-group">
+                                    <label for="operating_system">Operating System</label>
+                                    <input type="text" class="form-control" id="operating_system" name="operating_system">
+                                </div>
+                                <div class="form-group">
+                                    <label for="antivirus">Antivirus</label>
+                                    <input type="text" class="form-control" id="antivirus" name="antivirus">
+                                </div>
+                                <div class="form-group">
+                                    <label for="workgroup">Workgroup</label>
+                                    <select class="form-control" id="workgroup" name="workgroup">
+                                        <option value="">--select--</option>
+                                        <option value="WORKGROUP">WORKGROUP</option>
+                                        <option value="MKSBKK.th">MKSBKK.th</option>
+                                        <option value="Other">Other</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="status">Status</label>
+                                    <input type="text" class="form-control" id="status" name="status">
+                                </div>
+                                <div class="form-group">
+                                    <label for="remark">Remark</label>
+                                    <input type="text" class="form-control" id="remark" name="remark">
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" onclick="saveChanges()">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <!-- Include Bootstrap JS -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+    <!-- Include SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10.12.2/dist/sweetalert2.min.js"></script>
+    <!-- Include custom JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10.16.6/dist/sweetalert2.min.js"></script>
+    <script>
+        function addComputer() {
+            // Clear form fields
+            $('#addForm')[0].reset();
+            // Show the modal
+            $('#addModal').modal('show');
+        }
+    
+        function saveComputer() {
+            // Extract data from form fields
+            var data = {
+                location: $('#add_location').val(),
+                department: $('#add_department').val(),
+                email: $('#add_email').val(),
+                computer_name: $('#add_computer_name').val(),
+                actual_user: $('#add_actual_user').val(),
+                user_permission: $('#add_user_permission').val(),
+                brand: $('#add_brand').val(),
+                model: $('#add_model').val(),
+                type: $('#add_type').val(),
+                cpu: $('#add_cpu').val(),
+                ram: $('#add_ram').val(),
+                year: $('#add_year').val(),
+                estimate_value: $('#add_estimate_value').val(),
+                hdd_total_gb: $('#add_hdd_total_gb').val(),
+                drive_c_total_gb: $('#add_drive_c_total_gb').val(),
+                drive_c_free_gb: $('#add_drive_c_free_gb').val(),
+                drive_c_used_gb: $('#add_drive_c_used_gb').val(),
+                drive_d_total_gb: $('#add_drive_d_total_gb').val(),
+                drive_d_free_gb: $('#add_drive_d_free_gb').val(),
+                drive_d_used_gb: $('#add_drive_d_used_gb').val(),
+                operating_system: $('#add_operating_system').val(),
+                antivirus: $('#add_antivirus').val(),
+                workgroup: $('#add_workgroup').val(),
+                status: $('#add_status').val(),
+                remark: $('#add_remark').val(),
+                last_update: new Date().toISOString()  // Add current datetime
+            };
+    
+            // Send data to server (Flask)
+            $.ajax({
+                url: '/add_computer',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(data),
+                success: function(response) {
+                    console.log('Computer added successfully');
+                    // Show success message using SweetAlert
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Success!',
+                        text: 'Computer added successfully',
+                        onClose: function() {
+                            // Optionally, close the modal after successful addition
+                            $('#addModal').modal('hide');
+                            // Reload or update table data
+                            // Implement a function to refresh your table if needed
+                            // For example: updateComputerTable();
+                        }
+                    });
+                },
+                error: function(error) {
+                    console.error(error.responseText);
+                    // Show error message using SweetAlert
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error!',
+                        text: 'Failed to add computer',
+                        footer: '<pre>' + error.responseText + '</pre>'
+                        
+                    });
+                }
+            });
+        }
+    </script>
+    
+    <script>
+        function sortTable(n) {
+            const table = document.getElementById("computerTable");
+            let rows, switching, i, x, y, shouldSwitch, dir, switchCount = 0;
+            switching = true;
+            dir = "asc";
+
+            while (switching) {
+                switching = false;
+                rows = table.rows;
+                for (i = 1; i < (rows.length - 1); i++) {
+                    shouldSwitch = false;
+                    x = rows[i].getElementsByTagName("TD")[n];
+                    y = rows[i + 1].getElementsByTagName("TD")[n];
+                    if (dir == "asc") {
+                        if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+                            shouldSwitch = true;
+                            break;
+                        }
+                    } else if (dir == "desc") {
+                        if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+                            shouldSwitch = true;
+                            break;
+                        }
+                    }
+                }
+                if (shouldSwitch) {
+                    rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                    switching = true;
+                    switchCount++;
+                } else {
+                    if (switchCount == 0 && dir == "asc") {
+                        dir = "desc";
+                        switching = true;
+                    }
+                }
+            }
+        }
+
+        function filterTable() {
+            var input, filter, table, tr, td, i, txtValue;
+            input = document.getElementById("searchValue");
+            filter = input.value.toUpperCase();
+            table = document.getElementById("computerTable");
+            tr = table.getElementsByTagName("tr");
+
+            var select = document.getElementById("searchColumn");
+            var columnIndex = select.selectedIndex;
+
+            for (i = 0; i < tr.length; i++) {
+                td = tr[i].getElementsByTagName("td")[columnIndex];
+                if (td) {
+                    txtValue = td.textContent || td.innerText;
+                    if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                        tr[i].style.display = "";
+                    } else {
+                        tr[i].style.display = "none";
+                    }
+                }
+            }
+        }
+
+    </script>
+    <script>
+
+function populateForm(computer) {
+    console.log('Computer Data:', computer); // Log the entire computer object for debugging
+
+    document.getElementById('location').value = computer.location;
+    document.getElementById('department').value = computer.department;
+    document.getElementById('email').value = computer.email;
+    document.getElementById('computer_name').value = computer.computer_name;
+    document.getElementById('actual_user').value = computer.actual_user;
+    document.getElementById('user_permission').value = computer.user_permission;
+    document.getElementById('brand').value = computer.brand;
+    document.getElementById('model').value = computer.model;
+    document.getElementById('type').value = computer.type;
+    document.getElementById('cpu').value = computer.cpu;
+    document.getElementById('ram').value = computer.ram;
+    document.getElementById('year').value = computer.year;
+    document.getElementById('estimate_value').value = computer.estimate_value;
+    document.getElementById('hdd_total_gb').value = computer.hdd_total_gb;
+    document.getElementById('drive_c_total_gb').value = computer.drive_c_total_gb;
+    document.getElementById('drive_c_free_gb').value = computer.drive_c_free_gb;
+    document.getElementById('drive_c_used_gb').value = calculateDriveUsed(computer.drive_c_total_gb, computer.drive_c_free_gb);
+    document.getElementById('drive_d_total_gb').value = computer.drive_d_total_gb;
+    document.getElementById('drive_d_free_gb').value = computer.drive_d_free_gb;
+    document.getElementById('drive_d_used_gb').value = calculateDriveUsed(computer.drive_d_total_gb, computer.drive_d_free_gb);
+    document.getElementById('operating_system').value = computer.operating_system;
+    document.getElementById('antivirus').value = computer.antivirus;
+    document.getElementById('workgroup').value = computer.workgroup;
+    document.getElementById('status').value = computer.status;
+    document.getElementById('remark').value = computer.remark;
+
+    // Set the default value of the workgroup select field
+    let workgroupSelect = document.getElementById('workgroup');
+    for (let i = 0; i < workgroupSelect.options.length; i++) {
+        if (workgroupSelect.options[i].value === computer.workgroup) {
+            workgroupSelect.selectedIndex = i;
+            break;
+        }
+    }
+
+    // Debugging: Check the value of last_update
+    console.log('last_update:', computer.last_update);
+}
+
+// Function to calculate used drive space based on total and free space
+function calculateDriveUsed(total, free) {
+    return (total - free).toFixed(2); // Calculate and return used space, rounded to 2 decimal places
+}
+
+// Function to open edit modal and populate form with computer data
+function editComputer(computerId) {
+    // Example URL for fetching computer details
+    const url = `/get_computer_details/${computerId}`;
+
+    // Fetch computer details
+    fetch(url)
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Populate form with computer data
+                populateForm(data.computer);
+
+                // Show the edit modal
+                $('#editModal').modal('show');
+            } else {
+                console.error('Failed to fetch computer details:', data.error);
+            }
+        })
+        .catch(error => {
+            console.error('Error fetching computer details:', error);
+        });
+
+    // Assign the computerId to a global variable or directly pass it to saveChanges function
+    // Example assuming computerId is passed to global variable selectedComputerId
+    selectedComputerId = computerId;
+}
+// Function to save changes to computer details
+function saveChanges() {
+    // Get form data
+    const form = document.getElementById('editForm');
+    const formData = new FormData(form);
+
+    // Example URL for saving changes
+    const url = `/save_computer_changes/${selectedComputerId}`;
+
+    // Perform POST request to save changes
+    fetch(url, {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            // Optionally, show success message or update UI
+            $('#editModal').modal('hide'); // Hide the edit modal after successful save
+            Swal.fire({
+                icon: 'success',
+                title: 'Changes Saved!',
+                text: 'Computer details have been updated.',
+                showConfirmButton: false,
+                timer: 1500
+            }).then(() => {
+                            // Reload the page or handle further actions after success
+                window.location.reload();
+            });
+            // Optionally, update the table or perform other actions
+        } else {
+            console.error('Failed to save changes:', data.error);
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Failed to save changes. Please try again.',
+                showConfirmButton: false,
+                timer: 1500
+            });
+        }
+    })
+    .catch(error => {
+        console.error('Error saving changes:', error);
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'An error occurred while saving changes. Please try again.',
+            showConfirmButton: false,
+            timer: 1500
+        });
+    });
+}
+
+
+    </script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+<!-- ตัวอย่างการโหลด jQuery และ Select2 -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
+
+<script>
+    $(document).ready(function(){
+        // Fetch departments from server
+        $.ajax({
+            url: '/get_departments',
+            type: 'GET',
+            success: function(response) {
+                var departments = response.departments;
+                console.log(departments); // For debugging
+
+                // Sort departments alphabetically
+                departments.sort();
+
+                // Populate tab options
+                var departmentTabs = $('#departmentTabs');
+                departmentTabs.find('li.nav-item:not(:first)').remove(); // Remove existing tabs except 'All Departments'
+
+                $.each(departments, function(index, dept) {
+                    departmentTabs.append(
+                        $('<li class="nav-item"></li>').append(
+                            $('<a class="nav-link"></a>')
+                                .attr('href', '#')
+                                .attr('data-department', dept)
+                                .text(dept)
+                        )
+                    );
+                });
+
+                // Initialize select2 for dropdown (if applicable)
+                var departmentSelect = $('#add_department');
+                $.each(departments, function(index, dept) {
+                    departmentSelect.append($('<option></option>').attr('value', dept).text(dept));
+                });
+
+                $("#add_department").select2();
+            },
+            error: function(error) {
+                console.error('Error fetching departments:', error);
+            }
+        });
+
+        // Tab switch functionality
+        $('#departmentTabs').on('click', 'a', function (e) {
+            e.preventDefault(); // Stop the link from following the URL
+            var selectedDepartment = $(this).data('department');
+            
+            // Change active tab
+            $('#departmentTabs a').removeClass('active');
+            $(this).addClass('active');
+
+            // Show/hide table rows based on selected department
+            if (selectedDepartment === 'all') {
+                $('#computerTable tbody tr').show();
+            } else {
+                $('#computerTable tbody tr').hide().filter('[data-department="' + selectedDepartment + '"]').show();
+            }
+        });
+    });
+</script>
+<script>
+    var requestSent = false;  // Flag to prevent multiple requests
+
+    function triggerVNC(computerName) {
+        if (requestSent) {
+            alert("Request already sent.");
+            sessionStorage.setItem('scrollTop', window.pageYOffset || document.documentElement.scrollTop);
+            window.location.reload();
+            return;
+        }
+
+        requestSent = true;
+
+        var url = "http://localhost:8080/?computer_name=" + encodeURIComponent(computerName);
+        
+        fetch(url)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok: ' + response.statusText);
+                }
+                return response.text();
+            })
+            .then(data => {
+                console.log("Response from server:", data);
+                requestSent = false;
+                updateStatusByComputerName(computerName);
+            })
+            .catch(error => {
+                console.error("Error:", error);
+                requestSent = false;
+            });
+    }
+
+    window.onload = function() {
+        var scrollTop = sessionStorage.getItem('scrollTop');
+        if (scrollTop !== null) {
+            window.scrollTo(0, scrollTop);
+            sessionStorage.removeItem('scrollTop');
+        }
+    };
+    function updateStatus(computerId, callback) {
+        let $statusCell = $('#computer-status-' + computerId);
+        let $statusLoading = $statusCell.find('.status-loading');
+        let $statusText = $statusCell.find('.status-text');
+        let $pingTimeDiv = $statusCell.find('.ping-time');
+
+        $statusLoading.show();
+        $statusText.hide();
+        $pingTimeDiv.find('small').text('');
+
+        $.ajax({
+            url: '/get_computer_status/' + computerId,
+            method: 'GET',
+            success: function (response) {
+                $statusLoading.hide();
+                
+                $statusText.find('span').removeClass('badge-success badge-danger');
+                if (response.status === 'Online') {
+                    $statusText.find('span').addClass('badge-success').html('<i class="fas fa-check-circle"></i> Online');
+                } else {
+                    $statusText.find('span').addClass('badge-danger').html('<i class="fas fa-times-circle"></i> Offline');
+                }
+                $statusText.show();
+
+                if (response.last_ping_time) {
+                    $pingTimeDiv.find('small').text('Last checked: ' + response.last_ping_time);
+                } else {
+                    $pingTimeDiv.find('small').text('Last Ping: N/A');
+                }
+
+                callback();
+            },
+            error: function (xhr, status, error) {
+                console.error('Error fetching status for computer ID ' + computerId + ': ' + error);
+                $statusLoading.hide();
+                $statusText.show().text('Error fetching status');
+                callback();
+            }
+        });
+    }
+// Ensure this script is loaded correctly
+        $(document).ready(function () {
+            function updateStatus(computerId, callback) {
+                let $statusCell = $('#computer-status-' + computerId);
+                let $statusLoading = $statusCell.find('.status-loading');
+                let $statusText = $statusCell.find('.status-text');
+                let $pingTimeDiv = $statusCell.find('.ping-time');
+
+                $statusLoading.show();
+                $statusText.hide();
+                $pingTimeDiv.find('small').text('');
+
+                $.ajax({
+                    url: 'http://127.0.0.1:5000/get_computer_status/' + computerId,
+                    method: 'GET',
+                    success: function (response) {
+                        $statusLoading.hide();
+                        
+                        $statusText.find('span').removeClass('badge-success badge-danger');
+                        if (response.status === 'Online') {
+                            $statusText.find('span').addClass('badge-success').html('<i class="fas fa-check-circle"></i> Online');
+                        } else {
+                            $statusText.find('span').addClass('badge-danger').html('<i class="fas fa-times-circle"></i> Offline');
+                        }
+                        $statusText.show();
+
+                        if (response.last_ping_time) {
+                            $pingTimeDiv.find('small').text('Last checked: ' + response.last_ping_time);
+                        } else {
+                            $pingTimeDiv.find('small').text('Last Ping: N/A');
+                        }
+
+                        callback();
+                    },
+                    error: function (xhr, status, error) {
+                        console.error('Error fetching status for computer ID ' + computerId + ': ' + error);
+                        $statusLoading.hide();
+                        $statusText.show().text('Error fetching status');
+                        callback();
+                    }
+                });
+            }
+
+            function updateAllStatuses() {
+                $('.status-loading').show();
+                $('.status-text').hide();
+                $('.ping-time').find('small').text('');
+
+                let computerIds = [];
+                $('.status-cell').each(function () {
+                    let id = $(this).attr('id').replace('computer-status-', '');
+                    computerIds.push(id);
+                });
+
+                function updateNext(index) {
+                    if (index < computerIds.length) {
+                        let computerId = computerIds[index];
+                        updateStatus(computerId, function() {
+                            setTimeout(function() {
+                                updateNext(index + 1);
+                            }, 500);
+                        });
+                    } else {
+                        console.log('All statuses updated.');
+                    }
+                }
+
+                updateNext(0);
+            }
+
+            // Attach the function to the button
+            $('button[onclick="updateAllStatuses()"]').click(function () {
+                updateAllStatuses();
+            });
+        });
+
+</script>
+
+
+
+
+
+</body>
+</html>

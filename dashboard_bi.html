@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            color: #343a40;
+        }
+    
+        .container {
+            padding: 20px;
+        }
+    
+        h1, h3 {
+            color: #007bff;
+            margin-bottom: 20px;
+        }
+    
+        .form-group label {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+    
+        .form-control {
+            border-radius: 0.25rem;
+        }
+    
+        .list-group-item {
+            border: 1px solid #e9ecef;
+        }
+    
+        .list-group-item strong {
+            color: #28a745;
+        }
+    
+        .table {
+            margin-top: 20px;
+            border: 1px solid #dee2e6;
+            border-radius: 0.25rem;
+        }
+    
+        .table thead th {
+            background-color: #007bff;
+            color: #fff;
+        }
+    
+        .table tbody tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+    
+        .table tbody tr:hover {
+            background-color: #e9ecef;
+        }
+    
+        canvas {
+            max-width: 100%;
+            margin-bottom: 20px;
+        }
+    
+        .mt-4 {
+            margin-top: 1.5rem !important;
+        }
+    
+        .my-4 {
+            margin: 1.5rem 0 !important;
+        }
+    
+        .row {
+            margin-left: -15px;
+            margin-right: -15px;
+        }
+    
+        .col-md-6, .col-md-4 {
+            padding-left: 15px;
+            padding-right: 15px;
+        }
+    
+        @media (max-width: 768px) {
+            .col-md-6, .col-md-4 {
+                padding-left: 0;
+                padding-right: 0;
+            }
+        }
+        @media print {
+    body {
+        background-color: #ffffff;
+        color: #000000;
+    }
+
+    .container {
+        padding: 10px;
+    }
+
+    .row {
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+    .col-md-6, .col-md-4 {
+        display: inline-block;
+        vertical-align: top;
+        box-sizing: border-box;
+    }
+
+    .col-md-6 {
+        width: 48%;
+        margin-right: 2%;
+    }
+
+    .col-md-4 {
+        width: 32%;
+        margin-right: 1%;
+    }
+
+    h1, h3 {
+        color: #000000;
+        page-break-after: avoid;
+    }
+
+    .table {
+        border: 1px solid #000000;
+        page-break-inside: auto;
+    }
+
+    .table thead th {
+        background-color: #000000;
+        color: #ffffff;
+    }
+
+    .table tbody tr:nth-child(even) {
+        background-color: #ffffff;
+    }
+
+    .table tbody tr:hover {
+        background-color: #ffffff;
+    }
+
+    canvas {
+        page-break-inside: avoid;
+        max-width: 100%;
+        margin-bottom: 10px;
+    }
+
+    .list-group-item {
+        border: 1px solid #000000;
+    }
+
+    .list-group-item strong {
+        color: #000000;
+    }
+
+    .page-break {
+        page-break-before: always;
+    }
+
+    @page {
+        margin: 10mm;
+        size: auto; /* or specific size if needed */
+    }
+    .btn{
+        display: none;
+    }
+}
+    </style>
+    
+</head>
+<body>
+    <div class="container">
+        <h1 class="my-4" style="text-align: center;">Dashboard Ticket For Business Intelligence (BI)</h1>
+        <div style="border: #343a40; border-color: #343a40; display: flex;"class=" mb-4" >
+            <!-- Dropdown for Month Selection -->
+            <div class="form-group" style="width: 50%;">
+                <label for="monthSelect">Select Month:</label>
+                <select id="monthSelect" class="form-control">
+                    <!-- Months will be populated here -->
+                </select>
+            </div>
+        
+            <!-- Dropdown for Year Selection -->
+            <div class="form-group" style="width: 50%;">
+                <label for="yearSelect">Select Year:</label>
+                <select id="yearSelect" class="form-control">
+                    <!-- Years will be populated here -->
+                </select>
+            </div>
+
+        </div>
+        <a href="{{ url_for('summary_page') }}" class="btn btn-success"> Go to summary all</a>
+        <a href="{{ url_for('main') }}" class="btn btn-success"> Go to Home</a>
+        <!-- Summary and Charts -->
+        <div class="row">
+            <div class="col-md-6">
+                <h3 style="text-align: center;">Summary BI Ticket</h3>
+                <ul class="list-group">
+                    <li class="list-group-item">Total BI Ticket: <strong><span id="totalIssues">0</span></strong> ticket</li>
+                    <li class="list-group-item">Status Open: <strong><span id="openIssues">0</span></strong> ticket</li>
+                    <li class="list-group-item">Status Wait for Requester: <strong><span id="Wait_for_Requester">0</span></strong> ticket</li>
+                    <li class="list-group-item">Status Finished: <strong><span id="closedIssues">0</span></strong> ticket</li>
+                    <li class="list-group-item">Status In Progress: <strong><span id="inProgressIssues">0</span></strong> ticket</li>
+                </ul>
+            </div>
+            <div class="col-md-6">
+                <h3 style="text-align: center;">BI Ticket Counts by Department</h3>
+                <canvas id="departmentChart"></canvas>
+            </div>
+        </div>
+        <h3 style="text-align: center;"> Distribution Of BI Ticket </h3>
+        <!-- Additional Charts -->
+        <div class="row mt-4">
+            <div class="col-md-4">
+                <h3 style="text-align: center;">BI Ticket Status</h3>
+                <canvas id="statusChart"></canvas>
+            </div>
+            <div class="col-md-4">
+                <h3 style="text-align: center;">BI Ticket Types</h3>
+                <canvas id="issueTypeChart"></canvas>
+            </div>
+            <div class="col-md-4">
+                <h3 style="text-align: center;">BI Ticket Finish By Person</h3>
+                <canvas id="finishByChart"></canvas>
+            </div>
+        </div>
+        <h3 style="text-align: center;">BI Ticket Average Duration Analysis</h3>
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <th> Created to Closed</th>
+                    <th> Created to In Progress</th>
+                    <th> In Progress to Closed</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong><span id="avgCreatedToClose">N/A</span></strong></td>
+                    <td><strong><span id="avgCreatedToInProgress">N/A</span></strong></td>
+                    <td><strong><span id="avgInProgressToClose">N/A</span></strong></td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="page-break"></div> <!-- Force page break -->
+        <!-- Finish By Summary With Percentage -->
+        <h3 class="mt-4" style="text-align: center;">BI Ticket Finish By Summary With Percentage</h3>
+        <table class="table mt-4">
+            <thead>
+                <tr>
+                    <th>Person</th>
+                    <th>Number of Jobs</th>
+                    <th>Percentage</th>
+                </tr>
+            </thead>
+            <tbody id="finishByTableBody">
+                <!-- Table rows will be dynamically filled here -->
+            </tbody>
+        </table>
+
+        <!-- Average Duration Analysis -->
+
+
+
+        <!-- Recent Issues -->
+        <h3 class="mt-4" style="text-align: center;">Recent 10 BI Ticket</h3>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Document Number</th>
+                    <th>Name Requester</th>
+                    <th>Description</th>
+                    <th>Status</th>
+                    <th>Created At</th>
+                    <th>Department</th>
+                </tr>
+            </thead>
+            <tbody id="issuesTableBody">
+                <!-- Table rows will be dynamically filled here -->
+            </tbody>
+        </table>
+
+        <!-- Trend Analysis -->
+        <h3 class="mt-4" style="text-align: center;">BI Ticket Trend Analysis</h3>
+        <canvas id="trendChart"></canvas>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
+    
+    <script>
+$(document).ready(function() {
+    function fetchAvailableDates() {
+        $.getJSON('/api/available_dates')
+        .done(function(data) {
+            console.log('Available Dates Response:', data);
+            $('#monthSelect').empty();
+            $('#yearSelect').empty();
+            
+            if (data.months && data.months.length) {
+                data.months.forEach(month => {
+                    $('#monthSelect').append(`<option value="${month.num}">${month.name}</option>`);
+                });
+            }
+            
+            if (data.years && data.years.length) {
+                data.years.forEach(year => {
+                    $('#yearSelect').append(`<option value="${year}">${year}</option>`);
+                });
+            }
+            
+            const currentMonth = new Date().getMonth() + 1;
+            const currentYear = new Date().getFullYear();
+            $('#monthSelect').val(currentMonth);
+            $('#yearSelect').val(currentYear);
+            
+            updateDashboard(currentMonth, currentYear);
+        })
+        .fail(function(jqXHR, textStatus, errorThrown) {
+            console.error('Error fetching available dates:', textStatus, errorThrown);
+            showError('Failed to load available dates. Please try again later.');
+        });
+    }
+
+    let charts = {};
+
+    function updateDashboard(month, year) {
+    if (!year) {
+        year = new Date().getFullYear(); // Set to current year if not provided
+    }
+    
+    let url = `/api/monthly_summary?year=${year}`;
+    if (month) {
+        url += `&month=${month}`;
+    }
+
+    console.log('Fetching data from:', url); // Log URL for debugging
+
+    $.getJSON(url, function(data) {
+        console.log('API Response:', data); // Log API response for debugging
+        
+        data = data || {};
+
+        $('#totalIssues').text(data.total_issues || 0);
+        $('#openIssues').text(data.open_issues || 0);
+        $('#Wait_for_Requester').text(data.Wait_for_Requester || 0);
+        $('#closedIssues').text(data.closed_issues || 0);
+        $('#inProgressIssues').text(data.in_progress_issues || 0);
+
+        $('#finishByTableBody').html(
+            (data.finish_by_counts || []).map(f => {
+                const percentage = data.total_issues ? ((f.count / data.total_issues) * 100).toFixed(2) : 0;
+                return `<tr><td>${f.finish_by}</td><td>${f.count}</td><td>${percentage}%</td></tr>`;
+            }).join('')
+        );
+
+        $('#issuesTableBody').html(
+            (data.recent_issues || []).map(i => {
+                return `<tr><td>${i.error_number}</td><td>${i.title}</td><td>${i.description}</td><td>${i.status}</td><td>${i.created_at}</td><td>${i.department}</td></tr>`;
+            }).join('')
+        );
+
+        $('#avgCreatedToInProgress').text((data.avg_created_to_in_progress) || 'N/A');
+        $('#avgCreatedToClose').text((data.avg_created_to_close) || 'N/A');
+        $('#avgInProgressToClose').text((data.avg_in_progress_to_close) || 'N/A');
+
+        updateChart('#departmentChart', 'bar', 
+            (data.department_counts || []).map(d => d.department || 'Unknown'), 
+            (data.department_counts || []).map(d => d.count || 0), 
+            'Issues by Department');
+
+        updateChart('#statusChart', 'pie', 
+            (data.status_counts || []).map(s => s.status || 'Unknown'), 
+            (data.status_counts || []).map(s => s.count || 0), 
+            'Issue Status Distribution');
+
+        updateChart('#issueTypeChart', 'pie', 
+            (data.issue_type_counts || []).map(i => i.issuetype || 'Unknown'), 
+            (data.issue_type_counts || []).map(i => i.count || 0), 
+            'Issue Type Distribution');
+
+        updateChart('#finishByChart', 'pie', 
+            (data.finish_by_counts || []).map(f => f.finish_by || 'Unknown'), 
+            (data.finish_by_counts || []).map(f => f.count || 0), 
+            'Jobs Finished By Person');
+        
+        updateChart('#trendChart', 'line', 
+            data.trend_labels || [], 
+            data.trend_data || [], 
+            'Trend Analysis');
+    });
+}
+
+function updateChart(selector, type, labels, data) {
+    const ctx = $(selector)[0].getContext('2d');
+    if (charts[selector]) {
+        charts[selector].destroy();
+    }
+
+    const backgroundColors = [
+        '#FF6384', '#36A2EB', '#FFCE56', 
+        '#FF5733', '#C70039', '#900C3F', 
+        '#581845'
+    ];
+
+    const borderColors = [
+        '#FF6384', '#36A2EB', '#FFCE56', 
+        '#FF5733', '#C70039', '#900C3F', 
+        '#581845'
+    ];
+
+    charts[selector] = new Chart(ctx, {
+        type: type,
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Data',
+                data: data,
+                backgroundColor: type === 'pie' ? backgroundColors : [
+                '#FF6384', '#36A2EB', '#FFCE56', 
+        '#FF5733', '#C70039', '#900C3F', 
+        '#581845'
+                ],
+                borderColor: type === 'pie' ? borderColors : [
+                '#FF6384', '#36A2EB', '#FFCE56', 
+        '#FF5733', '#C70039', '#900C3F', 
+        '#581845'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+}
+
+
+
+
+
+
+$('#monthSelect, #yearSelect').on('change', function() {
+    const month = $('#monthSelect').val();
+    const year = $('#yearSelect').val();
+    console.log('Selected Month:', month, 'Selected Year:', year); // Log selected values for debugging
+    updateDashboard(month, year);
+});
+
+    fetchAvailableDates();
+    updateDashboard(); // Initial load
+});
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
+</body>
+</html>

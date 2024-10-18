@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update Car</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.css">
+    <style>
+        /* CSS Style for Car Management System */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1, h2 {
+            text-align: center;
+            color: #333;
+        }
+
+        form {
+            margin-bottom: 20px;
+        }
+
+        label {
+            font-weight: bold;
+        }
+
+        input[type=text], input[type=url], input[type=date] {
+            width: calc(100% - 10px);
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        input[type=submit], button {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        input[type=submit]:hover, button:hover {
+            background-color: #45a049;
+        }
+
+        button {
+            padding: 8px 16px;
+            background-color: #008CBA;
+        }
+
+        button:hover {
+            background-color: #0077A3;
+        }
+
+        .car-item {
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+
+        .car-item h3 {
+            margin-top: 0;
+            margin-bottom: 10px;
+        }
+
+        .car-item img {
+            max-width: 100%;
+            height: auto;
+            margin-top: 10px;
+            border-radius: 4px;
+        }
+
+        .car-item button {
+            margin-top: 10px;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.5);
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            position: relative;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Update Car</h1>
+
+        <form id="updateCarForm">
+            <input type="hidden" id="carId" name="carId" value="{{ car.id }}"> <!-- ใช้ input hidden เก็บค่า car_id -->
+            
+            <label for="carName">Car Name:</label>
+            <input type="text" id="carName" name="carName" value="{{ car.car_name }}" required><br><br>
+            
+            <label for="insuranceExpiry">Insurance Expiry:</label>
+            <input type="date" id="insuranceExpiry" name="insuranceExpiry" value="{{ car.insurance_expiry }}"><br><br>
+            
+            <label for="taxExpiry">Tax Expiry:</label>
+            <input type="date" id="taxExpiry" name="taxExpiry" value="{{ car.tax_expiry }}"><br><br>
+            
+            <label for="maintenanceDate">Maintenance Date:</label>
+            <input type="date" id="maintenanceDate" name="maintenanceDate" value="{{ car.maintenance_date }}"><br><br>
+            
+            <label for="licensePlate">License Plate:</label>
+            <input type="text" id="licensePlate" name="licensePlate" value="{{ car.license_plate }}" readonly required><br><br>
+            
+
+            <button type="submit">Update Car</button>
+        </form>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const updateCarForm = document.getElementById('updateCarForm');
+            updateCarForm.addEventListener('submit', function(event) {
+                event.preventDefault();
+
+                const formData = new FormData(updateCarForm);
+                const carData = {
+                    car_id: formData.get('carId'),
+                    car_name: formData.get('carName'),
+                    insurance_expiry: formData.get('insuranceExpiry'),
+                    tax_expiry: formData.get('taxExpiry'),
+                    maintenance_date: formData.get('maintenanceDate'),
+                    license_plate: formData.get('licensePlate')
+                };
+
+                // Prepare request options
+                const requestOptions = {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(carData)
+                };
+
+                // Fetch API endpoint to update car details
+                fetch(`/api/cars/${carData.car_id}`, requestOptions)
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log('Success:', data);
+                        swal('Success', 'Car updated successfully! \n Old data saved successfully!', 'success')
+                            .then(() => {
+                                saveOldData(carData)
+                                // Save old data to text file
+                                window.location.href = '/car';
+                                // Redirect to main page after updating
+                            });
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        swal('Error', 'Failed to update car. Please try again.', 'error');
+                    });
+            });
+
+            // Function to save old data to a file on the server
+            function saveOldData(carData) {
+                // Format the current date for the filename
+                const currentDate = new Date().toISOString().slice(0, 10); // Format: YYYY-MM-DD
+
+                // Generate the filename based on car name and current date
+                const filename = `${carData.car_name}_${currentDate}_old_data.txt`;
+                const car_name = `${carData.car_name}`;
+
+                // Construct the content of the text file
+                const oldData = `Car ID: ${carData.car_id}\nCar Name: ${carData.car_name}\nInsurance Expiry: ${carData.insurance_expiry}\nTax Expiry: ${carData.tax_expiry}\nMaintenance Date: ${carData.maintenance_date}\nLicense Plate: ${carData.license_plate}\n`;
+
+                // Fetch API endpoint to save data to server
+                fetch('/api/save_old_data', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        filename: filename,
+                        car_name: car_name,
+                        content: oldData
+                    })
+                })
+                .then(response => {
+                    if (response.ok) {
+                        console.log('Old data saved successfully on the server.');
+                    } else {
+                        console.error('Failed to save old data on the server.');
+                        swal('Error', 'Failed to save old data on the server. Please try again.', 'error');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error saving old data:', error);
+                    swal('Error', 'Failed to save old data on the server. Please try again.', 'error');
+                });
+            }
+
+        });
+    </script>
+</body>
+</html>

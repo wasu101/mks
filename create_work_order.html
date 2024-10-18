@@ -117,10 +117,41 @@
         strong, span {
             display: inline;
         }
-        .date-time-container {
+        .loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.8);
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
 }
+
+.loading-spinner {
+    border: 16px solid #f3f3f3;
+    border-top: 16px solid #3498db;
+    border-radius: 50%;
+    width: 120px;
+    height: 120px;
+    animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+#loading p {
+    margin-top: 20px;
+    font-size: 18px;
+    color: #000;
+}
+
+    </style>
+        
     </style>
     <script>
         function updateDateTime() {
@@ -132,15 +163,25 @@
             timeElement.innerHTML = now.toLocaleTimeString();
         }
 
-        setInterval(updateDateTime, 1000);
+        setInterval(updateDateTime, 1000); // Update every 1 second
     </script>
 </head>
 <body>
+    <!-- Show user information -->
+    <div id="loading" style="display:none;">
+        <div class="loading-overlay">
+            <div class="loading-spinner"></div>
+            <p></p>
+        </div>
+    </div>
+    
+   
     <div class="container">
+        
         <div class="form-container">
             <p class="small mb-1">You are logged in as <strong>{{ current_user.displayname }}</strong> from <strong>{{ current_user.department }}</strong>.</p>
-            <form action="/add" method="post" id="addTicketForm">
-                <h1><i class="fa fa-ticket"></i> Add New Ticket</h1>
+            <form action="/create_work_order" method="post" id="createWorkOrderForm">
+                <h1 class="mb-1">Create Work Order</h1>
                 <div class="date-time-container" style="display: flex; justify-content: space-between;">
                     <p class="small mb-1">Date: <span id="current-date"></span></p>
                     <p class="small mb-1">Time: <span id="current-time"></span></p>
@@ -163,45 +204,45 @@
             
         </div> <!-- End of form container -->
     </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     
-
-    <!-- JavaScript code to show the modal when ticket is successfully added -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> <!-- เพิ่ม jQuery library -->
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script> <!-- เพิ่ม Bootstrap JavaScript library -->
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> <!-- Include SweetAlert library -->
     <script>
-
         $(document).ready(function() {
-            function showSuccessAlert(new_ticket_id, ticket_number) {
+            // Function to show success SweetAlert and navigate to work_order_detail page
+            function showSuccessAlert(workOrderNumber, newOrderId) {
                 Swal.fire({
                     icon: 'success',
                     title: 'Success',
-                    html: 'Ticket successfully added! Your ticket number is: <strong>' + ticket_number + '</strong>',
-                    showCloseButton: false,
-                    showConfirmButton: true,
-                    allowOutsideClick: true
-                }).then((result) => {
-                    window.location.href = '/ticket/' + new_ticket_id;
+                    html: 'Work Order successfully added! Your Work Order number is: <strong>' + workOrderNumber + '</strong>',
+                    confirmButtonText: 'OK',
+                    showCloseButton: false, // แสดงปุ่มปิด
+                    showConfirmButton: true, // ไม่แสดงปุ่มยืนยัน
+                    allowOutsideClick: true // อนุญาตให้คลิกนอก SweetAlert เพื่อปิด
+                    }).then((result) => {
+                        window.location.href = '/work_order_detail/' + newOrderId;
+
                 });
             }
-
-            $('#addTicketForm').submit(function(event) {
-                event.preventDefault();
+    
+            // Form submission handling
+            $('#createWorkOrderForm').submit(function(event) {
+                event.preventDefault(); // Prevent default form submission
+    
                 $.ajax({
-                    url: '/add',
-                    type: 'POST',
-                    data: $(this).serialize(),
-                    success: function(response) {
-                        showSuccessAlert(response.new_ticket_id, response.ticket_number);
+                    url: '/create_work_order', // URL to submit form data
+                    type: 'POST', // HTTP method
+                    data: $(this).serialize(), // Form data
+                    success: function(response) { // Function to handle successful response
+                        showSuccessAlert(response.order_number, response.new_order_id); // Show success alert with Work Order number and navigate to work_order_detail page
                     },
-                    error: function(xhr, status, error) {
-                        console.error('Error:', error);
-                    },
-                    beforeSend: function() {
-                        Swal.showLoading();
+                    error: function(xhr, status, error) { // Function to handle error response
+                        console.error('Error:', error); // Log error to console
                     }
                 });
             });
+    
+            // Loading screen handling
             function showLoading() {
                 Swal.fire({
                     title: 'Loading...',
@@ -238,32 +279,62 @@
             window.showLoading = showLoading;
             window.hideLoading = hideLoading;
         });
+
     </script>
-    <script src="https://cdn.socket.io/4.0.1/socket.io.min.js"></script>
-    <script>
-        var protocol = window.location.protocol === 'https:' ? 'https:' : 'http:';
-        var socket = io.connect(protocol + '//' + document.domain + ':' + location.port);
-
-        socket.on('connect', function() {
-            console.log('Connected to server');
-        });
-
-        socket.on('disconnect', function() {
-            console.log('Disconnected from server');
-        });
-
-        socket.on('notify', (data) => {
-            // Display notification in browser
-            if (Notification.permission === 'granted') {
-                new Notification(data.title, { body: data.message });
-            } else if (Notification.permission !== 'denied') {
-                Notification.requestPermission().then(permission => {
-                    if (permission === 'granted') {
-                        new Notification(data.title, { body: data.message });
+            <script>
+                // Function to sort options alphabetically
+                function sortSelectOptions(selectElement) {
+                    // Get the select element
+                    var select = document.getElementById(selectElement);
+        
+                    // Get the options
+                    var options = select.options;
+        
+                    // Create array to hold option values
+                    var optionValues = [];
+        
+                    // Populate array with option values
+                    for (var i = 0; i < options.length; i++) {
+                        optionValues.push(options[i].text);
                     }
-                });
-            }
-        });
-    </script>
+        
+                    // Sort the array of option values alphabetically
+                    optionValues.sort();
+        
+                    // Remove existing options from select element
+                    select.innerHTML = '';
+        
+                    // Add sorted options back to select element
+                    for (var j = 0; j < optionValues.length; j++) {
+                        var option = document.createElement('option');
+                        option.text = optionValues[j];
+                        select.add(option);
+                    }
+                }
+        
+                // Call the function to sort options alphabetically
+                sortSelectOptions('department');
+            </script>
 </body>
+<script src="https://cdn.socket.io/4.0.1/socket.io.min.js"></script>
+<script>
+  const socket = io.connect();
+
+  // Request permission for browser notifications
+  if (Notification.permission !== 'granted') {
+    Notification.requestPermission();
+  }
+
+  // Listen for 'notify' events from the server
+  socket.on('notify', function (data) {
+    if (Notification.permission === 'granted') {
+      new Notification(data.title, {
+        body: data.message,
+      });
+    } else {
+      alert(data.message); // Fallback if notifications are not allowed
+    }
+  });
+</script>
+
 </html>

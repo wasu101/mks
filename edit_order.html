@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Work Order</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="icon" href="{{ url_for('static', filename='images/logo1.ico') }}" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: #666666;
+            background-color: #f0f0f0;
+        }
+
+        .container {
+            max-width: 600px;
+            width: 100%;
+        }
+
+        .form-container {
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h1 {
+            color: #333333;
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 36px;
+        }
+
+        h1 i {
+            color: #4a90e2;
+            font-size: 32px; /* Increase the icon size */
+            margin-right: 10px; /* Add some space between icon and text */
+        }
+
+        label {
+            color: #666666;
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        input[type="text"],
+        textarea,
+        select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #cccccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+            transition: border-color 0.3s;
+        }
+
+        input[type="text"]:focus,
+        textarea:focus,
+        select:focus {
+            border-color: #4a90e2;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        input[type="submit"] {
+            background-color: #4a90e2;
+            color: #ffffff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            display: block;
+            margin: 20px auto 0;
+            transition: background-color 0.3s ease;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #357ab8;
+        }
+
+        .small {
+            color: #333333;
+        }
+
+        .modal-content {
+            border-radius: 10px;
+        }
+
+        .modal-header {
+            border-bottom: none;
+        }
+
+        .modal-body {
+            font-size: 16px;
+        }
+
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .loading-spinner {
+            border: 16px solid #f3f3f3;
+            border-top: 16px solid #3498db;
+            border-radius: 50%;
+            width: 120px;
+            height: 120px;
+            animation: spin 2s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        #loading p {
+            margin-top: 20px;
+            font-size: 18px;
+            color: #000;
+        }
+
+    </style>
+</head>
+<body>
+    <div id="loading" style="display:none;">
+        <div class="loading-overlay">
+            <div class="loading-spinner"></div>
+            <p>Loading...</p>
+        </div>
+    </div>
+    <div class="container">       
+        <div class="form-container"> <!-- Add a container for the form -->
+    
+            <form action="/edit_mt/{{ work_order.id }}" method="post" id="editOrderForm">
+                <h1>Edit Work Order</h1>
+                <label for="title">Title:</label>
+                <input type="text" id="title" name="title" value="{{ work_order.title }}">
+                
+                <label for="description">Description:</label>
+                <textarea id="description" name="description">{{ work_order.description }}</textarea>
+                
+                <label for="department">Department:</label>
+                <select id="department" name="department">
+                    <option value="IT">IT</option>
+                    <option value="HR">HR</option>
+                    <!-- Add other department options here -->
+                </select>
+                
+                <input type="submit" value="Submit">
+                <a href="{{ url_for('work_order_detail', order_id=work_order.id) }}" class="text">Cancel</a>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="successModal" tabindex="-1" role="dialog" aria-labelledby="successModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="successModalLabel">Success</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Work Order successfully edited!
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            // Function to show the success modal
+            function showSuccessModal() {
+                $('#successModal').modal('show');
+            }
+
+            // Submit form via AJAX
+            $('#editOrderForm').submit(function(event) {
+                event.preventDefault(); // Prevent default form submission
+
+                $.ajax({
+                    url: $(this).attr('action'), // Form action URL
+                    type: $(this).attr('method'), // Form method (POST in this case)
+                    data: $(this).serialize(), // Serialize form data
+                    success: function(response) {
+                        showSuccessModal(); // Show success modal on successful form submission
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error:', error); // Log any errors to the console
+                    }
+                });
+
+                // Redirect to work order detail page after modal is closed
+                $('#successModal').on('hidden.bs.modal', function() {
+                    window.location.href = "{{ url_for('work_order_detail', order_id=work_order.id) }}";
+                });
+            });
+        });
+
+        // Loading screen handling
+        $(document).ready(function() {
+            function showLoading() {
+                $('#loading').show();
+            }
+
+            function hideLoading() {
+                $('#loading').hide();
+            }
+
+            // Show loading screen on link click
+            $('a').on('click', function(e) {
+                if (!$(this).hasClass('no-loading')) {
+                    showLoading();
+                }
+            });
+
+            // Show loading screen on form submit
+            $('form').on('submit', function() {
+                showLoading();
+            });
+
+            // Hide loading screen on page load
+            $(window).on('load', function() {
+                hideLoading();
+            });
+
+            // Manually show the loading screen if needed
+            window.showLoading = showLoading;
+            window.hideLoading = hideLoading;
+        });
+    </script>
+</body>
+</html>

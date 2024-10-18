@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Server Status</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        .status-container {
+            margin-top: 20px;
+            padding: 20px;
+            border-radius: 5px;
+            background-color: #fff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .status-heading {
+            margin-bottom: 10px;
+            font-size: 20px;
+            color: #333;
+        }
+
+        .status-list {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .status-item {
+            padding: 10px 0;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .error-message {
+            color: #d9534f;
+            font-weight: bold;
+        }
+        #databaseStatus {
+            margin-top: 20px;
+            padding: 20px;
+            border-radius: 5px;
+            background-color: #fff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        #statusGraphCanvas {
+            margin-top: 20px;
+            border-radius: 5px;
+            background-color: #fff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .log-container {
+            margin-top: 20px;
+            padding: 20px;
+            border-radius: 5px;
+            background-color: #fff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .log-heading {
+            margin-bottom: 10px;
+            font-size: 20px;
+            color: #333;
+        }
+        .log-list {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+        .log-item {
+            background-color: black;
+            color: white;
+            font-family: Courier, monospace;
+        }
+        .error-message {
+            color: #d9534f;
+            font-weight: bold;
+        }
+        .timestamp {
+            color: gray;
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Server Status</h1>
+    <div id="databaseStatus" class="status-container">
+        <h2 class="status-heading">Database Status</h2>
+        <p>Loading database status...</p>
+    </div>
+    <h1>System Logs</h1>
+    <p>
+        {% for log in logs %}
+            <li class="log-item"><span>{{ log}}</span></li>
+        {% endfor %}
+    </p>
+    <div class="status-container" id="connectedUsers">
+        <h2 class="status-heading">Connected Detial Table</h2>
+        <p>Loading connected users...</p>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // เรียก API เพื่อตรวจสอบสถานะฐานข้อมูล
+            fetch('/api/database/status')
+                .then(response => response.json())
+                .then(data => {
+                    const databaseStatusElement = document.getElementById('databaseStatus');
+                    databaseStatusElement.innerHTML = `<h2 class="status-heading">Database Status</h2><p>Database Status: ${data.status}</p>`;
+                })
+                .catch(error => {
+                    console.error('Error fetching database status:', error);
+                    const databaseStatusElement = document.getElementById('databaseStatus');
+                    databaseStatusElement.innerHTML = `<h2 class="status-heading">Database Status</h2><p class="error-message">Failed to fetch database status</p>`;
+                });
+            // เรียก API เพื่อดึงข้อมูลผู้ใช้ที่เชื่อมต่อ
+            fetch('/api/database/users')
+                .then(response => response.json())
+                .then(data => {
+                    const connectedUsersElement = document.getElementById('connectedUsers');
+                    if (data.tables && data.tables.length > 0) {
+                        const userListHTML = data.tables.map(table => `<li class="status-item">${table}</li>`).join('');
+                        connectedUsersElement.innerHTML = `<h2 class="status-heading">Connected Detial Table</h2><ul class="status-list">${userListHTML}</ul>`;
+                    } else {
+                        connectedUsersElement.innerHTML = `<h2 class="status-heading">Connected Detial Table</h2><p>No connected users</p>`;
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching connected users:', error);
+                    const connectedUsersElement = document.getElementById('connectedUsers');
+                    connectedUsersElement.innerHTML = `<h2 class="status-heading">Connected Detial Table</h2><p class="error-message">Failed to fetch connected users</p>`;
+                });
+        });
+    </script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        fetch('/api/system/logs')
+            .then(response => response.json())
+            .then(data => {
+                const logsList = document.getElementById('logs-list');
+                data.logs.forEach(log => {
+                    const listItem = document.createElement('li');
+                    listItem.textContent = log;
+                    logsList.appendChild(listItem);
+                });
+            })
+            .catch(error => console.error('Error fetching logs:', error));
+    });
+</script>
+</body>
+</html>

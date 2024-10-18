@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Print Task</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <style>
+        .print-container {
+            margin: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <h2> ตัดส่วนนี้เพื่อแปะที่หน้าซองเอกสาร</h2>
+        <br>
+        <br>
+        <p>------------------------------------------------------------------------------------------------------------------------------------------------------</p>
+        <br>
+        <br>
+        <table class="table table-bordered">
+            <tr>
+                <th>เอกสารหมายเลข</th>
+                <td>{{ task.task_id }}</td>
+            </tr>
+            <tr>
+                <th>สถานที่รับ</th>
+                <td>{{ task.pickup_address }}</td>
+            </tr>
+            <tr>
+                <th>สถานที่ส่ง</th>
+                <td>{{ task.delivery_address }}</td>
+            </tr>
+            <tr>
+                <th>เอกสารที่ต้องรอรับกลับ</th>
+                <td>{{ 'มี' if task.return_required == 1 else 'ไม่มี' }}</td>
+            </tr>
+
+        </table>
+        <br>
+        <br>
+        <p>------------------------------------------------------------------------------------------------------------------------------------------------------</p>
+        <br>
+        <br>
+        <button class="btn btn-primary" onclick="window.print()">Print</button>
+    </div>
+</body>
+</html>

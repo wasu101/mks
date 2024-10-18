@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>
+    <style>
+/* Reset บางส่วนเพื่อความเข้ากันได้ของเบราว์เซอร์ */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* ตั้งค่าพื้นฐานสำหรับ Body */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #ece9e6, #ffffff);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+/* สไตล์สำหรับ Container */
+.container {
+    background: #ffffff;
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    max-width: 400px;
+    width: 100%;
+}
+
+/* หัวเรื่อง */
+.container h1 {
+    text-align: center;
+    margin-bottom: 30px;
+    color: #333333;
+    font-size: 2em;
+}
+
+/* สไตล์สำหรับฟอร์ม */
+form#registerForm {
+    display: flex;
+    flex-direction: column;
+}
+
+/* สไตล์สำหรับแต่ละฟิลด์ */
+form#registerForm div {
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+/* ป้ายชื่อ (Label) */
+form#registerForm label {
+    margin-bottom: 5px;
+    color: #555555;
+    font-weight: 500;
+}
+
+/* อินพุตและเลือก */
+form#registerForm input,
+form#registerForm select {
+    padding: 10px 15px;
+    border: 1px solid #cccccc;
+    border-radius: 5px;
+    font-size: 1em;
+    transition: border-color 0.3s;
+}
+
+/* เปลี่ยนสีของขอบเมื่อโฟกัส */
+form#registerForm input:focus,
+form#registerForm select:focus {
+    border-color: #007BFF;
+    outline: none;
+}
+
+/* ปุ่มสมัครสมาชิก */
+form#registerForm button {
+    padding: 12px 20px;
+    background-color: #007BFF;
+    color: #ffffff;
+    border: none;
+    border-radius: 5px;
+    font-size: 1em;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+/* เปลี่ยนสีปุ่มเมื่อ hover */
+form#registerForm button:hover {
+    background-color: #0056b3;
+}
+
+/* สไตล์สำหรับอุปกรณ์ที่มีหน้าจอขนาดเล็ก */
+@media (max-width: 480px) {
+    .container {
+        padding: 20px;
+    }
+
+    .container h1 {
+        font-size: 1.5em;
+    }
+
+    form#registerForm input,
+    form#registerForm select {
+        font-size: 0.9em;
+    }
+
+    form#registerForm button {
+        font-size: 0.9em;
+    }
+}
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Register</h1>
+        <form id="registerForm">
+            <div>
+                <label for="firstName">First Name:</label>
+                <input type="text" id="firstName" required>
+            </div>
+            <div>
+                <label for="lastName">Last Name:</label>
+                <input type="text" id="lastName" required>
+            </div>
+            <div>
+                <label for="nickname">Nickname:</label>
+                <input type="text" id="nickname" required>
+            </div>
+            <div>
+                <label for="password">Password:</label>
+                <input type="password" id="password" required>
+            </div>
+            <div>
+                <label for="department">Department:</label>
+                <select id="department" name="department" required>
+                    <option value="IT">IT</option>
+                    <option value="DESIGN/CAD/MODEL">DESIGN/CAD/MODEL</option>
+                    <option value="HR">HR</option>
+                    <option value="GOLD STOCK">GOLD STOCK</option>
+                    <option value="CASTING">CASTING</option>
+                    <option value="REFINERY">REFINERY</option>
+                    <option value="WAXING">WAXING</option>
+                    <option value="WAX-SET">WAX-SET</option>
+                    <option value="CNC">CNC</option>
+                    <option value="VOLUME">VOLUME</option>
+                    <option value="COMMERCIAL">COMMERCIAL</option>
+                    <option value="AUTO">AUTO</option>
+                    <option value="BRANDED">BRANDED</option>
+                    <option value="SETTING-EXPRESS">SETTING-EXPRESS</option>
+                    <option value="PT-US">PT-US</option>
+                    <option value="PT-JP">PT-JP</option>
+                    <option value="EXPRESS">EXPRESS</option>
+                    <option value="PREMIUM">PREMIUM</option>
+                    <option value="SETTING-SUPPORT">SETTING-SUPPORT</option>
+                    <option value="SUB-CON">SUB-CON</option>
+                    <option value="SETTING">SETTING</option>
+                    <option value="PLATING">PLATING</option>
+                    <option value="QC">QC</option>
+                    <option value="DIAMOND/STONE/GEMS">DIAMOND/STONE/GEMS</option>
+                    <option value="BI(NAVISION)">BI(NAVISION)</option>
+                    <option value="PACKING">PACKING</option>
+                    <option value="EXPORT-IMPORT">EXPORT-IMPORT</option>
+                    <option value="OPC">OPC</option>
+                    <option value="MAINTENANCE">MAINTENANCE</option>
+                    <option value="PURCHASE">PURCHASE</option>
+                    <option value="STORE">STORE</option>
+                    <option value="SECURITY">SECURITY</option>
+                    <option value="SALES">SALES</option>
+                    <option value="ACCOUNTING">ACCOUNTING</option>
+                    <option value="SENIOR MANAGER">SENIOR MANAGER</option>
+                </select>
+            </div>
+            <button type="submit">Register</button>
+        </form>
+    </div>
+    <!-- SweetAlert2 CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+
+<!-- SweetAlert2 JS -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.js"></script>
+
+
+<script>
+$(document).ready(function() {
+    // Function to capitalize the first letter and make the rest lowercase
+    function capitalizeFirstLetter(string) {
+        if (!string) return '';
+        return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
+    }
+
+    // Function to sort options alphabetically
+    function sortSelectOptions(selectElement) {
+        // Get the select element
+        var select = document.getElementById(selectElement);
+        var options = select.options;
+        var optionValues = [];
+
+        // Populate array with option values
+        for (var i = 0; i < options.length; i++) {
+            optionValues.push(options[i].text);
+        }
+
+        // Sort the array of option values alphabetically
+        optionValues.sort();
+
+        // Remove existing options from select element
+        select.innerHTML = '';
+
+        // Add sorted options back to select element
+        for (var j = 0; j < optionValues.length; j++) {
+            var option = document.createElement('option');
+            option.text = optionValues[j];
+            select.add(option);
+        }
+    }
+
+    // Call the function to sort options alphabetically
+    sortSelectOptions('department');
+
+    $('#registerForm').on('submit', function(e) {
+        e.preventDefault(); // Prevent the form from submitting
+
+        // Get the input values and capitalize
+        var firstName = capitalizeFirstLetter($('#firstName').val());
+        var lastName = capitalizeFirstLetter($('#lastName').val());
+        var nickname = capitalizeFirstLetter($('#nickname').val());
+        var password = $('#password').val();
+        var department = $('#department').val();
+
+        // Generate the username
+        var username = firstName.toLowerCase() + '.' + lastName.charAt(0).toLowerCase();
+
+        // Show SweetAlert with the generated username
+        Swal.fire({
+            title: "Registration Successful!",
+            html: `<span style="color: red; font-size: 24px; font-weight: bold;">Your username is: ${username}</span><br>Please remember this.`,
+            icon: "success",
+            showCancelButton: false,
+            confirmButtonText: "Go to login",
+            allowOutsideClick: false, // Prevent closing by clicking outside
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Send data to the server
+                $.ajax({
+                    url: '/register',
+                    type: 'POST',
+                    data: {
+                        username: username,
+                        password: password,
+                        department: department,
+                        displayname: `${firstName} ${lastName.charAt(0).toUpperCase()}. (${nickname})`
+                    },
+                    success: function(response) {
+                        // Handle successful registration
+                        window.location.href = '/login'; // Redirect to login page
+                    },
+                    error: function(xhr, status, error) {
+                        // Handle errors
+                        Swal.fire("Error", "An error occurred during registration.", "error");
+                    }
+                });
+            }
+        });
+
+        // Add click event to copy username button
+        $(document).on('click', '#copyUsername', function() {
+            navigator.clipboard.writeText(username).then(() => {
+                Swal.fire('Copied!', 'Your username has been copied to clipboard.', 'success');
+            }).catch(err => {
+                console.error('Could not copy text: ', err);
+            });
+        });
+    });
+});
+
+</script>
+
+    
+</body>
+</html>

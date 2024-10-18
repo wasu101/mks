@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="icon" href="{{ url_for('static', filename='images/logo1.ico') }}" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <style>
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f7f7f7;
+    color: #333;
+}
+
+.card {
+    background-color: #fff;
+    border-radius: 8px; /* Slightly less rounded corners */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Lighter shadow */
+    padding: 20px;
+    margin: 20px auto;
+    max-width: 800px;
+    border: 1px solid #e0e0e0; /* Subtle border */
+}
+
+h1 {
+    font-size: 1.5em; /* Smaller heading size */
+    margin-bottom: 20px;
+    text-align: center;
+    color: #333; /* Darker color for contrast */
+}
+
+.container {
+    position: relative;
+    width: 300px; /* Set a fixed width */
+    height: 300px; /* Set a fixed height to match width for a square container */
+    display: flex; /* Use flexbox to center elements */
+    align-items: center; /* Center items vertically */
+    justify-content: center; /* Center items horizontally */
+}
+
+.container img {
+    border-radius: 50%; /* Circular image for a more modern look */
+    max-width: 300px; /* Size of the profile image */
+    height: auto; /* Maintain aspect ratio */
+    border: 2px solid #eaeaea; /* Subtle border */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Added shadow to the image */
+}
+
+.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    transition: opacity 0.3s;
+    border-radius: 50%; /* Match the image shape */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Shadow to match the image */
+}
+
+.container:hover .overlay {
+    opacity: 1;
+}
+
+#myBtn {
+    background-color: transparent; /* Make button background transparent */
+    border: none; /* Remove button border */
+    color: white; /* White text color */
+    font-size: 20px; /* Font size for the icon */
+    cursor: pointer; /* Pointer cursor for button */
+    transition: transform 0.3s; /* Smooth transform transition */
+}
+
+#myBtn:hover {
+    transform: scale(1.1); /* Slightly enlarge the button on hover */
+}
+
+
+button {
+    background-color: transparent; /* No background */
+    color: #007bff; /* Blue text color */
+    border: none; /* No border */
+    font-size: 14px; /* Slightly smaller font size */
+    cursor: pointer;
+    margin: 10px;
+    padding: 10px 15px;
+    border-radius: 5px; /* Rounded corners */
+    transition: color 0.3s, transform 0.2s; /* Smooth transitions */
+}
+
+button:hover {
+    color: #0056b3; /* Darker blue on hover */
+    transform: scale(1.05); /* Slight zoom effect */
+}
+
+button:active {
+    transform: scale(0.95); /* Press effect */
+}
+
+.modal {
+    display: none; 
+    position: fixed; 
+    z-index: 1000; 
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto; 
+    background-color: rgba(0,0,0,0.5);
+}
+
+.modal-content {
+    background-color: #fff;
+    margin: 15% auto; 
+    padding: 20px;
+    border: 1px solid #e0e0e0; /* Subtle border */
+    border-radius: 8px; /* Match card style */
+    width: 80%; 
+    max-width: 400px; 
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1); /* Lighter shadow */
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.row-container {
+    margin-top: 20px;
+}
+
+.row {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 1px solid #e0e0e0; /* Subtle divider */
+}
+
+.label-col {
+    font-weight: bold;
+}
+
+.value-col {
+    text-align: right;
+}
+
+.profile-info p {
+    margin: 0;
+}
+
+input[type="file"] {
+    display: block;
+    margin: 10px auto;
+}
+
+img#image {
+    margin-top: 10px;
+    border: 2px dashed #007bff; /* Light dashed border */
+    border-radius: 5px;
+}
+
+.mt-4 {
+    margin-top: 20px;
+}
+
+.mb-4 {
+    margin-bottom: 20px;
+}
+
+
+    </style>
+</head>
+<body>
+    
+<!-- Add Font Awesome CSS in the <head> section of your HTML -->
+    <head>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    </head>
+    
+    <body>
+        <div class="card">
+            <h1 class="mt-4">User Profile</h1>
+            <div class="container mt-4 mb-4">
+                <img src="{{ url_for('static', filename='uploads/' + current_user.image_path.split('/')[-1]) }}" alt="{{ current_user.username }}">
+
+                <div class="overlay">
+                    <button id="myBtn"><i class="fas fa-cloud-upload-alt" style="font-size:20px; color:white;"></i> Upload</button>
+                </div>
+            </div>
+    
+            <div id="myModal" class="modal">
+                <div class="modal-content">
+                    <span class="close" style="cursor: pointer;">&times;</span>
+                    <h1>{{ current_user.displayname }} Profile Picture</h1>
+                    <img id="currentProfilePic" src="{{ url_for('static', filename=current_user.image_path) }}" style="max-width: 100%; height: auto; display: none;">
+                    <input type="file" id="imageInput" name="image" accept="image/*" onchange="loadImage(event);">
+                    <div>
+                        <img id="image" style="max-width: 100%; display: none;">
+                    </div>
+                    <button id="cropButton" style="display:none;">Crop and Upload</button>
+                    <form id="uploadForm" method="POST" enctype="multipart/form-data" style="display:none;">
+                        {{ form.hidden_tag() }} <!-- Hidden CSRF token -->
+                        <input type="hidden" id="croppedImage" name="croppedImage">
+                        <button type="submit" style="display: none;">Upload New Image</button>
+                    </form>
+                    
+                </div>
+            </div>
+    
+        <div class="row-container profile-info">
+            <div class="row">
+                <div class="col-md-6 label-col">
+                    <p><i class="fas fa-user"></i> Name:</p>
+                </div>
+                <div class="col-md-6 value-col">
+                    <p>{{ current_user.displayname }}</p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6 label-col">
+                    <p><i class="fas fa-lock"></i> Password:</p>
+                </div>
+                <div class="col-md-6 value-col">
+                    <p><span id="passwordDisplay">****</span></p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6 label-col">
+                    <p><i class="fas fa-user-circle"></i> Username:</p>
+                </div>
+                <div class="col-md-6 value-col">
+                    <p>{{ current_user.username }}</p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6 label-col">
+                    <p><i class="fas fa-building"></i> Department:</p>
+                </div>
+                <div class="col-md-6 value-col">
+                    <p>{{ current_user.department }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="mt-4">
+            <button onclick="window.location.href='{{ url_for('edit_user', user_id=current_user.id) }}'"><i class="fas fa-edit" style="font-size:20px; color:rgb(0, 123, 255);"></i> Change Password or Name</button>
+            <button onclick="window.location.href='{{ url_for('main', user_id=current_user.id) }}'"><i class="fas fa-arrow-left" style="font-size:20px; color:rgb(0, 123, 255);"></i> Back to main menu</button>
+        </div>
+    </div>
+    
+    
+    <script>
+        let cropper;
+
+        // JavaScript for modal
+        var modal = document.getElementById("myModal");
+        var btn = document.getElementById("myBtn");
+        var span = document.getElementsByClassName("close")[0];
+
+        btn.onclick = function() {
+            modal.style.display = "block";
+        }
+
+        span.onclick = function() {
+            modal.style.display = "none";
+        }
+
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+
+        // Load Image for Cropping
+        function loadImage(event) {
+            const input = event.target;
+            const image = document.getElementById('image');
+            const cropButton = document.getElementById('cropButton');
+            
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    image.src = e.target.result;
+                    image.style.display = 'block';
+                    modal.style.display = "block";
+
+                    // Initialize Cropper.js
+                    if (cropper) {
+                        cropper.destroy(); // Destroy previous instance if exists
+                    }
+                    cropper = new Cropper(image, {
+                        aspectRatio: 1, // Set desired aspect ratio
+                        viewMode: 1,
+                        ready() {
+                            cropButton.style.display = 'block'; // Show crop button
+                        }
+                    });
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        document.getElementById('cropButton').onclick = function() {
+    const canvas = cropper.getCroppedCanvas();
+    const formData = new FormData();
+    canvas.toBlob(function(blob) {
+        // Get the display name from a hidden input or pass it in some other way
+        const displayName = '{{ current_user.displayname }}'; // Assuming you are passing this from your Flask template
+        const sanitizedDisplayName = displayName.replace(/\s+/g, '_'); // Replace spaces with underscores
+        const filename = `${sanitizedDisplayName}_profile_image.png`; // Create filename
+
+        formData.append('image', blob, filename); // Append the cropped image blob with the new filename
+        document.getElementById('currentProfilePic').src = canvas.toDataURL(); // Show cropped image
+        
+        // Add CSRF token
+        const csrfToken = document.querySelector('input[name="csrf_token"]').value;
+        formData.append('csrf_token', csrfToken);
+
+        // Make the fetch request to upload the image
+        fetch(`{{ url_for('user_profile', user_id=current_user.id) }}`, {
+            method: 'POST',
+            body: formData,
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Uploaded!',
+                    text: data.message,
+                });
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: data.message || 'Something went wrong!',
+                });
+            }
+        })
+        .catch(error => {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error!',
+                text: 'There was an error uploading your image.',
+            });
+        });
+
+        modal.style.display = "none"; // Close modal
+    });
+}
+
+
+    </script>
+</body>
+</html>

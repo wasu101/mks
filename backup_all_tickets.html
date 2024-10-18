@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Tickets</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .blue-cell{
+            background-color: rgb(0, 123, 255);
+        }
+        .white-cell  {
+            background-color: rgb(255, 255, 255);
+
+        }
+        th{
+            text-align: center;
+
+        }
+        td {
+            padding: 8px;
+            text-align: center;
+
+        }            
+        .chat-window {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 250px;
+            height: 100%;
+            background-color: #f8f9fa;
+            overflow-y: auto;
+            padding: 10px;
+        }
+
+
+        textarea {
+            border: 2px solid #969696;
+        }
+
+        html,
+        body {
+            height: 100%;
+            width: 100%;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+        .black-text {
+            color: rgb(255, 255, 255);
+            font-weight: bold;
+            font-size: 32px;
+        }
+
+        .green-text {
+            color: green;
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        .red-text {
+            color: red;
+            font-weight: bold;
+            font-size: 16px;
+        }
+        .banner {
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: #ffffff;
+            padding: 10px;
+            position: fixed;
+        }
+
+        .container {
+            margin-top: 150px;
+        }
+
+    </style>
+</head>
+
+<body>
+    <table>
+    <tr>
+    <th>
+    <!-- Banner -->
+    <div class="banner d-flex justify-content-end">
+        <table>
+        <tr>
+        <th>
+        <h1 class="text-center">=======All Tickets=======</h1>
+        <div class="d-flex justify-content-end">
+            <!-- Search form -->
+            <script>
+                // Function to format and display datetime in Bangkok timezone
+                function formatDateTimeInBangkok(timestamp) {
+                    // Create a new Date object from the given timestamp
+                    var date = new Date(timestamp);
+                    
+                    // Convert the date to Bangkok timezone
+                    var options = {
+                        timeZone: 'Asia/Bangkok',
+                        year: 'numeric',
+                        month: 'short',
+                        day: '2-digit',
+                        hour: '2-digit',
+                        minute: '2-digit',
+                        second: '2-digit'
+                    };
+                    
+                    return date.toLocaleString('en-US', options);
+                }
+            </script>
+            <form action="/search" method="get" class="mt-2 ml-2">
+                <label for="search_date" class="mr-2">Search by Date:</label>
+                <input type="date" id="search_date" name="search_date" class="mr-2">
+                <button type="submit" class="btn btn-primary">Search</button>
+
+            </form>
+
+            <!-- Add Ticket button -->
+            <form action="/home" class=" ml-2 mt-2">
+                <button type="submit" class="btn btn-success">Add Ticket</button>
+            </form>
+
+            <!-- Report form -->
+            <form action="/report" method="post" class="ml-2 mt-2">
+                <button type="submit" class="btn btn-info">Report</button>
+            </form>   
+        </div>
+        </th>
+        </tr>
+        </table>
+    </div>
+    </th>
+    </tr>
+    
+    <tr>
+    <td>
+        <div class="container">
+         
+        {% for ticket in tickets %}
+        <div class="ticket  p-1 mb-3">
+
+            <!-- ส่วนของ Tickets (ซ้าย) -->
+        <table>
+            <tr>
+                <td class="blue-cell"> 
+                <!-- Iterate through tickets -->
+
+
+                    <!-- Ticket details -->
+                    <h2 class="black-text">Ticket No: {{ ticket.ticket_number }}</h2>   
+                </td>
+            </tr>
+  
+            <tr>
+                <th class="white-cell">    
+                    <h5 class="text-primary">ID Computer/User: {{ ticket.title }}</h5>
+                    <p class="{% if ticket.status == 'open' %}red-text{% else %}green-text{% endif %}">Status: {{ ticket.status }}</p>
+                    <p>Problems encountered: {{ ticket.description }}</p>
+                    <p>Created at: {{ ticket.created_at }}</p>
+                    {% if ticket.status != 'open' %}
+                        <p class="small text-muted mt-2">Close at: {{ ticket.close_at }}</p>
+                    {% endif %}       
+               <!-- เพิ่มลิงก์ไปยังหน้า Ticket Detail -->
+                    <a href="/ticket/{{ ticket.id }}" class="btn btn-primary mt-2">View Details</a>
+                    <p> </p>
+                
+                </th> 
+            </tr> 
+        </table> 
+        </div>
+        {% endfor %}
+    </div>
+    </td>
+    </tr>
+    </table>
+
+    <!-- JavaScript for refreshing page after form submission -->
+    
+    <script>
+        
+        function sendChat(ticketId) {
+            var messageInput = document.getElementById("chat_" + ticketId);
+            var message = messageInput.value.trim();
+    
+            if (message !== '') {
+                var data = {
+                    "ticket_id": ticketId,
+                    "message": message
+                };
+                console.log("Sending chat message:", data);
+    
+                fetch("/save_chat", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(data)
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.success) {
+                        // Clear input field after sending
+                        messageInput.value = '';
+                        // Handle success (if needed)
+                    } else {
+                        throw new Error('Failed to send message');
+                    }
+                })
+                .catch(error => {
+                    console.error("Error:", error);
+                    alert("An error occurred while sending the message.");
+                });
+            } else {
+                alert("Please enter a message.");
+            }
+    
+            // Prevent the form from submitting and refreshing the page
+            event.preventDefault();
+        }
+    
+        function closeTicket(ticketId) {
+            var now = new Date();
+            var reason = document.getElementById("reason_" + ticketId).value;
+            var formData = new FormData();
+            formData.append("reason", reason);
+            formData.append("close_at", now.toISOString()); // Convert to ISO string format
+    
+            fetch("/status/" + ticketId + "/submit", {
+                method: "POST",
+                body: formData
+            }).then(function(response) {
+                // Handle response
+                // อาจเป็นการรีโหลดหน้าหรือปรับปรุงข้อมูลอื่น ๆ ตามที่ต้องการ
+    
+                // Hide the form and save button
+                var formElement = document.getElementById("closeForm_" + ticketId);
+                formElement.style.display = "none";
+            }).catch(function(error) {
+                console.error("Error:", error);
+            });
+    
+            // Prevent the form from submitting and refreshing the page
+            event.preventDefault();
+        }
+        function updateChatLog(ticketId) {
+            fetch('/update_chat/' + ticketId)
+                .then(response => response.json())
+                .then(data => {
+                    // ใช้ข้อมูลใน data ที่ได้รับจากการส่งคำขอ
+                    if (data.success) {
+                        // อัพเดท chat log ด้วยข้อมูลที่ได้รับ
+                        document.getElementById('chat_log_' + ticketId).innerHTML = data.updatedChatLog;
+                    } else {
+                        console.error('Failed to update chat log');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error updating chat log:', error);
+                });
+        }
+
+    </script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/socket.io/4.3.2/socket.io.js"></script>
+    <script type="text/javascript">
+        var socket = io.connect('http://' + document.domain + ':' + location.port);
+    
+        socket.on('connect', function() {
+            console.log('Connected to server');
+        });
+    
+        socket.on('disconnect', function() {
+            console.log('Disconnected from server');
+        });
+    
+        socket.on('update_chat_log', function(data) {
+            var ticketId = data.ticket_id;
+            var updatedChatLog = data.updatedChatLog;
+    
+            // Update chat log section for the specific ticket
+            var chatLogDiv = document.getElementById('chat_log_' + ticketId);
+            if (chatLogDiv) {
+                chatLogDiv.innerHTML = updatedChatLog;
+            }
+        });
+    </script>
+</body>
+
+</html>

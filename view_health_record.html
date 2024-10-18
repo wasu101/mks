@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Health Record Details</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles_rec.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body>
+    <h1>Health Record Details for Employee {{ employee_code }}</h1>
+    {% if records %}
+    <table border="1" cellspacing="0" cellpadding="10">
+        <thead>
+            <tr>
+                <th>Checkup Type</th>
+                <th>Checkup Date</th>
+                <th>Doctor Name</th>
+                <th>Doctor License Number</th>
+                <th>Health Service Unit Name</th>
+                <th>Health Service Unit Number</th>
+                <th>Health Service Unit Address</th>
+                <th>Health Service Unit Village</th>
+                <th>Health Service Unit Soi</th>
+                <th>Health Service Unit Road</th>
+                <th>Health Service Unit Sub-District</th>
+                <th>Health Service Unit District</th>
+                <th>Health Service Unit Province</th>
+                <th>Health Service Unit Postcode</th>
+                <th>Health Service Unit Phone</th>
+                <th>Weight</th>
+                <th>Height</th>
+                <th>BMI</th>
+                <th>Blood Pressure</th>
+                <th>Pulse</th>
+                <th>Physical Examination Result</th>
+                <th>Lab Test Result</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for record in records %}
+            <tr>
+                <td>{{ record['checkup_type'] }}</td>
+                <td>{{ record['checkup_date'] }}</td>
+                <td>{{ record['doctor_name'] }}</td>
+                <td>{{ record['doctor_license_number'] }}</td>
+                <td>{{ record['health_service_unit_name'] }}</td>
+                <td>{{ record['health_service_unit_number'] }}</td>
+                <td>{{ record['health_service_unit_address'] }}</td>
+                <td>{{ record['health_service_unit_village'] }}</td>
+                <td>{{ record['health_service_unit_soi'] }}</td>
+                <td>{{ record['health_service_unit_road'] }}</td>
+                <td>{{ record['health_service_unit_sub_district'] }}</td>
+                <td>{{ record['health_service_unit_district'] }}</td>
+                <td>{{ record['health_service_unit_province'] }}</td>
+                <td>{{ record['health_service_unit_postcode'] }}</td>
+                <td>{{ record['health_service_unit_phone'] }}</td>
+                <td>{{ record['weight'] }}</td>
+                <td>{{ record['height'] }}</td>
+                <td>{{ record['bmi'] }}</td>
+                <td>{{ record['blood_pressure'] }}</td>
+                <td>{{ record['pulse'] }}</td>
+                <td>{{ record['physical_examination_result'] }}</td>
+                <td>
+                    {% if record['lab_test_result'] %}
+                        <a href="{{ url_for('static', filename='' + record['lab_test_result'].replace('\\', '/')) }}" target="_blank">View Lab Test Result</a>
+                    {% else %}
+                        N/A
+                    {% endif %}
+                </td>
+                
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <script>
+        Swal.fire({
+            title: 'No Health Record Found',
+            text: 'Do you want to add a new health record?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, add record',
+            cancelButtonText: 'No, cancel'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Redirect to the add health record page
+                window.location.href = "{{ url_for('add_health_record', employee_code=employee_code) }}";
+            } else {
+                // Redirect back to the employees list or any other action
+                window.location.href = "{{ url_for('employees_list') }}";
+            }
+        });
+    </script>
+    {% endif %}
+    <br>
+    <a href="{{ url_for('employees_list') }}">Back to Employees List</a>
+</body>
+</html>

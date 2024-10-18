@@ -1,0 +1,899 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Monthly View - {{ updated_data.month }}</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            color: #333;
+            background-color: #f4f4f4;
+        }
+    
+        header {
+            background-color: #333;
+            padding: 20px;
+            text-align: center;
+            color: #fff;
+        }
+    
+        header a {
+            color: #fff;
+            text-decoration: none;
+        }
+    
+        .main-content {
+            padding: 20px;
+        }
+    
+        h1, h2 {
+            color: #333;
+        }
+    
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+    
+        table th, table td {
+            padding: 10px;
+            text-align: center;
+            border-bottom: 1px solid #ddd;
+        }
+    
+        table th {
+            background-color: #f4f4f4;
+            color: #333;
+        }
+    
+        table tbody tr:hover {
+            background-color: #f0f0f0;
+        }
+    
+        .number-cell {
+            cursor: pointer;
+            position: relative;
+        }
+    
+        .number-cell:hover::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            left: 50%;
+            top: 100%;
+            transform: translateX(-50%);
+            background-color: #333;
+            color: #fff;
+            padding: 5px;
+            border-radius: 3px;
+            font-size: 12px;
+            white-space: nowrap;
+            display: block;
+            z-index: 10;
+        }
+    
+        .page-break {
+            page-break-after: always;
+        }
+    
+        .chart-container {
+            margin: 20px 0;
+        }
+    
+        .chart-container canvas {
+            width: 100% !important;
+            height: auto !important;
+        }
+    
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            overflow: auto;
+        }
+    
+        .modal-content {
+            position: relative;
+            margin: 5% auto;
+            width: 80%;
+            max-width: 800px;
+            background: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+    
+        .modal-content h5, .modal-content h2 {
+            margin-top: 0;
+        }
+    
+        .modal-content button.close {
+            background: #888;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 5px;
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
+    
+        .modal-content button.close:hover {
+            background: #666;
+        }
+    
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .modal-content {
+                width: 90%;
+            }
+        }
+    
+        /* Add some padding and center the end of report text */
+        p.small {
+            margin: 20px 0;
+            font-size: 12px;
+            color: #777;
+        }
+    
+        /* Header Link Styles */
+        header a:hover {
+            text-decoration: underline;
+        }
+    
+        /* Hover Effect for clickable rows */
+        .clickable-row {
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+    
+        .clickable-row:hover {
+            background-color: #e0e0e0;
+        }
+    
+        /* Modal Scroll */
+        .modal-content {
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        /* Ensures the charts are displayed side-by-side */
+.charts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px; /* Space between the charts */
+    justify-content: center; /* Center align the charts */
+}
+
+.chart-container {
+    flex: 1 1 45%; /* Flex-grow, flex-shrink, and flex-basis */
+    max-width: 45%; /* Ensures the containers do not exceed 45% width */
+    margin: 0 auto; /* Center the containers */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Adds a shadow effect */
+    border-radius: 8px; /* Rounded corners */
+    background: #fff; /* Background color */
+    padding: 10px; /* Padding inside the container */
+}
+
+/* Responsive design for smaller screens */
+@media (max-width: 768px) {
+    .chart-container {
+        flex: 1 1 100%; /* Full width on small screens */
+        max-width: 100%; /* Ensures full width */
+    }
+}
+
+    </style>
+    
+    
+</head>
+<body>
+
+    <header>
+        <h1><a href="{{ url_for('dashboard') }}" style="color: #fff;">Dashboard of {{ updated_data.month }}</a></h1>
+    </header>
+    
+    <div class="main-content">
+        <h2>Total Tickets of {{ updated_data.month }}</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Month</th>
+                    <th>Total Tickets</th>
+                    <th>Finished Tickets</th>
+                    <th>Finished Percentage (%)</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for data in monthly_data %}
+                <tr>
+                    <td>{{ data.month }}</td>
+                    <td>{{ data.total_tickets }}</td>
+                    <td>{{ data.finished_tickets }}</td>
+                    <td>{{ data.finished_percentage }}%</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <h2>Issue Type Statistics of {{ updated_data.month }}</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Issue Type</th>
+                    <th>Total Issue Cases</th>
+                    <th>Percentage (%)</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for issuetype_info in issuetype_data %}
+                <tr>
+                    <td>{{ issuetype_info.issuetype }}</td>
+                    <td>{{ issuetype_info.total_issue_cases }}</td>
+                    <td>{{ issuetype_info.percentage }}%</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+            <tfoot>
+                <tr>
+                    <th>Total</th>
+                    <th id="totalIssueTypeCases"></th>
+                    <th>100.0%</th>
+                </tr>
+            </tfoot>
+        </table>
+        <h2>Average Ticket Closing Time of {{ updated_data.month }}</h2>
+        <table >
+            <thead>
+                <tr >
+                    <th style="text-align: center;">Month</th>
+                    <th style="text-align: center;">Average Ticket Closing Time</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for times in monthly_open_close_times %}
+                <tr >
+                    <td style="text-align: center;">{{ times.month }}</td>
+                    <td style="text-align: center;">{{ times.avg_close_time_minutes }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <h2>Ticket Priority Statistics of {{ updated_data.month }}</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Priority</th>
+                    <th>Total Cases</th>
+                    <th>Percentage (%)</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for type_info in type_data %}
+                <tr>
+                    <td>
+                        <a href="#" class="issue-type-link" data-issue-type="{{ type_info.type }}">
+                            {{ type_info.type }}
+                        </a>
+                    </td>
+                    <td>{{ type_info.total_cases }}</td>
+                    <td>{{ type_info.percentage }}%</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+            <tfoot>
+                <tr>
+                    <th>Total</th>
+                    <th id="totalTypeCases"></th>
+                    <th>100.0%</th>
+                </tr>
+            </tfoot>
+        </table>
+        
+        <div id="issueTypeModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); z-index: 9999;">
+            <div style="position: relative; margin: auto; top: 10%; width: 95%; max-width:auto; background: #fff; padding: 20px; border-radius: 5px; box-shadow: 0 4px 8px rgba(0,0,0,0.2); max-height: 80vh; display: flex; flex-direction: column;">
+                <h5 id="issueTypeModalLabel" style="margin-top: 0;">Tickets for <span id="modalIssueType"></span></h5>
+                <div style="overflow-y: auto; flex: 1;">
+                    <table class="table" style="width: 100%; max-width:auto; border-collapse: collapse;">
+                        <thead>
+                            <tr>
+                                <th>Ticket Number</th>
+                                <th>Description</th>
+                                <th>Created At</th>
+                                <th>Closed At</th>
+                            </tr>
+                        </thead>
+                        <tbody id="modalTicketList">
+                            <!-- Ticket rows will be appended here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        
+
+        
+        <div class="page-break"></div> <!-- Force page break -->
+        <h2>Departments with Tickets for {{ updated_data.month }}</h2>
+        <table id="departmentsTable">
+            <thead>
+                <tr>
+                    <th rowspan="2">Department</th>
+                    <th rowspan="2">Total Tickets</th>
+                    <th rowspan="2">Finished Percentage (%)</th>
+                    <th colspan="11" style="text-align: center;">Issue Types</th>
+                </tr>
+                <tr>
+                    <th>Hardware</th>
+                    <th>Other Issue</th>
+                    <th>Network</th>
+                    <th>User</th>
+                    <th>Software </th>
+                    <th>Finger Scan</th>
+                    <th>Printer</th>
+                    <th>Server</th>
+                    <th>CCTV</th>
+                    <th>IP Phone</th>
+                    <th>UPS</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for department in result_departments %}
+                <tr class="clickable-row">
+                    <td>
+                        <a href="#" class="departmentHeader" data-department-name="{{ department.department_name }}">
+                            {{ department.department_name }}
+                        </a>
+                    </td>
+                    <td >{{ department.total_tickets }}</td>
+                    <td >{{ department.finished_percentage }}%</td>
+                    <td class="number-cell" onclick="showDetails('{{ department.department_name }}', 'Hardware')" data-tooltip="Hardware issues">{{ department.issue_types.get('Hardware', 0) }}</td>
+                    <td class="number-cell" onclick="showDetails('{{ department.department_name }}', 'OtherIssue')" data-tooltip="Other issues">{{ department.issue_types.get('OtherIssue', 0) }}</td>
+                    <td class="number-cell" onclick="showDetails('{{ department.department_name }}', 'Network')" data-tooltip="Network issues">{{ department.issue_types.get('Network', 0) }}</td>
+                    <td class="number-cell" onclick="showDetails('{{ department.department_name }}', 'User')" data-tooltip="User issues">{{ department.issue_types.get('User', 0) }}</td>
+                    <td class="number-cell" onclick="showDetails('{{ department.department_name }}', 'Software')" data-tooltip="Software issues">{{ department.issue_types.get('Software', 0) }}</td>
+                    <td class="number-cell" onclick="showDetails('{{ department.department_name }}', 'FingerScan')" data-tooltip="FingerScan issues">{{ department.issue_types.get('FingerScan', 0) }}</td>
+                    <td class="number-cell" onclick="showDetails('{{ department.department_name }}', 'Printer')" data-tooltip="Printer issues">{{ department.issue_types.get('Printer', 0) }}</td>
+                    <td class="number-cell" onclick="showDetails('{{ department.department_name }}', 'Server')" data-tooltip="Server issues">{{ department.issue_types.get('Server', 0) }}</td>
+                    <td class="number-cell" onclick="showDetails('{{ department.department_name }}', 'CCTV')" data-tooltip="CCTV issues">{{ department.issue_types.get('CCTV', 0) }}</td>
+                    <td class="number-cell" onclick="showDetails('{{ department.department_name }}', 'IP Phone')" data-tooltip="IP Phone issues">{{ department.issue_types.get('IP Phone', 0) }}</td>
+                    <td class="number-cell" onclick="showDetails('{{ department.department_name }}', 'UPS')" data-tooltip="UPS issues">{{ department.issue_types.get('UPS', 0) }}</td>
+                </tr>
+                
+                {% endfor %}
+            </tbody>
+            <tfoot>
+                <tr >
+                    <th>Total</th>
+                    <th id="totalTickets"></th>
+                    <th id="averagePercentage"></th>
+                    <th id="totalCompuer"></th>
+                    <th id="totalOtherIssue"></th>
+                    <th id="totalNetwork"></th>
+                    <th id="totalUser"></th>
+                    <th id="totalSoftware"></th>
+                    <th id="totalFingerScan"></th>
+                    <th id="totalPrinter"></th>
+                    <th id="totalServer"></th>
+                    <th id="totalCCTV"></th>
+                    <th id="totalIPPhone"></th>
+                    <th id="totalUPS"></th>
+                </tr>
+            </tfoot>
+        </table>
+<!-- Modal HTML -->
+<!-- Details Modal -->
+<div id="detailsModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); z-index: 1000;">
+    <div style="position: relative; margin: auto; top: 10%; width: 95%; max-width: auto; background: #fff; padding: 20px; border-radius: 5px; box-shadow: 0 4px 8px rgba(0,0,0,0.2);">
+        <button class="close" onclick="document.getElementById('detailsModal').style.display = 'none';" style="background: #888888; color: #fff; border: none; padding: 10px 20px; cursor: pointer; border-radius: 5px; position: absolute; top: 10px; right: 10px;">X</button>
+        <h2 id="modalTitle" style="margin-top: 0;"></h2>
+        <div id="detailsContainer">Nodata to show</div>
+    </div>
+</div>
+
+<!-- Department Tickets Modal -->
+<div id="departmentTicketsModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); z-index: 9999;">
+    <div style="position: relative; margin: auto; top: 10%; width: 95%;  max-width: auto; background: #fff; padding: 20px; border-radius: 5px; box-shadow: 0 4px 8px rgba(0,0,0,0.2);">
+        <h5 id="modalDepartmentName" style="margin-top: 0;">Department Tickets</h5>
+        <div style="overflow-x: auto;">
+            <table class="table" style="width: 100%; max-width:auto;">
+                <thead>
+                    <tr>
+                        <th>Ticket Number</th>
+                        <th>Description</th>
+                        <th>Issue Type</th>
+                        <th>Created At</th>
+                        <th>Closed At</th>
+                        <th>Use time total</th>
+                    </tr>
+                </thead>
+                <tbody id="modalTicketListdepartment">
+                    <!-- Ticket rows will be inserted here -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<h2>Ticket Type Statistics of {{ updated_data.month }}</h2>
+
+<div class="charts">
+    <div class="chart-container">
+        <canvas id="issueTypePieChart"></canvas>
+    </div>
+
+    <div class="chart-container">
+        <canvas id="ticketTypeBarChart"></canvas>
+    </div>
+</div>
+
+<h2 class="mt-4">Departments with Tickets of {{ updated_data.month }}</h2>
+<div class="chart-container">
+    <canvas id="totalTicketsChart"></canvas>
+</div>
+<p class="small mt-4" style="text-align: center;">-end of report-</p>
+
+    </div>
+</div>
+        
+</div>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Fetch data from context
+        const typeData = {{ type_data | tojson }};
+        const issuetypeData = {{ issuetype_data | tojson }};
+        const departmentData = {{ result_departments | tojson }}; // Added line
+
+        // Set total cases in ticket type table
+        const totalTypeCasesElement = document.getElementById('totalTypeCases');
+        let totalCases = 0;
+        for (const typeInfo of typeData) {
+            totalCases += typeInfo.total_cases || 0;
+        }
+        totalTypeCasesElement.textContent = totalCases;
+
+        // Set total issue type cases in issue type table
+        const totalIssueTypeCasesElement = document.getElementById('totalIssueTypeCases');
+        let totalIssueTypeCases = 0;
+        for (const issueTypeInfo of issuetypeData) {
+            totalIssueTypeCases += issueTypeInfo.total_issue_cases || 0;
+        }
+        totalIssueTypeCasesElement.textContent = totalIssueTypeCases;
+
+        // Define rows in departments table
+        const rows = document.querySelectorAll('#departmentsTable tbody tr');
+        
+        let totalTickets = 0;
+        let totalFinishedPercentage = 0;
+        let totalCompuer = 0;
+        let totalOtherIssue = 0;
+        let totalNetwork = 0;
+        let totalUser = 0;
+        let totalSoftware = 0;
+        let totalFingerScan = 0;
+        let totalPrinter = 0;
+        let totalServer = 0;
+        let totalCCTV = 0;
+        let totalIPPhone = 0;
+        let totalUPS = 0;
+
+        rows.forEach(row => {
+            totalTickets += parseInt(row.cells[1].textContent) || 0;
+            totalFinishedPercentage += parseFloat(row.cells[2].textContent) || 0;
+            totalCompuer += parseInt(row.cells[3].textContent) || 0;
+            totalOtherIssue += parseInt(row.cells[4].textContent) || 0;
+            totalNetwork += parseInt(row.cells[5].textContent) || 0;
+            totalUser += parseInt(row.cells[6].textContent) || 0;
+            totalSoftware += parseInt(row.cells[7].textContent) || 0;
+            totalFingerScan += parseInt(row.cells[8].textContent) || 0;
+            totalPrinter += parseInt(row.cells[9].textContent) || 0;
+            totalServer += parseInt(row.cells[10].textContent) || 0;
+            totalCCTV += parseInt(row.cells[11].textContent) || 0;
+            totalIPPhone += parseInt(row.cells[12].textContent) || 0;
+            totalUPS += parseInt(row.cells[13].textContent) || 0;
+        });
+
+        document.getElementById('totalTickets').textContent = totalTickets;
+        document.getElementById('averagePercentage').textContent = (totalFinishedPercentage / rows.length).toFixed(2) + '%';
+        document.getElementById('totalCompuer').textContent = totalCompuer;
+        document.getElementById('totalOtherIssue').textContent = totalOtherIssue;
+        document.getElementById('totalNetwork').textContent = totalNetwork;
+        document.getElementById('totalUser').textContent = totalUser;
+        document.getElementById('totalSoftware').textContent = totalSoftware;
+        document.getElementById('totalFingerScan').textContent = totalFingerScan;
+        document.getElementById('totalPrinter').textContent = totalPrinter;
+        document.getElementById('totalServer').textContent = totalServer;
+        document.getElementById('totalCCTV').textContent = totalCCTV;
+        document.getElementById('totalIPPhone').textContent = totalIPPhone;
+        document.getElementById('totalUPS').textContent = totalUPS;
+
+        // Pie Chart for Issue Types
+        const issueTypeCtx = document.getElementById('issueTypePieChart').getContext('2d');
+        const issueTypeLabels = issuetypeData.map(issue => issue.issuetype);
+        const issueTypeCounts = issuetypeData.map(issue => issue.total_issue_cases);
+
+        new Chart(issueTypeCtx, {
+            type: 'pie',
+            data: {
+                labels: issueTypeLabels,
+                datasets: [{
+                    data: issueTypeCounts,
+                    backgroundColor: [
+                        '#FF6384', '#36A2EB', '#FFCE56', 
+                        '#FF5733', '#C70039', '#900C3F', 
+                        '#581845', '#1F77B4', '#FF7F0E', 
+                        '#2CA02C', '#D62728', '#9467BD', 
+                        '#8C564B', '#E377C2', '#7F7F7F', 
+                        '#BCBD22', '#17BECF', '#FF69B4', 
+                        '#4B0082', '#FFD700'
+                    ],
+                    borderColor: [
+                        '#FF6384', '#36A2EB', '#FFCE56', 
+                        '#FF5733', '#C70039', '#900C3F', 
+                        '#581845', '#1F77B4', '#FF7F0E', 
+                        '#2CA02C', '#D62728', '#9467BD', 
+                        '#8C564B', '#E377C2', '#7F7F7F', 
+                        '#BCBD22', '#17BECF', '#FF69B4', 
+                        '#4B0082', '#FFD700'
+                    ],
+
+                    borderWidth: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                }
+            }
+        });
+
+        // Bar Chart for Total Tickets by Department
+        const totalTicketsCtx = document.getElementById('totalTicketsChart').getContext('2d');
+        const departments = departmentData.map(dept => dept.department_name);
+        const totalTicketsData = departmentData.map(dept => dept.total_tickets);
+
+        new Chart(totalTicketsCtx, {
+            type: 'bar',
+            data: {
+                labels: departments,
+                datasets: [{
+                    label: 'Total Tickets',
+                    data: totalTicketsData,
+                    backgroundColor: [
+                        '#FF6384', '#36A2EB', '#FFCE56', 
+                        '#FF5733', '#C70039', '#900C3F', 
+                        '#581845', '#1F77B4', '#FF7F0E', 
+                        '#2CA02C', '#D62728', '#9467BD', 
+                        '#8C564B', '#E377C2', '#7F7F7F', 
+                        '#BCBD22', '#17BECF', '#FF69B4', 
+                        '#4B0082', '#FFD700'
+                    ],
+                    borderColor: [
+                        '#FF6384', '#36A2EB', '#FFCE56', 
+                        '#FF5733', '#C70039', '#900C3F', 
+                        '#581845', '#1F77B4', '#FF7F0E', 
+                        '#2CA02C', '#D62728', '#9467BD', 
+                        '#8C564B', '#E377C2', '#7F7F7F', 
+                        '#BCBD22', '#17BECF', '#FF69B4', 
+                        '#4B0082', '#FFD700'
+                    ],
+                    borderWidth: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        // Bar Chart for Ticket Types
+        const ticketTypeCtx = document.getElementById('ticketTypeBarChart').getContext('2d');
+        const ticketTypeLabels = typeData.map(type => type.type);
+        const ticketTypeCounts = typeData.map(type => type.total_cases);
+
+        new Chart(ticketTypeCtx, {
+            type: 'bar',
+            data: {
+                labels: ticketTypeLabels,
+                datasets: [{
+                    label: 'Total Cases',
+                    data: ticketTypeCounts,
+                    backgroundColor: [
+                        '#FF6384', '#36A2EB', '#FFCE56', 
+                        '#FF5733', '#C70039', '#900C3F', 
+                        '#581845', '#1F77B4', '#FF7F0E', 
+                        '#2CA02C', '#D62728', '#9467BD', 
+                        '#8C564B', '#E377C2', '#7F7F7F', 
+                        '#BCBD22', '#17BECF', '#FF69B4', 
+                        '#4B0082', '#FFD700'
+                    ],
+                    borderColor: [
+                        '#FF6384', '#36A2EB', '#FFCE56', 
+                        '#FF5733', '#C70039', '#900C3F', 
+                        '#581845', '#1F77B4', '#FF7F0E', 
+                        '#2CA02C', '#D62728', '#9467BD', 
+                        '#8C564B', '#E377C2', '#7F7F7F', 
+                        '#BCBD22', '#17BECF', '#FF69B4', 
+                        '#4B0082', '#FFD700'
+                    ],
+                    borderWidth: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    });
+</script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<!-- Bootstrap CSS -->
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+<!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- Bootstrap JS -->
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+<script>
+$(document).ready(function() {
+    $('.departmentHeader').on('click', function(event) {
+        event.preventDefault(); // Prevent the default anchor click behavior
+
+        function getQueryParam(param) {
+            var urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(param);
+        }
+
+        var departmentName = $(this).data('department-name');
+        var month = getQueryParam('selected_month');
+
+        if (!month) {
+            alert('Please select a month.');
+            return;
+        }
+
+        $.ajax({
+            url: '/get-tickets-by-department',
+            method: 'GET',
+            data: { department_name: departmentName, month: month },
+            success: function(response) {
+                var ticketList = $('#modalTicketListdepartment');
+                ticketList.empty(); // Clear old data
+
+                // เติมข้อมูลตั๋วในตารางของ Modal
+                response.tickets.forEach(function(ticket) {
+                    ticketList.append(`
+                        <tr data-id="${ticket.id}">
+                            <td>${ticket.ticket_number}</td>
+                            <td>${ticket.description}</td>
+                            <td>${ticket.issuetype}</td>
+                            <td>${ticket.created_at}</td>
+                            <td>${ticket.close_at || 'N/A'}</td>
+                            <td>${ticket.total_time || 'N/A'}</td>
+                        </tr>
+                    `);
+                });
+
+                // ตั้งชื่อหัวข้อ Modal
+                $('#modalDepartmentName').text(departmentName);
+
+                // แสดง Modal
+                $('#departmentTicketsModal').modal('show');
+
+                // ฟังก์ชันเมื่อคลิกที่แถวของตาราง
+                $('#modalTicketListdepartment tr').on('click', function() {
+                    var ticketId = $(this).data('id');
+                    window.location.href = `/ticket/${ticketId}`; // Redirect to /ticket/id
+                });
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                console.error('Error fetching tickets:', textStatus, errorThrown);
+                alert('An error occurred while fetching tickets.');
+            }
+        });
+    });
+});
+
+function showDetails(department, issueType) {
+    const month = new URLSearchParams(window.location.search).get('selected_month'); // Example to get the month
+
+    fetch(`/get_ticket_details?issue_type=${issueType}&department=${department}&month=${month}`)
+        .then(response => response.json())
+        .then(data => {
+            const tickets = data.tickets;
+            const detailsContainer = document.getElementById('detailsContainer');
+            const modalTitle = document.getElementById('modalTitle');
+
+            // Check if there are tickets
+            if (tickets.length === 0) {
+                detailsContainer.innerHTML = '<p>No data to show</p>';
+            } else {
+                // Create table rows for the tickets
+                let tableRows = '';
+                tickets.forEach(ticket => {
+                    tableRows += `
+                        <tr data-id="${ticket.id}">
+                        <td>${ticket.id}</td>
+                        <td>${ticket.ticket_number}</td>
+                        <td>${ticket.title}</td>
+                        <td>${ticket.subtype || 'N/A'}</td>
+                        <td>${ticket.description}</td>
+                        <td>${ticket.reason}</td>
+                        <td>${ticket.total_time || 'N/A'}</td>
+                        </tr>
+                    `;
+                });
+
+                // Update the modal title
+                modalTitle.textContent = `Ticket Details for ${issueType} in ${department}`;
+
+                // Update the modal content
+                detailsContainer.innerHTML = `
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Ticket Number</th>
+                                <th>Name Requester</th>
+                                <th>Subtype</th>
+                                <th>Description</th>
+                                <th>Reason</th>
+                                <th>Total time to use</th>
+                            </tr>
+                        </thead>
+                        <tbody>${tableRows}</tbody>
+                    </table>
+                `;
+            }
+
+            // Show the modal
+            document.getElementById('detailsModal').style.display = 'block';
+
+            // Add click event to table rows
+            document.querySelectorAll('#detailsContainer tr').forEach(row => {
+                row.addEventListener('click', function() {
+                    const ticketId = this.getAttribute('data-id');
+                    console.log('Clicked row ticketId:', ticketId);  // Debugging line
+                    if (ticketId) {
+                        window.location.href = `/ticket/${ticketId}`; // Redirect to /ticket/id
+                    } else {
+                        console.error('Ticket ID is undefined');
+                    }
+                });
+            });
+
+        })
+        .catch(error => console.error('Error fetching ticket details:', error));
+}
+
+
+// Close the modal when clicking outside the modal or on the close button
+document.querySelector('#detailsModal .close').addEventListener('click', () => {
+    document.getElementById('detailsModal').style.display = 'none';
+});
+
+window.addEventListener('click', (event) => {
+    if (event.target == document.getElementById('detailsModal')) {
+        document.getElementById('detailsModal').style.display = 'none';
+    }
+});
+
+
+    </script>
+    
+    
+<script>
+$(document).ready(function() {
+    // ฟังก์ชันเพื่อดึงค่าจาก URL
+    function getQueryParam(param) {
+        var urlParams = new URLSearchParams(window.location.search);
+        return urlParams.get(param);
+    }
+
+    // รับค่า selected_month จาก URL
+    var month = getQueryParam('selected_month');
+
+    // แสดงค่าเดือนในคอนโซลเพื่อการดีบั๊ก
+    console.log('Selected month from URL:', month);
+
+    // ตั้งค่า #selectedMonth ถ้าต้องการ
+    $('#selectedMonth').val(month);
+
+    // เมื่อคลิกที่ลิงก์ประเภทปัญหา
+    $('.issue-type-link').on('click', function(e) {
+        e.preventDefault();
+        
+        var issueType = $(this).data('issue-type');
+
+        console.log('Selected month:', month); // ตรวจสอบค่าเดือนในคอนโซล
+
+        // ถ้าไม่มีการเลือกเดือน ให้แจ้งเตือน
+        if (!month) {
+            alert('Please select a month.');
+            return;
+        }
+
+        // ตั้งชื่อประเภทปัญหาใน modal
+        $('#modalIssueType').text(issueType);
+
+        // เรียก AJAX เพื่อดึงข้อมูลตั๋ว
+        $.ajax({
+            url: '/get-tickets-by-issue-type',
+            method: 'GET',
+            data: { issue_type: issueType, month: month },
+            success: function(response) {
+                var ticketList = $('#modalTicketList');
+                ticketList.empty(); // ล้างข้อมูลเก่าออก
+
+                // เพิ่มข้อมูลตั๋วใหม่
+                response.tickets.forEach(function(ticket) {
+                    var ticketRow = $(`
+                        <tr data-id="${ticket.id}">
+                            <td>${ticket.ticket_number}</td>
+                            <td>${ticket.description}</td>
+                            <td>${ticket.created_at}</td>
+                            <td>${ticket.close_at || 'N/A'}</td>
+                        </tr>
+                    `);
+
+                    // เพิ่มการคลิกที่แถวเพื่อนำไปสู่ /ticket/id
+                    ticketRow.on('click', function() {
+                        window.location.href = `/ticket/${ticket.id}`;
+                    });
+
+                    ticketList.append(ticketRow);
+                });
+
+                // แสดง modal
+                $('#issueTypeModal').modal('show');
+            },
+            error: function() {
+                alert('An error occurred while fetching tickets.');
+            }
+        });
+    });
+});
+
+
+
+</script>
+
+
+    
+
+
+</body>
+</html>
