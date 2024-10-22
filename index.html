@@ -5,24 +5,27 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>My Coding Portfolio</title>
+    <title>Worrakan Nasai - Coding Portfolio</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <style>
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
+            font-family: 'Roboto', sans-serif;
+            background-color: #f9f9f9;
             margin: 0;
             padding: 0;
+            color: #333;
         }
 
         header {
-            background-color: #333;
+            background-color: #0056b3;
             color: white;
-            padding: 10px 0;
+            padding: 15px 0;
             text-align: center;
         }
 
         header h1 {
             margin: 0;
+            font-size: 1.8em;
         }
 
         .container {
@@ -41,16 +44,23 @@
             width: 150px;
             height: 150px;
             object-fit: cover;
+            border: 4px solid #fff;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
         }
 
         .profile h2 {
-            margin: 20px 0 10px;
+            margin: 10px 0;
+            font-weight: 700;
+        }
+
+        .profile p {
+            font-size: 18px;
         }
 
         .skills {
             display: flex;
             flex-wrap: wrap;
-            justify-content: space-around;
+            justify-content: space-between;
             margin-bottom: 40px;
         }
 
@@ -62,10 +72,16 @@
             margin: 10px;
             width: 30%;
             text-align: center;
+            transition: transform 0.3s;
+        }
+
+        .skill:hover {
+            transform: translateY(-5px);
         }
 
         .skill h3 {
             margin-bottom: 15px;
+            color: #0056b3;
         }
 
         .projects {
@@ -75,6 +91,8 @@
         .projects h2 {
             text-align: center;
             margin-bottom: 30px;
+            font-weight: 700;
+            color: #0056b3;
         }
 
         .project {
@@ -87,10 +105,26 @@
 
         .project h3 {
             margin-top: 0;
+            color: #333;
         }
 
         .project p {
             margin: 10px 0;
+        }
+
+        .project a {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 10px 15px;
+            background-color: #0056b3;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        .project a:hover {
+            background-color: #004494;
         }
 
         footer {
@@ -104,35 +138,88 @@
         footer p {
             margin: 0;
         }
+
+        footer a {
+            color: #fff;
+            text-decoration: none;
+        }
+
+        .language-toggle {
+            position: absolute;
+            top: 10px;
+            right: 20px;
+        }
+
+        .language-toggle button {
+            padding: 10px;
+            border: none;
+            background-color: #0056b3;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .language-toggle button.active {
+            background-color: orange;
+        }
+
+        .language-toggle button:hover {
+            background-color: #004494;
+        }
     </style>
+    <script>
+        function toggleLanguage(lang) {
+            const elements = document.querySelectorAll('[data-lang]');
+            elements.forEach(el => {
+                if (el.dataset.lang === lang) {
+                    el.style.display = 'block';
+                } else {
+                    el.style.display = 'none';
+                }
+            });
+            document.getElementById('btn-eng').classList.toggle('active', lang === 'en');
+            document.getElementById('btn-th').classList.toggle('active', lang === 'th');
+        }
+    </script>
 </head>
 
-<body>
+<body onload="toggleLanguage('en')">
 
     <header>
-        <h1>My Coding Portfolio</h1>
+        <h1>Worrakan Nasai - Coding Portfolio</h1>
+        <div class="language-toggle">
+            <button id="btn-eng" onclick="toggleLanguage('en')">ENG</button>
+            <button id="btn-th" onclick="toggleLanguage('th')">TH</button>
+        </div>
     </header>
 
     <div class="container">
 
         <div class="profile">
             <img src="https://via.placeholder.com/150" alt="Profile Picture">
-            <h2>Your Name</h2>
-            <p>Full Stack Developer | Python, JavaScript, HTML, CSS</p>
+            <h2 data-lang="en">Worrakan Nasai (Jack)</h2>
+            <h2 data-lang="th" style="display: none;">วรกันต์ นาไทร (แจ๊ค)</h2>
+            <p data-lang="en">Full Stack Developer | Python, JavaScript, HTML, CSS | IT Support | Data Analysis</p>
+            <p data-lang="th" style="display: none;">นักพัฒนา Full Stack | Python, JavaScript, HTML, CSS | IT Support | การวิเคราะห์ข้อมูล</p>
         </div>
 
         <section class="skills">
-            <div class="skill">
-                <h3>Python</h3>
-                <p>Experienced in developing web applications using Flask, Django, and data analysis with Pandas.</p>
-            </div>
-            <div class="skill">
-                <h3>JavaScript</h3>
-                <p>Proficient in building dynamic web interfaces using React.js, Vue.js, and vanilla JavaScript.</p>
-            </div>
-            <div class="skill">
-                <h3>HTML & CSS</h3>
-                <p>Expert in building responsive and accessible websites with modern HTML5 and CSS3.</p>
+            <div class="skills">
+                <div class="skill">
+                    <h3>Python</h3>
+                    <p data-lang="en">Experienced in developing web applications using Flask, Django, and data analysis with Pandas.</p>
+                    <p data-lang="th" style="display: none;">มีประสบการณ์ในการพัฒนาแอปพลิเคชันเว็บโดยใช้ Flask, Django และการวิเคราะห์ข้อมูลด้วย Pandas</p>
+                </div>
+                <div class="skill">
+                    <h3>JavaScript</h3>
+                    <p data-lang="en">Skilled in building interactive web applications with JavaScript, focusing on DOM manipulation and event handling.</p>
+                    <p data-lang="th" style="display: none;">มีความเชี่ยวชาญในการสร้างเว็บแอปพลิเคชันเชิงโต้ตอบโดยใช้ JavaScript พร้อมทั้งจัดการ DOM และ event handling</p>
+                </div>
+                <div class="skill">
+                    <h3>HTML & CSS</h3>
+                    <p data-lang="en">Expert in creating responsive and accessible websites with modern HTML5 and CSS3.</p>
+                    <p data-lang="th" style="display: none;">เชี่ยวชาญในการสร้างเว็บไซต์ที่ตอบสนองและเข้าถึงได้ด้วย HTML5 และ CSS3 สมัยใหม่</p>
+                </div>
             </div>
         </section>
 
@@ -140,27 +227,46 @@
             <h2>Projects</h2>
 
             <div class="project">
-                <h3>Project 1: Task Management App</h3>
-                <p>This is a full-stack web application built with Flask and SQLite. It allows users to manage tasks and track progress efficiently.</p>
+                <h3 data-lang="en">Project 1: Ticket Management and Analysis System</h3>
+                <h3 data-lang="th" style="display: none;">โปรเจค 1: ระบบเปิดใบซ่อมและวิเคราะห์ข้อมูล</h3>
+                <p data-lang="en">A ticket management system built with Flask and SQLite. It allows users to open tickets for repair, track work progress, and analyze data for insights and improvements.</p>
+                <p data-lang="th" style="display: none;">ระบบจัดการใบซ่อมที่พัฒนาด้วย Flask และ SQLite ผู้ใช้สามารถเปิดใบซ่อม ติดตามความคืบหน้างาน และนำข้อมูลมาวิเคราะห์เพื่อหาข้อมูลเชิงลึกและปรับปรุงการทำงาน</p>
+                <a href="https://github.com/wasu101/mks" target="_blank">View Project</a>
             </div>
 
             <div class="project">
-                <h3>Project 2: Real-Time Chat App</h3>
-                <p>A real-time chat application developed using Flask-SocketIO. Users can exchange messages and upload images seamlessly.</p>
+                <h3 data-lang="en">Project 2: Car Booking System</h3>
+                <h3 data-lang="th" style="display: none;">โปรเจค 2: ระบบจองรถ</h3>
+                <p data-lang="en">An interactive car booking system that allows users to select their desired car, view availability, and make bookings seamlessly.</p>
+                <p data-lang="th" style="display: none;">ระบบจองรถที่เชื่อมต่อผู้ใช้กับรถยนต์ที่ต้องการ สามารถดูสถานะการใช้งานและจองรถได้อย่างราบรื่น</p>
+                <a href="https://github.com/wasu101/mks" target="_blank">View Project</a>
             </div>
 
             <div class="project">
-                <h3>Project 3: E-commerce Website</h3>
-                <p>An e-commerce platform created using Django and integrated with Stripe for payment processing. It supports product browsing, cart management, and order placement.</p>
+                <h3 data-lang="en">Project 3: Car Booking System with LINE API</h3>
+                <h3 data-lang="th" style="display: none;">โปรเจค 3: ระบบจองรถพร้อมส่ง API เข้า LINE</h3>
+                <p data-lang="en">A car booking system built with Flask that allows users to book cars and sends notifications through LINE API. The system includes features such as driver management, booking status tracking, and distance calculation between locations.</p>
+                <p data-lang="th" style="display: none;">ระบบจองรถที่สร้างด้วย Flask ที่ช่วยให้ผู้ใช้สามารถจองรถและส่งการแจ้งเตือนผ่าน LINE API มีฟีเจอร์จัดการคนขับ ติดตามสถานะการจอง และคำนวณระยะทางระหว่างสถานที่ต่าง ๆ</p>
+                <a href="https://github.com/wasu101/mks" target="_blank">View Project</a>
+            </div>
+            
+
+            <div class="project">
+                <h3 data-lang="en">Project 4: Facial Recognition Door Control System</h3>
+                <h3 data-lang="th" style="display: none;">โปรเจค 4: ระบบควบคุมประตูด้วยการจดจำใบหน้า</h3>
+                <p data-lang="en">A facial recognition system for door control, built on Raspberry Pi with Linux, integrating AI-powered facial recognition to securely control access.</p>
+                <p data-lang="th" style="display: none;">ระบบการจดจำใบหน้าเพื่อควบคุมการเปิดประตู สร้างขึ้นด้วย Raspberry Pi และระบบปฏิบัติการ Linux รวม AI สำหรับการจดจำใบหน้าเพื่อความปลอดภัยในการเข้าถึง</p>
+                <a href="https://github.com/wasu101/Face_recognition" target="_blank">View Project</a>
             </div>
         </section>
 
     </div>
 
-    <footer>
-        <p>&copy; 2024 Your Name | <a href="mailto:your.email@example.com">your.email@example.com</a></p>
-    </footer>
 
+    <footer>
+        <p>&copy; 2024 Worrakan Nasai. All rights reserved.</p>
+        <p><a href="mailto:wasu550.jak2541@gmail.com">Contact Me</a></p>
+    </footer>
 </body>
 
 </html>
