@@ -428,7 +428,90 @@
         font-weight: bold;
         cursor: pointer;
     }
-    
+    .chat-message {
+    display: flex;
+    align-items: flex-start;
+    margin: 10px 0;
+}
+
+.chat-message.self {
+    justify-content: flex-end;
+}
+
+.chat-message.other {
+    justify-content: flex-start;
+}
+
+.chat-user-image {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.message-content {
+    background-color: #f1f1f1;
+    border-radius: 5px;
+    padding: 10px;
+    max-width: 70%;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    position: relative;
+}
+
+.message-content.self {
+    background-color: #d1e7dd;
+
+    display: flex; /* ใช้ flexbox */
+    flex-direction: column; /* จัดให้ข้อความอยู่ในแนวตั้ง */
+    align-items: flex-end; /* ชิดขวา */
+    position: relative; /* เพื่อให้ timestamp อยู่ในตำแหน่งที่ถูกต้อง */
+
+
+}
+
+.message-sender {
+    justify-content: flex-end;
+
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.message-text {
+    display: inline-block;
+    white-space: pre-wrap;
+}
+
+.message-timestamp {
+    font-size: 0.7em;
+    color: #888;
+    margin-left: 10px;
+    position: absolute;
+    bottom: -7px; /* ปรับให้ต่ำลง */
+    right: 10px;
+}
+
+
+.chat-image-thumbnail {
+    border-color: #000000;
+    cursor: pointer;
+    margin-top: 2px; /* เพิ่มระยะห่างระหว่างข้อความกับรูป */
+}
+
+.delete-image-link {
+    font-size: 0.8em;
+    color: red;
+    cursor: pointer;
+    margin-left: 10px;
+}
+
+.file-icon {
+    width: 40px; /* Adjust the size of the icon */
+    height: auto; /* Maintain the aspect ratio */
+    vertical-align: middle; /* Align icon with text */
+    margin-right: 8px; /* Space between icon and file name */
+}
+
         </style>
 </head>
 <body>
@@ -540,33 +623,92 @@
                     <div class="chat-log ticket border p-4">
                         <h4 class="small"><strong>Operation details for ticket No :</strong> {{ ticket.ticket_number }}</h4>
                         <div class="chat" id="chat_box_{{ ticket.id }}">
-                            {% set messages_found = false %}
                             {% if chat_messages is not defined or chat_messages|length == 0 %}
                                 <p class="small text-muted mt-2">No Chat History</p>
                             {% else %}
                                 {% for message in chat_messages %}
                                     {% if message.ticket_id == ticket.id %}
-    
-                                        <p id="message_{{ message.id }}" class="white-bg mt-1 mb-1 message-container zoom">
-                                            {% if message.image_user %}
-                                                <img src="{{ message.image_user }}" class="chat-user-image" style="width: 40px; height: 40px; border-radius: 50%;" />
-                                            {% endif %}
-                                            <strong>{{ message.sender }}:</strong> {{ message.message }}
-                                            {% if message.image_path %}
-                                                <img style="border-color: #000000;" src="{{ url_for('static', filename='uploads/' + message.image_path.split('/')[-1]) }}" class="chat-image-thumbnail image-container border" onclick="viewFullImage('{{ url_for('static', filename='uploads/' + message.image_path.split('/')[-1]) }}')" />
-                                                {% if ticket.status in ['Pending', 'in_progress'] %}
-                                                    <a href="#" class="delete-image-link" data-image-id="{{ message.id }}" onclick="deleteImage(event, '{{ message.image }}')">Delete</a>
+                                    <div id="message_{{ message.id }}" class="chat-message {% if message.sender == current_user.displayname %}self{% else %}other{% endif %}">
+                                        {% if message.sender == current_user.displayname %}
+                                            <div class="message-content self">
+                                                <strong class="message-sender">{{ message.sender }}</strong>
+                                                <span class="message-text">{{ message.message | e }}</span>
+                                                {% if message.image_path %}
+                                                    <img src="{{ url_for('static', filename='uploads/' + message.image_path.split('/')[-1]) }}" class="chat-image-thumbnail" onclick="viewFullImage('{{ url_for('static', filename='uploads/' + message.image_path.split('/')[-1]) }}')" />
+                                                    {% if ticket.status in ['Pending', 'in_progress'] %}
+                                                        <a href="#" class="delete-image-link" data-image-id="{{ message.id }}" onclick="deleteImage(event, '{{ message.image }}')">Delete</a>
+                                                    {% endif %}
                                                 {% endif %}
+                                                {% if message.document_path %}
+                                                {% set filename = message.document_path.split('/')[-1] %}
+                                                {% set file_extension = filename.split('.')[-1].lower() %}
+                                
+                                                <a href="{{ url_for('static', filename='uploads/' + message.document_path) }}" class="chat-document-link" target="_blank">
+                                                    {% if file_extension in ['xls', 'xlsx'] %}
+                                                        <img src="{{ url_for('static', filename='icons/excel-icon.png') }}" alt="Excel Icon" class="file-icon">
+                                                    {% endif %}
+                                                    {% if file_extension in ['pdf'] %}
+                                                        <img src="{{ url_for('static', filename='icons/pdf-icon.png') }}" alt="PDF Icon" class="file-icon">
+                                                    {% endif %}
+                                                    {{ filename }}
+                                                </a>
                                             {% endif %}
-                                            <small>({{ message.timestamp }})</small>
-                                            {% if ticket.status in ['Pending', 'in_progress'] %}
+                                                <small class="message-timestamp mt-4">({{ message.timestamp }})</small>
+                                                {% if ticket.status in ['Pending', 'in_progress'] %}
                                                 <span class="delete-message small" onclick="deleteMessage('{{ message.id }}')">delete</span>
+                                                {% endif %}
+                                            </div>
+
+                                            <img src="{{ message.image_user }}" class="chat-user-image mr-2 ml-2" />
+                                        {% else %}
+                                            {% if message.sender == 'System' %}
+                                                <img src="{{ url_for('static', filename='uploads/MKS_logo.png') }}" class="chat-user-image" />
+                                            {% else %}
+                                                <img src="{{ message.image_user }}" class="chat-user-image" />
                                             {% endif %}
-                                        </p>
+                                            <div class="message-content other">
+                                                <strong class="message-sender">{{ message.sender }}</strong>
+                                                <span class="message-text">{{ message.message | e }}</span>
+                                                {% if message.image_path %}
+                                                    <img src="{{ url_for('static', filename='uploads/' + message.image_path.split('/')[-1]) }}" class="chat-image-thumbnail" onclick="viewFullImage('{{ url_for('static', filename='uploads/' + message.image_path.split('/')[-1]) }}')" />
+                                                    {% if ticket.status in ['Pending', 'in_progress'] %}
+                                                        <a href="#" class="delete-image-link" data-image-id="{{ message.id }}" onclick="deleteImage(event, '{{ message.image }}')">Delete</a>
+                                                    {% endif %}
+                                                {% endif %}
+                                                {% if message.document_path %}
+                                                {% set filename = message.document_path.split('/')[-1] %}
+                                                {% set file_extension = filename.split('.')[-1].lower() %}
+                                
+                                                <a href="{{ url_for('static', filename='uploads/' + message.document_path) }}" class="chat-document-link" target="_blank">
+                                                    {% if file_extension in ['xls', 'xlsx'] %}
+                                                        <img src="{{ url_for('static', filename='icons/excel-icon.png') }}" alt="Excel Icon" class="file-icon">
+                                                    {% endif %}
+                                                    {% if file_extension in ['pdf'] %}
+                                                        <img src="{{ url_for('static', filename='icons/pdf-icon.png') }}" alt="PDF Icon" class="file-icon">
+                                                    {% endif %}
+                                                    {{ filename }}
+                                                </a>
+                                            {% endif %}
+                                                <small class="message-timestamp">({{ message.timestamp }})</small>
+                                                {% if ticket.status in ['Pending', 'in_progress'] %}
+                                                <span class="delete-message small" onclick="deleteMessage('{{ message.id }}')">delete</span>
+                                                {% endif %}
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                    
+                                    
+                                    
+                                    
+                                    
                                     {% endif %}
                                 {% endfor %}
                             {% endif %}
                         </div>
+                    </div>
+                    
+                    
+                    
                     
                         {% if ticket.status != 'Finish' %}
                             <div class="chat-container mt-4">
@@ -578,6 +720,7 @@
                                     <textarea id="chat_{{ ticket.id }}" onpaste="handlePaste(event, '{{ ticket.id }}')" class="form-control mb-1" style="height: auto; resize: none;" required placeholder="Type or job description here."></textarea>
                                     <input type="file" id="singleImageUpload_{{ ticket.id }}" class="d-none mt-2" accept="image/*" onchange="handleSingleImageUpload(event, '{{ ticket.id }}')">
                                     <input type="file" id="multipleImageUpload_{{ ticket.id }}" name="images" accept="image/*" multiple style="display: none;" onchange="handleMultipleImageUpload(event, '{{ ticket.id }}')">
+                                    <input type="file" id="documentUpload_{{ ticket.id }}" class="d-none mt-2" accept=".pdf,.doc,.docx,.xls,.xlsx" onchange="handleDocumentUpload(event, '{{ ticket.id }}')">
                                     <button class="btn btn-primary" onclick="sendChat('{{ ticket.id }}')" style="height: 40px; width: 100px;" required>
                                         <i class="fa-solid fa-paper-plane" style="font-size:18px;color:rgb(255, 255, 255)"></i> Send
                                     </button>
@@ -585,6 +728,10 @@
                                         <label for="multipleImageUpload_{{ ticket.id }}" class="btn btn-info ml-2 mr-2 mt-2 tooltip-button">
                                             <i class="fa-solid fa-image" style="font-size:18px;color:rgb(255, 255, 255)"></i>
                                             <span class="tooltip-text">Upload Images</span>
+                                        </label>
+                                        <label for="documentUpload_{{ ticket.id }}" class="btn btn-warning  mt-2 tooltip-button">
+                                            <i class="fa-solid fa-paperclip" style="font-size:18px;color:rgb(255, 255, 255)"></i>
+                                            <span class="tooltip-text">Upload Document</span>
                                         </label>
                                     </div>
                                     <div id="previewContainer_{{ ticket.id }}"></div>
@@ -1044,46 +1191,136 @@ socket.on('ticket_update_notification', function(data) {
     }
 }
 
-// ฟังก์ชันที่รับข้อมูลจาก Socket.IO และแสดงการแจ้งเตือน
 socket.on('receive_chat', function(data) {
     const chatBox = document.getElementById(`chat_box_${data.ticket_id}`);
-    
+
     if (chatBox) {
-        // Create a new message element
-        const newMessage = document.createElement('p');
+        const newMessage = document.createElement('div');
         newMessage.id = `message_${data.message_id}`;
-        newMessage.className = 'white-bg mt-1 mb-1 message-container zoom';
-        
-        newMessage.innerHTML = `
-            ${data.image_user ? `<img src="${data.image_user}" alt="User Image" class="user-image-thumbnail" />` : ''}
-            <strong>${data.sender}:</strong>
-            ${data.message}
-            ${data.image_path ? `<img src="${data.image_path}" class="chat-image-thumbnail image-container" onclick="viewFullImage('${data.image_path}')" />` : ''}
-            <small>(${data.timestamp})</small>
-            ${data.ticket_status === 'Pending' || data.ticket_status === 'in_progress' ? `<span class="delete-message small" onclick="deleteMessage('${data.message_id}')">delete</span>` : ''}
-        `;
-        
-        // Optionally add a delete link for images
+        newMessage.className = `chat-message ${data.sender === current_user.displayname ? 'self' : 'other'}`;
+
+        // Create a div for message content
+        const messageContent = document.createElement('div');
+        messageContent.className = `message-content ${data.sender === current_user.displayname ? 'self' : 'other'}`;
+
+        // Add user image
+        const userImage = document.createElement('img');
+        userImage.src = data.image_user || "/static/uploads/MKS_logo.png"; // Fallback to system logo
+        userImage.className = "chat-user-image";
+
+        // Add sender name
+        const senderStrong = document.createElement('strong');
+        senderStrong.className = 'message-sender';
+        senderStrong.innerText = `${data.sender}:`;
+        messageContent.appendChild(senderStrong);
+
+        // Add message text
+        const messageText = document.createElement('span');
+        messageText.className = 'message-text';
+        messageText.innerHTML = data.message; // Allow for HTML content
+        messageContent.appendChild(messageText);
+
+        // Handle file uploads
         if (data.image_path) {
-            const deleteLink = document.createElement('a');
-            deleteLink.href = '#';
-            deleteLink.className = 'delete-image-link';
-            deleteLink.dataset.imageId = data.message_id;
-            deleteLink.onclick = function(event) {
-                deleteImage(event, data.image_path);
+            const messageImage = document.createElement('img');
+            messageImage.src = data.image_path;
+            messageImage.className = "chat-image-thumbnail";
+            messageImage.onclick = function() {
+                viewFullImage(data.image_path);
             };
-            deleteLink.textContent = 'Delete';
-            newMessage.appendChild(deleteLink);
+            messageContent.appendChild(messageImage);
+
+            // Add delete link
+            if (data.ticket_status === 'Pending' || data.ticket_status === 'in_progress') {
+                const deleteLink = document.createElement('a');
+                deleteLink.href = '#';
+                deleteLink.className = 'delete-image-link';
+                deleteLink.dataset.imageId = data.message_id;
+                deleteLink.onclick = function(event) {
+                    deleteImage(event, data.image_path);
+                };
+                deleteLink.innerText = 'Delete';
+                messageContent.appendChild(deleteLink);
+            }
         }
-        
+
+        // Add document link
+        // Add document link
+        if (data.document_path) {
+            const filename = data.document_path.split('/').pop(); // รับชื่อไฟล์
+            const fileExtension = filename.split('.').pop().toLowerCase(); // รับนามสกุลไฟล์
+
+            const documentLink = document.createElement('a');
+            documentLink.href = data.document_path;
+            documentLink.target = "_blank";
+            documentLink.className = "chat-document-link";
+
+            // Create an icon element based on the file type
+            if (fileExtension === 'xls' || fileExtension === 'xlsx') {
+                const excelIcon = document.createElement('img');
+                excelIcon.src = "/static/icons/excel-icon.png"; // ปรับให้ตรงกับเส้นทาง
+                excelIcon.alt = "Excel Icon";
+                excelIcon.className = "file-icon";
+                documentLink.appendChild(excelIcon);
+            } else if (fileExtension === 'pdf') {
+                const pdfIcon = document.createElement('img');
+                pdfIcon.src = "/static/icons/pdf-icon.png"; // ปรับให้ตรงกับเส้นทาง
+                pdfIcon.alt = "PDF Icon";
+                pdfIcon.className = "file-icon";
+                documentLink.appendChild(pdfIcon);
+            }
+
+            documentLink.innerText = filename; // แสดงชื่อไฟล์
+            messageContent.appendChild(documentLink);
+        }
+
+
+        // Add timestamp
+        const timestampSmall = document.createElement('small');
+        timestampSmall.className = 'message-timestamp';
+        timestampSmall.innerText = `(${data.timestamp})`;
+        messageContent.appendChild(timestampSmall);
+
+        // Append message content to the new message element
+        newMessage.appendChild(messageContent);
+
+        // Append user image based on sender
+        if (data.sender === current_user.displayname) {
+            // For self messages, add image to the right
+            newMessage.appendChild(userImage);
+        } else {
+            // For others' messages, add image to the left
+            newMessage.insertBefore(userImage, messageContent);
+        }
+        fetch(`/notify/ticket/${data.ticket_id}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+
+            },
+            body: JSON.stringify({}) // Body can be empty or include any necessary data
+        }).then(response => {
+            // Handle response if needed, or simply ignore it
+            if (!response.ok) {
+                console.error('Failed to notify ticket creator');
+            }
+        }).catch(error => {
+            console.error('Error:', error);
+        });
         // Append the new message to the chat box
         chatBox.appendChild(newMessage);
-        
-        // Optionally scroll to the bottom of the chat box
         chatBox.scrollTop = chatBox.scrollHeight;
     }
 });
+
+
+
+
     </script>
+    <script>
+        const current_user = {{ current_user | tojson }};
+    </script>
+    
     <script>
         function changeLanguage(lang) {
             // ส่งค่าภาษาไปยังหน้าเว็บที่ต้องการ
@@ -1745,7 +1982,19 @@ function saveIssueType(ticketId, issueType) {
         });
     }
 
+    function showUploadModal() {
+    const modal = document.getElementById('uploadModal');
+    if (modal) {
+        modal.style.display = 'block';
+    }
+}
 
+function closeUploadModal() {
+    const modal = document.getElementById('uploadModal');
+    if (modal) {
+        modal.style.display = 'none';
+    }
+}
 
 
     function setUrgency(ticketId, urgencyType) {
@@ -1789,7 +2038,7 @@ function saveIssueType(ticketId, issueType) {
             });
         });
     }
-    async function handleMultipleImageUpload(event, ticketId) {
+async function handleMultipleImageUpload(event, ticketId) {
     const input = event.target;
     const previewContainer = document.getElementById(`previewContainer_${ticketId}`);
     
@@ -1799,12 +2048,17 @@ function saveIssueType(ticketId, issueType) {
         if (input.files) {
             showUploadModal(); // Show upload modal
 
-            // Create an array to store image data
             const imageDataArray = [];
 
             // Function to process a file
             const processFile = (file) => {
                 return new Promise((resolve, reject) => {
+                    if (!file.type.startsWith('image/')) {
+                        alert('Invalid file type: ' + file.name); // แจ้งผู้ใช้เกี่ยวกับประเภทไฟล์ที่ไม่ถูกต้อง
+                        reject(new Error('Invalid file type: ' + file.name));
+                        return;
+                    }
+
                     const reader = new FileReader();
 
                     reader.onload = function(e) {
@@ -1814,30 +2068,28 @@ function saveIssueType(ticketId, issueType) {
                         img.style.margin = '5px';
                         previewContainer.appendChild(img);
 
-                        // Prepare image data
                         const imageData = {
                             ticketId: ticketId,
                             imageData: e.target.result
                         };
 
                         imageDataArray.push(imageData);
-
                         resolve();
                     };
 
-                    reader.onerror = (error) => reject(error);
+                    reader.onerror = (error) => {
+                        alert('Error reading file: ' + file.name);
+                        reject(error);
+                    };
                     reader.readAsDataURL(file);
                 });
             };
 
-            // Create an array of promises for each file
             const filePromises = Array.from(input.files).map(file => processFile(file));
 
-            // Process all files concurrently
             try {
                 await Promise.all(filePromises);
 
-                // Send all images to the server
                 const response = await fetch('/upload_image', {
                     method: 'POST',
                     headers: {
@@ -1861,7 +2113,6 @@ function saveIssueType(ticketId, issueType) {
                 console.error('Error uploading images:', error);
             }
 
-            // Close the upload modal after all images are uploaded
             closeUploadModal();
         }
     }
@@ -1869,22 +2120,9 @@ function saveIssueType(ticketId, issueType) {
 
 
 
+
 var currentImageIndex = 0;
 var images = []; // เก็บรายชื่อภาพ
-
-function showUploadModal() {
-    const modal = document.getElementById('uploadModal');
-    if (modal) {
-        modal.style.display = 'block';
-    }
-}
-
-function closeUploadModal() {
-    const modal = document.getElementById('uploadModal');
-    if (modal) {
-        modal.style.display = 'none';
-    }
-}
 
 function viewFullImage(src) {
     var modal = document.getElementById("imageModal");
@@ -1936,7 +2174,45 @@ window.onclick = function(event) {
 }
 
 
-</script> 
+
+
+// Example function to display chat messages including images
+function displayChatMessages(messages) {
+    const chatContainer = document.getElementById('chatContainer');
+    if (!chatContainer) return;
+    chatMessages.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
+    chatContainer.innerHTML = ''; // Clear existing chat messages
+
+    messages.forEach(message => {
+        const messageElement = document.createElement('div');
+        messageElement.classList.add('chat-message');
+
+        const senderElement = document.createElement('strong');
+        senderElement.textContent = message.sender;
+        messageElement.appendChild(senderElement);
+
+        if (message.image_path) {
+            const img = document.createElement('img');
+            img.src = message.image_path;
+            img.style.maxWidth = '200px';
+            img.style.maxHeight = '200px';
+            messageElement.appendChild(img);
+        }
+
+        const timestampElement = document.createElement('span');
+        timestampElement.textContent = message.timestamp;
+        messageElement.appendChild(timestampElement);
+
+        chatContainer.appendChild(messageElement);
+    });
+}
+
+// Example function to handle incoming chat messages
+socket.on('receive_chat', function(chatMessages) {
+    displayChatMessages(chatMessages); // Ensure that this function processes and displays messages in the correct order
+});
+
+    </script>
 <script>
 function handleIssueSelection(ticketId, issueType) {
     // Issue types that don't need to show the subtype dropdown
@@ -2069,7 +2345,39 @@ function updateSubtypeDropdown(ticketId, issueType) {
 
 <!-- Include SweetAlert JS -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.js"></script>
+<script>
+    function handleDocumentUpload(event, ticketId) {
+const file = event.target.files[0];
+if (file) {
+    const formData = new FormData();
+    formData.append('document', file);
+    formData.append('ticket_id', ticketId);
 
+    fetch('/upload_document_ticket', {  
+    method: 'POST',
+    body: formData,
+})
+.then(response => {
+    if (!response.ok) {
+        throw new Error('Network response was not ok');
+    }
+    return response.json();
+})
+.then(data => {
+    if (data.status === 'success') {
+        console.log('Document uploaded successfully:', data);
+    } else {
+        alert('Upload failed: ' + data.message);
+    }
+})
+.catch(error => {
+    console.error('Error:', error);
+    alert('Upload failed');
+});
+}}
+
+
+</script>
 </body>
 </html>
 

@@ -13,9 +13,6 @@
         });
 
         function validateForm() {
-            const firstName = document.getElementById('firstName').value;
-            const lastName = document.getElementById('lastName').value;
-            const nickname = document.getElementById('nickname').value;
             const password = document.getElementById('password').value;
             
             const regex = /^[A-Za-z\s]+$/; // Regex for English letters and spaces
@@ -198,15 +195,6 @@ a.text:hover {
                     <label for="username">Username:</label>
                     <input class="mb-1" type="text" id="username" name="username" value="{{ current_user.username }}" readonly>
                     <p class="small text-muted">You can't change the username.</p>
-                    
-                    <label for="firstName">First Name:</label>
-                    <input type="text" id="firstName" name="first_name" value="{{ current_user.first_name }}" required pattern="[A-Za-z\s]+" data-toggle="tooltip" title="Only English letters are allowed  กรุณาใส่ภาษาอังกฤษเท่านั้น">
-                    
-                    <label for="lastName">Last Name:</label>
-                    <input type="text" id="lastName" name="last_name" value="{{ current_user.last_name }}" required pattern="[A-Za-z\s]+" data-toggle="tooltip" title="Only English letters are allowed  กรุณาใส่ภาษาอังกฤษเท่านั้น">
-                    
-                    <label for="nickname">Nickname:</label>
-                    <input type="text" id="nickname" name="nickname" value="{{ current_user.nickname }}" required pattern="[A-Za-z\s]+" data-toggle="tooltip" title="Only English letters are allowed  กรุณาใส่ภาษาอังกฤษเท่านั้น">
                     
                     <label for="password">New Password:</label>
                     <input type="password" id="password" name="password" value="" placeholder="Enter new password">

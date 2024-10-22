@@ -459,6 +459,82 @@ footer {
     vertical-align: middle; /* Align icon with text */
     margin-right: 8px; /* Space between icon and file name */
 }
+.chat-message {
+    display: flex;
+    align-items: flex-start;
+    margin: 10px 0;
+}
+
+.chat-message.self {
+    justify-content: flex-end;
+}
+
+.chat-message.other {
+    justify-content: flex-start;
+}
+
+.chat-user-image {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.message-content {
+    background-color: #f1f1f1;
+    border-radius: 5px;
+    padding: 10px;
+    max-width: 70%;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    position: relative;
+}
+
+.message-content.self {
+    background-color: #d1e7dd;
+
+    display: flex; /* ใช้ flexbox */
+    flex-direction: column; /* จัดให้ข้อความอยู่ในแนวตั้ง */
+    align-items: flex-end; /* ชิดขวา */
+    position: relative; /* เพื่อให้ timestamp อยู่ในตำแหน่งที่ถูกต้อง */
+
+
+}
+
+.message-sender {
+    justify-content: flex-end;
+
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.message-text {
+    display: inline-block;
+    white-space: pre-wrap;
+}
+
+.message-timestamp {
+    font-size: 0.7em;
+    color: #888;
+    margin-left: 10px;
+    position: absolute;
+    bottom: -7px; /* ปรับให้ต่ำลง */
+    right: 10px;
+}
+
+
+.chat-image-thumbnail {
+    border-color: #000000;
+    cursor: pointer;
+    margin-top: 2px; /* เพิ่มระยะห่างระหว่างข้อความกับรูป */
+}
+
+.delete-image-link {
+    font-size: 0.8em;
+    color: red;
+    cursor: pointer;
+    margin-left: 10px;
+}
 
 
     </style>
@@ -601,37 +677,71 @@ footer {
                             {% else %}
                                 {% for message in chat_messages %}
                                     {% if message.error_id == error.id %}
-                                        <p id="message_{{ message.id }}" class="white-bg mt-1 mb-1 message-container zoom">
-                                            {% if message.image_user %}
-                                                <img src="{{ message.image_user }}" class="chat-user-image" style="width: 40px; height: 40px; border-radius: 50%;" />
-                                            {% endif %}
-                                            <strong>{{ message.sender }}:</strong> {{ message.message }}
-                        
-                                            {% if message.image_path %}
-                                                <img style="border-color: #000000;" src="{{ url_for('static', filename='uploads/' + message.image_path.split('/')[-1]) }}" class="chat-image-thumbnail image-container border" onclick="viewFullImage('{{ url_for('static', filename='uploads/' + message.image_path.split('/')[-1]) }}')" />
-                                            {% endif %}
-                        
-                                            {% if message.document_path %}
-                                            {% set filename = message.document_path.split('/')[-1] %}  {# Extract the file name from the path #}
-                                            {% set file_extension = filename.split('.')[-1].lower() %}  {# Extract and lowercase the file extension #}
-                                            
-                                            <a href="{{ url_for('static', filename='uploads/' + message.document_path) }}" class="chat-document-link" target="_blank">
-                                                {% if file_extension in ['xls', 'xlsx'] %}
-                                                    <!-- Display Excel icon for Excel files -->
-                                                    <img src="{{ url_for('static', filename='icons/excel-icon.png') }}" alt="Excel Icon" class="file-icon">
-
+                                    <div id="message_{{ message.id }}" class="chat-message {% if message.sender == current_user.displayname %}self{% else %}other{% endif %}">
+                                        {% if message.sender == current_user.displayname %}
+                                            <div class="message-content self">
+                                                <strong class="message-sender">{{ message.sender }}</strong>
+                                                <span class="message-text">{{ message.message | e }}</span>
+                                    
+                                                {% if message.image_path %}
+                                                    <img style="border-color: #000000;" src="{{ url_for('static', filename='uploads/' + message.image_path.split('/')[-1]) }}" class="chat-image-thumbnail image-container border" onclick="viewFullImage('{{ url_for('static', filename='uploads/' + message.image_path.split('/')[-1]) }}')" />
                                                 {% endif %}
-                                                {{ filename }}  {# Display the file name #}
-                                            </a>
-                                        {% endif %}
-                                        
-                                        
-                        
-                                            <small>({{ message.timestamp }})</small>
-                                            {% if error.status in ['Pending', 'in_progress', 'Wait for Requester', 'Wait for Admin'] %}
-                                                <span class="delete-message small" onclick="deleteMessage('{{ message.id }}')">delete</span>
+                                    
+                                                {% if message.document_path %}
+                                                    {% set filename = message.document_path.split('/')[-1] %}
+                                                    {% set file_extension = filename.split('.')[-1].lower() %}
+                                    
+                                                    <a href="{{ url_for('static', filename='uploads/' + message.document_path) }}" class="chat-document-link" target="_blank">
+                                                        {% if file_extension in ['xls', 'xlsx'] %}
+                                                        <img src="{{ url_for('static', filename='icons/excel-icon.png') }}" alt="Excel Icon" class="file-icon">
+                                                    {% endif %}
+                                                    {% if file_extension in ['pdf'] %}
+                                                        <img src="{{ url_for('static', filename='icons/pdf-icon.png') }}" alt="PDF Icon" class="file-icon">
+                                                    {% endif %}
+                                                        {{ filename }}
+                                                    </a>
+                                                {% endif %}
+                                    
+                                                <small class="message-timestamp mt-4">({{ message.timestamp }})</small>
+                                                {% if error.status in ['Pending', 'in_progress', 'Wait for Requester', 'Wait for Admin'] %}
+                                                    <span class="delete-message small" onclick="deleteMessage('{{ message.id }}')">delete</span>
+                                                {% endif %}
+                                            </div>
+                                            <img src="{{ message.image_user | replace('http://', 'https://') }}" class="chat-user-image ml-2" style="width: 40px; height: 40px; border-radius: 50%; " />
+                                        {% else %}
+                                            {% if message.sender == 'System' %}
+                                                <img src="{{ url_for('static', filename='uploads/MKS_logo.png') }}" class="chat-user-image" />
+                                            {% else %}
+                                                <img src="{{ message.image_user | replace('http://', 'https://') }}" class="chat-user-image" />
                                             {% endif %}
-                                        </p>
+                                            <div class="message-content other">
+                                                <strong class="message-sender">{{ message.sender }}</strong>
+                                                <span class="message-text">{{ message.message | e }}</span>
+                                    
+                                                {% if message.image_path %}
+                                                    <img style="border-color: #000000;" src="{{ url_for('static', filename='uploads/' + message.image_path.split('/')[-1]) }}" class="chat-image-thumbnail image-container border" onclick="viewFullImage('{{ url_for('static', filename='uploads/' + message.image_path.split('/')[-1]) }}')" />
+                                                {% endif %}
+                                    
+                                                {% if message.document_path %}
+                                                    {% set filename = message.document_path.split('/')[-1] %}
+                                                    {% set file_extension = filename.split('.')[-1].lower() %}
+                                    
+                                                    <a href="{{ url_for('static', filename='uploads/' + message.document_path) }}" class="chat-document-link" target="_blank">
+                                                        {% if file_extension in ['xls', 'xlsx'] %}
+                                                        <img src="{{ url_for('static', filename='icons/excel-icon.png') }}" alt="Excel Icon" class="file-icon">
+                                                    {% endif %}
+                                                    {% if file_extension in ['pdf'] %}
+                                                        <img src="{{ url_for('static', filename='icons/pdf-icon.png') }}" alt="PDF Icon" class="file-icon">
+                                                    {% endif %}
+                                                        {{ filename }}
+                                                    </a>
+                                                {% endif %}
+                                    
+                                                <small class="message-timestamp">({{ message.timestamp }})</small>
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                    
                                     {% endif %}
                                 {% endfor %}
                             {% endif %}
@@ -858,17 +968,21 @@ socket.on('receive_chat_nv', function(data) {
     // Ensure chatBox is defined before accessing it
     const chatBox = document.getElementById(`chat_box_${data.error_id}`);
     if (chatBox) {
-        const newMessage = document.createElement('p');
+        const newMessage = document.createElement('div');
         newMessage.id = `message_${data.id}`;
-        newMessage.className = 'white-bg mt-1 mb-1 message-container zoom';
+        newMessage.className = `chat-message ${data.sender === current_user.displayname ? 'self' : 'other'}`;
         
         newMessage.innerHTML = `
-            <img src="${data.image_user}" alt="User Image" class="user-image-thumbnail" />
-            <strong>${data.sender}:</strong>
-            ${data.message}
-            ${data.image_path ? `<img id="myImg" src="${data.image_path}" class="chat-image-thumbnail image-container" onclick="viewFullImage('${data.image_path}')" />` : ''}
-            ${data.document_path ? `<a href="${data.document_path}" target="_blank">Download Document</a>` : ''}
-            <small>(${data.timestamp})</small>
+            <div class="message-content ${data.sender === current_user.displayname ? 'self' : 'other'}">
+                <img src="${data.image_user}" alt="User Image" class="chat-user-image" />
+                <strong class="message-sender">${data.sender}:</strong>
+                <span class="message-text">${data.message}</span>
+                
+                ${data.image_path ? `<img src="${data.image_path}" class="chat-image-thumbnail" onclick="viewFullImage('${data.image_path}')" />` : ''}
+                ${data.document_path ? `<a href="${data.document_path}" target="_blank" class="chat-document-link">Download Document</a>` : ''}
+                
+                <small class="message-timestamp">(${data.timestamp})</small>
+            </div>
         `;
 
         if (data.image_path) {
@@ -885,6 +999,21 @@ socket.on('receive_chat_nv', function(data) {
 
         chatBox.appendChild(newMessage);
     }
+    fetch(`/notify/error_detail/${data.error_id}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+
+            },
+            body: JSON.stringify({}) // Body can be empty or include any necessary data
+        }).then(response => {
+            // Handle response if needed, or simply ignore it
+            if (!response.ok) {
+                console.error('Failed to notify ticket creator');
+            }
+        }).catch(error => {
+            console.error('Error:', error);
+        });
     window.location.reload();
 });
 

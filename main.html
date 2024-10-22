@@ -428,20 +428,28 @@ body {
          width: 100%;
 }
 #notifications-list {
-        display: none; /* Initially hidden */
-        position: absolute;
-        background-color: #ffffffea;
-        border: 1px solid #ddd;
-        box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-        max-height: 300px;
-        overflow-y: auto;
-        z-index: 1000;
-        /* Optional: Position the list below the notification icon */
-        top: 50%; /* Adjust as needed */
-        left: 0;
-        width: 100%;
-        margin: auto;
-    }
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    position: absolute;
+    top: 60px; 
+    right: 0;
+    width: 300px; 
+    z-index: 1000;
+    display: none; 
+}
+
+.notification-item {
+    display: flex;
+    align-items: center;
+    padding: 10px 15px;
+    border-bottom: 1px solid #f0f0f0;
+    transition: background 0.2s;
+}
+
+.notification-item:hover {
+    background: #f9f9f9;
+}
 
     /* Optional: Style list items */
     #notifications-list li {
@@ -478,19 +486,21 @@ body {
 #notifications-list {
     margin: auto;
     position: absolute; /* Position it relative to its closest positioned ancestor */
-    top: 60%; /* Place it right below the notification icon */
-    left: auto; /* Align with the left edge of the notification icon */
-    width: 360%; /* Set a fixed width or adjust as needed */
+    top: 40px; /* Adjust position below the notification icon */
+    left: 0; /* Align with the left edge of the notification icon */
+    width: 300px; /* Set a fixed width */
     max-height: 400px; /* Set a maximum height */
     overflow-y: auto; /* Add scroll if the content exceeds max height */
-    background: #d8d8d8; /* Background color for better visibility */
+    background: #ffffff; /* White background for better visibility */
     border: 1px solid #ddd; /* Border around the list */
     border-radius: 5px; /* Rounded corners */
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Shadow for depth */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2); /* Shadow for depth */
     z-index: 2; /* Ensure it appears above other elements */
     display: none; /* Hidden by default, shown on click */
+    padding: 10px; /* Padding around the content */
 }
 
+/* Arrow for Notifications List */
 #notifications-list::before {
     content: "";
     position: absolute;
@@ -498,9 +508,10 @@ body {
     left: 20px; /* Align the arrow with the notification icon */
     border-width: 10px;
     border-style: solid;
-    border-color: transparent transparent #4e4e4e transparent; /* Arrow pointing down */
+    border-color: transparent transparent #ddd transparent; /* Arrow pointing down */
 }
 
+/* Notification Items */
 .notification-list {
     list-style-type: none; /* Remove default list styling */
     padding: 0;
@@ -510,7 +521,9 @@ body {
 .notification-item {
     padding: 10px;
     border-bottom: 1px solid #ddd; /* Separator line between items */
-    background-color: #dadada; /* Background color for better visibility */
+    background-color: #f8f8f8; /* Background color for better visibility */
+    transition: background-color 0.3s; /* Smooth background transition */
+    position: relative; /* Required for positioning close button */
 }
 
 .notification-item:last-child {
@@ -518,10 +531,11 @@ body {
 }
 
 .notification-item:hover {
-    background-color: #f5f5f5; /* Background color on hover */
+    background-color: #e0e0e0; /* Background color on hover */
     cursor: pointer;
 }
 
+/* Close Button */
 .close-btn {
     background: none;
     border: none;
@@ -533,6 +547,49 @@ body {
 .close-btn:hover {
     color: red;
 }
+.notification-item {
+    padding: 10px;
+    border-bottom: 1px solid #ddd; /* Separator line between items */
+    background-color: #f8f8f8; /* Background color for better visibility */
+    transition: background-color 0.3s; /* Smooth background transition */
+    position: relative; /* Required for positioning close button */
+}
+
+.notification-item:last-child {
+    border-bottom: none; /* No border for the last item */
+}
+
+.close-btn {
+    background: red; /* สีพื้นหลังเป็นสีแดง */
+    color: white; /* สีข้อความเป็นสีขาว */
+    border: none; /* ไม่มีกรอบ */
+    border-radius: 50%; /* ทำให้ปุ่มเป็นวงกลม */
+    width: 25px; /* กำหนดขนาด */
+    height: 25px; /* กำหนดขนาด */
+    position: absolute; /* ให้ตำแหน่งอยู่ในตำแหน่งที่ต้องการ */
+    top: 5px; /* ระยะห่างจากด้านบน */
+    right: 5px; /* ระยะห่างจากด้านขวา */
+    cursor: pointer; /* แสดงตัวชี้เมื่อ hover */
+    font-size: 16px; /* ขนาดตัวอักษร */
+    line-height: 25px; /* จัดแนวนอนให้กลาง */
+}
+
+.close-btn:hover {
+    background: darkred; /* เปลี่ยนสีเมื่อ hover */
+}
+
+/* Badge */
+#openNotificationsCount {
+    background: red;
+    color: white;
+    border-radius: 50%;
+    padding: 3px 6px; /* Adjust padding for better appearance */
+    position: absolute;
+    top: -5px;
+    right: -5px; /* Adjust position to overlap the icon */
+    font-size: 12px; /* Smaller font size */
+}
+
 
     #navigate{
         height:300px;
@@ -622,19 +679,18 @@ text-align: center;
                                     <span class="tooltip-text">My Tasks</span>
                                 </a>
                             </div>                                                        <!-- New My Tasks Button -->
-                            <div id="notifications-container">
-                                <p href="#" class="ml-2 mb-4 notification tooltip-button" id="notification-icon"
-                                    data-type="{{ notification_type }}" 
-                                    data-id="{{ notification_id }}">
-                                    <i class="fa-solid fa-earth-americas" style="font-size:28px; color:rgb(255, 255, 255);"></i>
+                            <div id="notifications-container" style="position: relative;">
+                                <div class="notification tooltip-button" id="notification-icon" data-type="{{ notification_type }}" data-id="{{ notification_id }}">
+                                    <i class="fa-solid fa-earth-americas" style="font-size: 28px; color: white;"></i>
                                     <span class="badge" id="openNotificationsCount"></span>
                                     <span class="tooltip-text">Notification</span>
-                                </p>
-                                
-                                <div id="notifications-list">
+                                </div>
+                            
+                                <div id="notifications-list" style="background: white; border-radius: 8px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); position: absolute; top: 60px; right: 0; width: 300px; z-index: 1000; display: none;">
                                     <!-- Notifications will be dynamically populated here -->
                                 </div>
                             </div>
+                            
                             
                             <div> 
                                 <a href="{{ url_for('user_profile', user_id=current_user.id) }}" class="ml-2 mb-4 notification tooltip-button">
@@ -728,11 +784,12 @@ text-align: center;
                                     <a href="{{ url_for('create_work_order') }}" class="btn btn-success mr-4  mb-2 notification" style="font-size:15px;">
                                         <i class="fa-solid fa-plus" style="font-size:15px;"></i> Create Tickets Repair Requisition
                                     </a>
-                                    {% if current_user and ('adminmt' in current_user.roles or 'all' in current_user.roles) %}
+                                    
                                     <a href="{{ url_for('view_work_orders') }}" class="btn btn-primary  mr-4 mb-2 notification" style="font-size:15px;">
                                         <i class="fa-solid fa-bars" style="font-size:15px;"></i> All Repair Requisition
                                         <span class="badge" id="openOrdersCount">0</span>
                                     </a>
+                                    {% if current_user and ('adminmt' in current_user.roles or 'all' in current_user.roles) %}
                                     <a href="{{ url_for('soon') }}" class="btn btn-info mr-4  mb-2 notification" style="font-size:15px;">
                                         <i class="fa-solid fa-chart-simple" style="font-size:15px;"></i> Dashboard
                                     </a>

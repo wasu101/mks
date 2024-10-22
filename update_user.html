@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update Profile</title>
+    <link rel="stylesheet" href="styles.css"> <!-- แฟ้ม CSS สำหรับสไตล์ -->
+</head>
+<body>
+    <div class="container">
+        <h1>อัปเดตข้อมูลผู้ใช้</h1>
+        <form id="updateProfileForm" method="POST" enctype="multipart/form-data">
+            <div>
+                <label for="username">ชื่อผู้ใช้:</label>
+                <input type="text" id="username" name="username" required>
+            </div>
+            <div>
+                <label for="password">รหัสผ่าน:</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+            <div>
+                <label for="department">แผนก:</label>
+                <input type="text" id="department" name="department" required>
+            </div>
+            <div>
+                <label for="displayname">ชื่อที่แสดง:</label>
+                <input type="text" id="displayname" name="displayname">
+            </div>
+            <div>
+                <label for="image">รูปภาพโปรไฟล์:</label>
+                <input type="file" id="image" name="image" accept="image/*">
+            </div>
+            <div>
+                <button type="submit">อัปเดตข้อมูล</button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById('updateProfileForm').onsubmit = function(event) {
+            event.preventDefault(); // ป้องกันการส่งฟอร์มโดยอัตโนมัติ
+
+            const formData = new FormData(this);
+
+            fetch('/update_profile', { // เปลี่ยนเป็น URL ที่ต้องการ
+                method: 'POST',
+                body: formData,
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('อัปเดตข้อมูลสำเร็จ!');
+                } else {
+                    alert('เกิดข้อผิดพลาด: ' + data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        };
+    </script>
+</body>
+</html>
