@@ -1,269 +1,166 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Add Ticket</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link rel="icon" href="{{ url_for('static', filename='images/logo1.ico') }}" type="image/x-icon">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>My Coding Portfolio</title>
     <style>
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
             margin: 0;
             padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            color: #666666;
-            background-color: #f0f0f0;
+        }
+
+        header {
+            background-color: #333;
+            color: white;
+            padding: 10px 0;
+            text-align: center;
+        }
+
+        header h1 {
+            margin: 0;
         }
 
         .container {
-            max-width: 600px;
-            width: 100%;
+            width: 80%;
+            margin: 0 auto;
+            padding: 20px;
         }
 
-        .form-container {
-            background-color: #ffffff;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-            animation: fadeIn 1s ease-in-out;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        h1 {
-            color: #333333;
+        .profile {
             text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .profile img {
+            border-radius: 50%;
+            width: 150px;
+            height: 150px;
+            object-fit: cover;
+        }
+
+        .profile h2 {
+            margin: 20px 0 10px;
+        }
+
+        .skills {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            margin-bottom: 40px;
+        }
+
+        .skill {
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            padding: 20px;
+            margin: 10px;
+            width: 30%;
+            text-align: center;
+        }
+
+        .skill h3 {
+            margin-bottom: 15px;
+        }
+
+        .projects {
+            margin-bottom: 40px;
+        }
+
+        .projects h2 {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .project {
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            padding: 20px;
             margin-bottom: 20px;
-            font-size: 36px;
         }
 
-        h1 i {
-            color: #4a90e2;
-            font-size: 32px; /* Increase the icon size */
-            margin-right: 10px; /* Add some space between icon and text */
+        .project h3 {
+            margin-top: 0;
         }
 
-        label {
-            color: #666666;
-            display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
+        .project p {
+            margin: 10px 0;
         }
 
-        input[type="text"],
-        textarea,
-        select {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 10px;
-            border: 1px solid #cccccc;
-            border-radius: 5px;
-            box-sizing: border-box;
-            transition: border-color 0.3s;
+        footer {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 20px 0;
+            margin-top: 40px;
         }
 
-        input[type="text"]:focus,
-        textarea:focus,
-        select:focus {
-            border-color: #4a90e2;
+        footer p {
+            margin: 0;
         }
-
-        textarea {
-            resize: vertical;
-            min-height: 100px;
-        }
-
-        input[type="submit"] {
-            background-color: #4a90e2;
-            color: #ffffff;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-            display: block;
-            margin: 20px auto 0;
-            transition: background-color 0.3s ease;
-        }
-
-        input[type="submit"]:hover {
-            background-color: #357ab8;
-        }
-
-        .small {
-            color: #333333;
-        }
-
-        .modal-content {
-            border-radius: 10px;
-        }
-
-        .modal-header {
-            border-bottom: none;
-        }
-
-        .modal-body {
-            font-size: 16px;
-        }
-        strong, span {
-            display: inline;
-        }
-        .date-time-container {
-    display: flex;
-    justify-content: space-between;
-}
     </style>
-    <script>
-        function updateDateTime() {
-            var now = new Date();
-            var dateElement = document.getElementById("current-date");
-            var timeElement = document.getElementById("current-time");
-
-            dateElement.innerHTML = now.toLocaleDateString();
-            timeElement.innerHTML = now.toLocaleTimeString();
-        }
-
-        setInterval(updateDateTime, 1000);
-    </script>
 </head>
+
 <body>
+
+    <header>
+        <h1>My Coding Portfolio</h1>
+    </header>
+
     <div class="container">
-        <div class="form-container">
-            <p class="small mb-1">You are logged in as <strong>{{ current_user.displayname }}</strong> from <strong>{{ current_user.department }}</strong>.</p>
-            <form action="/add" method="post" id="addTicketForm">
-                <h1><i class="fa fa-ticket"></i> Add New Ticket</h1>
-                <div class="date-time-container" style="display: flex; justify-content: space-between;">
-                    <p class="small mb-1">Date: <span id="current-date"></span></p>
-                    <p class="small mb-1">Time: <span id="current-time"></span></p>
-                </div>
-                
-                <label for="title"><i class="fas fa-user"></i> Requester Name:</label>
-                <input type="text" id="title" name="title" value="{{ current_user.displayname }}" readonly>
-                <label for="description"><i class="fas fa-pencil-alt"></i> Description:</label>
-                <textarea id="description" name="description" required></textarea>
-                <label for="department"><i class="fas fa-building"></i> Department:</label>
-                <input type="text" id="department" name="department" value="{{ current_user.department }}" readonly>
-                <input type="submit" value="Submit">
-                <a href="{{ url_for('main', user_id=current_user.id) }}" class="text">Cancel</a>
-            </form>
-            <div class="small">
-                <label for="creator"></label>
-                <span id="creator">{{ current_user.displayname }}</span>
-                <span> (ID: {{ current_user.id }})</span>
+
+        <div class="profile">
+            <img src="https://via.placeholder.com/150" alt="Profile Picture">
+            <h2>Your Name</h2>
+            <p>Full Stack Developer | Python, JavaScript, HTML, CSS</p>
+        </div>
+
+        <section class="skills">
+            <div class="skill">
+                <h3>Python</h3>
+                <p>Experienced in developing web applications using Flask, Django, and data analysis with Pandas.</p>
             </div>
-            
-        </div> <!-- End of form container -->
+            <div class="skill">
+                <h3>JavaScript</h3>
+                <p>Proficient in building dynamic web interfaces using React.js, Vue.js, and vanilla JavaScript.</p>
+            </div>
+            <div class="skill">
+                <h3>HTML & CSS</h3>
+                <p>Expert in building responsive and accessible websites with modern HTML5 and CSS3.</p>
+            </div>
+        </section>
+
+        <section class="projects">
+            <h2>Projects</h2>
+
+            <div class="project">
+                <h3>Project 1: Task Management App</h3>
+                <p>This is a full-stack web application built with Flask and SQLite. It allows users to manage tasks and track progress efficiently.</p>
+            </div>
+
+            <div class="project">
+                <h3>Project 2: Real-Time Chat App</h3>
+                <p>A real-time chat application developed using Flask-SocketIO. Users can exchange messages and upload images seamlessly.</p>
+            </div>
+
+            <div class="project">
+                <h3>Project 3: E-commerce Website</h3>
+                <p>An e-commerce platform created using Django and integrated with Stripe for payment processing. It supports product browsing, cart management, and order placement.</p>
+            </div>
+        </section>
+
     </div>
-    
 
-    <!-- JavaScript code to show the modal when ticket is successfully added -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> <!-- เพิ่ม jQuery library -->
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script> <!-- เพิ่ม Bootstrap JavaScript library -->
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> <!-- Include SweetAlert library -->
-    <script>
+    <footer>
+        <p>&copy; 2024 Your Name | <a href="mailto:your.email@example.com">your.email@example.com</a></p>
+    </footer>
 
-        $(document).ready(function() {
-            function showSuccessAlert(new_ticket_id, ticket_number) {
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Success',
-                    html: 'Ticket successfully added! Your ticket number is: <strong>' + ticket_number + '</strong>',
-                    showCloseButton: false,
-                    showConfirmButton: true,
-                    allowOutsideClick: true
-                }).then((result) => {
-                    window.location.href = '/ticket/' + new_ticket_id;
-                });
-            }
-
-            $('#addTicketForm').submit(function(event) {
-                event.preventDefault();
-                $.ajax({
-                    url: '/add',
-                    type: 'POST',
-                    data: $(this).serialize(),
-                    success: function(response) {
-                        showSuccessAlert(response.new_ticket_id, response.ticket_number);
-                    },
-                    error: function(xhr, status, error) {
-                        console.error('Error:', error);
-                    },
-                    beforeSend: function() {
-                        Swal.showLoading();
-                    }
-                });
-            });
-            function showLoading() {
-                Swal.fire({
-                    title: 'Loading...',
-                    html: 'Please wait a moment.',
-                    allowOutsideClick: false,
-                    didOpen: () => {
-                        Swal.showLoading();
-                    }
-                });
-            }
-    
-            function hideLoading() {
-                Swal.close();
-            }
-    
-            // Show loading screen on link click
-            $('a').on('click', function(e) {
-                if (!$(this).hasClass('no-loading')) {
-                    showLoading();
-                }
-            });
-    
-            // Show loading screen on form submit
-            $('form').on('submit', function() {
-                showLoading();
-            });
-    
-            // Hide loading screen on page load
-            $(window).on('load', function() {
-                hideLoading();
-            });
-    
-            // You can also manually show the loading screen if needed
-            window.showLoading = showLoading;
-            window.hideLoading = hideLoading;
-        });
-    </script>
-    <script src="https://cdn.socket.io/4.0.1/socket.io.min.js"></script>
-    <script>
-        var protocol = window.location.protocol === 'https:' ? 'https:' : 'http:';
-        var socket = io.connect(protocol + '//' + document.domain + ':' + location.port);
-
-        socket.on('connect', function() {
-            console.log('Connected to server');
-        });
-
-        socket.on('disconnect', function() {
-            console.log('Disconnected from server');
-        });
-
-        socket.on('notify', (data) => {
-            // Display notification in browser
-            if (Notification.permission === 'granted') {
-                new Notification(data.title, { body: data.message });
-            } else if (Notification.permission !== 'denied') {
-                Notification.requestPermission().then(permission => {
-                    if (permission === 'granted') {
-                        new Notification(data.title, { body: data.message });
-                    }
-                });
-            }
-        });
-    </script>
 </body>
+
 </html>
